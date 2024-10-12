@@ -57,7 +57,7 @@ const ShowModal = ({ user }: any) => {
     const { currentPassword, newPassword, confirmNewPassword } =
       changePasswordData;
     if (newPassword !== confirmNewPassword) {
-      toast.error("Passwords do not match");
+      toast.error('The new password and confirmation do not match. Please try again.');
       return;
     }
     userPrivateRequest
