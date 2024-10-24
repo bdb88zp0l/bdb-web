@@ -131,7 +131,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     {moment
                       .utc(data.startDate)
                       .format("DD,MMM YYYY")
-                      .toString()}
+                      ?.toString()}
                   </span>
                 </div>
                 <div>
@@ -139,7 +139,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     End Date
                   </span>
                   <span className="block text-[.875rem] font-semibold">
-                    {moment.utc(data.endDate).format("DD,MMM YYYY").toString()}
+                    {moment.utc(data.endDate).format("DD,MMM YYYY")?.toString()}
                   </span>
                 </div>
                 <div>
@@ -235,7 +235,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                         <p className="mb-2">
                           <b>
                             {auth.user?.email?.toString() ==
-                            history?.updatedBy?.email.toString()
+                            history?.updatedBy?.email?.toString()
                               ? "You"
                               : history?.updatedBy?.firstName}
                           </b>{" "}
@@ -244,7 +244,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                             {moment
                               .utc(history.date)
                               .format("DD,MMM YYYY - HH:mm")
-                              .toString()}
+                              ?.toString()}
                           </span>
                         </p>
                         <p className="text-[#8c9097] dark:text-white/50 mb-0">
