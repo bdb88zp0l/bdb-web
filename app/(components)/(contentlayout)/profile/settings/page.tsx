@@ -71,7 +71,7 @@ const Mailsettings = () => {
     const { currentPassword, newPassword, confirmNewPassword } =
       changePasswordData;
     if (newPassword !== confirmNewPassword) {
-      toast.error("Passwords do not match");
+      toast.error("The new password and confirmation do not match. Please try again.");
       return;
     }
     userPrivateRequest
@@ -82,7 +82,7 @@ const Mailsettings = () => {
         sourcePage: "profile",
       })
       .then((res) => {
-        toast.success("Password changed successfully");
+        toast.success("Your password has been changed successfully.");
         setChangePasswordData({
           currentPassword: "",
           newPassword: "",
@@ -139,7 +139,7 @@ const Mailsettings = () => {
         },
       })
       .then((res) => {
-        toast.success("Profile updated successfully");
+        toast.success("Your profile has been updated successfully.");
       })
       .catch((err) => {
         toast.error(err.response.data.message);
