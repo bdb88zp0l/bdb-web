@@ -1,19 +1,19 @@
 "use client";
 import { userPrivateRequest } from "@/config/axios.config";
+import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
 import Pageheader from "@/shared/layout-components/page-header/pageheader";
 import Seo from "@/shared/layout-components/seo/seo";
+import CaseTeamOverview from "@/shared/page-components/case-management/CaseTeamOverview";
+import FileRow from "@/shared/page-components/case-management/FileRow";
 import { useConfig } from "@/shared/providers/ConfigProvider";
 import store from "@/shared/redux/store";
 import { getImageUrl, toWordUpperCase } from "@/utils/utils";
 import moment from "moment";
-import Link from "next/link";
 import dynamic from "next/dynamic";
-const Select = dynamic(() => import("react-select"), { ssr: false });
-import React, { Fragment, useEffect, useState } from "react";
+import Link from "next/link";
+import { Fragment, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
-import CaseTeamOverview from "@/shared/page-components/case-management/CaseTeamOverview";
-import FileRow from "@/shared/page-components/case-management/FileRow";
+const Select = dynamic(() => import("react-select"), { ssr: false });
 export default function CaseOverview({ params }: { params: { id: string } }) {
   const { auth } = store.getState();
 
@@ -235,7 +235,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                         <p className="mb-2">
                           <b>
                             {auth.user?.email?.toString() ==
-                            history?.updatedBy?.email.toString()
+                            history?.updatedBy?.email?.toString()
                               ? "You"
                               : history?.updatedBy?.firstName}
                           </b>{" "}
