@@ -216,14 +216,14 @@ const CaseList = () => {
                             </div>
                           </td>
                           <td>{item.caseNumber ?? " "}</td>
-                          <td>{item.client?.companyName ?? " "}</td>
+                          <td>{item.clientData?.companyName ?? " "}</td>
                           <td>
-                            {item.client?.contact?.firstName ?? " "}{" "}
-                            {item.client?.contact?.lastName ?? " "}
+                            {item.clientData?.contact?.firstName ?? " "}{" "}
+                            {item.clientData?.contact?.lastName ?? " "}
                           </td>
                           <td>
                             <div className="avatar-list-stacked flex">
-                              {item?.team?.teamUsers?.map(
+                              {item?.team?.users?.map(
                                 (
                                   user: {
                                     photo: any;

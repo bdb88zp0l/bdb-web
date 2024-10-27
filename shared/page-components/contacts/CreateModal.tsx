@@ -323,6 +323,62 @@ const CreateModal = ({
                       }
                     />
                   </div>
+                  <div className="xl:col-span-6 col-span-12">
+                    <label
+                      htmlFor="contactperson"
+                      className="form-label mt-2"
+                    >
+                      CONTACT PERSON
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="contactperson"
+                      placeholder="CONTACT PERSON"
+                    />
+                  </div>
+                  <div className="xl:col-span-6 col-span-12">
+                    <label
+                      htmlFor="designation"
+                      className="form-label mt-2"
+                    >
+                      DESIGNATION
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="designation"
+                      placeholder="DESIGNATION"
+                    />
+                  </div>
+                  <div className="xl:col-span-6 col-span-12">
+                    <label
+                      htmlFor="contactperson2"
+                      className="form-label mt-2"
+                    >
+                      CONTACTPERSON 2
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="contactperson2"
+                      placeholder="CONTACTPERSON 2"
+                    />
+                  </div>
+                  <div className="xl:col-span-6 col-span-12">
+                    <label
+                      htmlFor="designation2"
+                      className="form-label mt-2"
+                    >
+                      DESIGNATION 2
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="designation2"
+                      placeholder="DESIGNATION 2"
+                    />
+                  </div>
                 </div>
                 <div className="xl:col-span-6 col-span-12">
                   <div className="xl:col-span-12 col-span-12">
