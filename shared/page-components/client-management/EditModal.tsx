@@ -1277,21 +1277,22 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                 </div>
                 <div className="xl:col-span-6 col-span-12">
                   <div className="xl:col-span-12 col-span-12">
-                    <label htmlFor="contact-mail" className="form-label mt-2">
-                      Point of Contact
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder={`${row?.contact?.firstName ?? ""} ${row?.contact?.lastName ?? ""
-                        }`}
-                      disabled
-                    />
                     <div className="col-span-6">
-                      <label htmlFor="title" className="form-label">Title</label>
+                      <label htmlFor="contact-mail" className="form-label mt-2">
+                        Point of Contact
+                      </label>
                       <input
                         type="text"
                         className="form-control"
+                        placeholder={`${row?.contact?.firstName ?? ""} ${row?.contact?.lastName ?? ""
+                          }`}
+                        disabled
+                      /></div>
+                    <div className="col-span-6">
+                      <label htmlFor="title" className="form-label mt-2">Title</label>
+                      <input
+                        type="text"
+                        className="form-control mb-2"
                         placeholder="Title"
                         id="title"
                       />
@@ -1300,7 +1301,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       <label htmlFor="prefix" className="form-label">Prefix</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control mb-2"
                         placeholder="Prefix"
                         id="prefix"
                       />
@@ -1309,7 +1310,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       <label htmlFor="firstName" className="form-label">First Name</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control mb-2"
                         placeholder="First Name"
                         id="firstName"
                       />
@@ -1318,7 +1319,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       <label htmlFor="lastName" className="form-label">Last Name</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control mb-2"
                         placeholder="Last Name"
                         id="lastName"
                       />
@@ -1327,7 +1328,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       <label htmlFor="suffix" className="form-label">Suffix</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control mb-2"
                         placeholder="Suffix"
                         id="suffix"
                       />
@@ -1336,7 +1337,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       <label htmlFor="nickname" className="form-label">Nickname</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control mb-2"
                         placeholder="Nickname"
                         id="nickname"
                       />
@@ -1345,7 +1346,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
                       <input
                         type="date"
-                        className="form-control"
+                        className="form-control mb-2"
                         placeholder="Date of Birth"
                         id="dateOfBirth"
                       />
@@ -1354,7 +1355,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       <label htmlFor="contactPerson" className="form-label">CONTACTPERSON:Fe F.valdez</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control mb-2"
                         placeholder="CONTACTPERSON:Fe F.valdez"
                         id="contactPerson"
                       />
@@ -1363,7 +1364,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       <label htmlFor="designation" className="form-label">DSIGNATION:President</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control mb-2"
                         placeholder="DSIGNATION:President"
                         id="designation"
                       />
@@ -1372,7 +1373,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       <label htmlFor="contactPerson2" className="form-label">CONTACTPERSON2</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control mb-2"
                         placeholder="CONTACTPERSON2"
                         id="contactPerson2"
                       />
@@ -1381,7 +1382,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       <label htmlFor="designation2" className="form-label">DESIGNATION2</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control mb-2"
                         placeholder="DESIGNATION2"
                         id="designation2"
                       />
@@ -1398,47 +1399,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                     Contact Information
                   </label>
                 </div>
-                {/* Emails
-                <div className="col-span-6">
-                  <label htmlFor="emails" className="form-label">
-                    Emails
-                  </label>
-                  {emails.map((email, index) => (
-                    <div key={index} className="flex gap-2 items-center mb-2">
-                      <input
-                        type="email"
-                        className="form-control"
-                        placeholder="Enter Email"
-                        value={email.value}
-                        onChange={(e) =>
-                          handleFieldChange(
-                            setEmails,
-                            emails,
-                            index,
-                            "value",
-                            e.target.value
-                          )
-                        }
-                      />
-                      {index !== 0 && (
-                        <button
-                          type="button"
-                          className="ti-btn ti-btn-danger ti-btn-xs"
-                          onClick={() => removeField(setEmails, emails, index)}
-                        >
-                          &times;
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    className="mt-4 px-4 py-2 ti-btn bg-primary text-white !font-medium"
-                    onClick={() => addField(setEmails, emails)}
-                  >
-                    + Add Email
-                  </button>
-                </div> */}
+
                 <div className="xl:col-span-6 col-span-12">
                   <div className="grid grid-cols-12 gap-4 mb-4">
                     <div className="col-span-6">
@@ -1640,6 +1601,48 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
 
 
                 </div>
+                Emails
+                <div className="col-span-6">
+                  <label htmlFor="emails" className="form-label">
+                    Emails
+                  </label>
+                  {emails.map((email, index) => (
+                    <div key={index} className="flex gap-2 items-center mb-2">
+                      <input
+                        type="email"
+                        className="form-control"
+                        placeholder="Enter Email"
+                        value={email.value}
+                        onChange={(e) =>
+                          handleFieldChange(
+                            setEmails,
+                            emails,
+                            index,
+                            "value",
+                            e.target.value
+                          )
+                        }
+                      />
+                      {index !== 0 && (
+                        <button
+                          type="button"
+                          className="ti-btn ti-btn-danger ti-btn-xs"
+                          onClick={() => removeField(setEmails, emails, index)}
+                        >
+                          &times;
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="mt-4 px-4 py-2 ti-btn bg-primary text-white !font-medium"
+                    onClick={() => addField(setEmails, emails)}
+                  >
+                    + Add Email
+                  </button>
+                </div>
+
 
                 {/* Phone Information */}
                 <PhoneForm

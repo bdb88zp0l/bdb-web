@@ -334,6 +334,123 @@ const CreateModal = ({ fetchClients, pageData, fetchPageData }: any) => {
                 <div className="xl:col-span-6 col-span-12">
                   <div className="grid grid-cols-12 gap-4 mb-4">
                     <div className="col-span-6">
+                      <label htmlFor="clientCode" className="form-label">
+                        Client Code
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="clientCode"
+                        placeholder="Client Code"
+                        value={data?.clientNumber || ""}
+                        onChange={(e) =>
+                          setData({
+                            ...data,
+                            clientNumber: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className="col-span-6">
+                      <label className="form-label">Account Type</label>
+                      <Select
+                        name="accountType"
+                        options={config?.CLIENT_ACCOUNT_TYPE?.map((option) => {
+                          return {
+                            value: option,
+                            label: option,
+                          };
+                        })}
+                        className="basic-multi-select"
+                        menuPlacement="auto"
+                        classNamePrefix="Select2"
+                        placeholder="Select Account Type"
+                        onChange={(e: any) =>
+                          setData({ ...data, accountType: e.value })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-12 gap-4 mt-2">
+                    <div className="col-span-6">
+                      <label htmlFor="dateEngaged" className="form-label">
+                        Date Engaged
+                      </label>
+                      <DatePicker
+                        className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
+                        showIcon
+                        selected={
+                          data?.engagedAt
+                            ? moment(data?.engagedAt).toDate()
+                            : null
+                        }
+                        onChange={(date) =>
+                          setData({
+                            ...data,
+                            engagedAt: date,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className="col-span-6">
+                      <label className="form-label">Status</label>
+                      <Select
+                        name="status"
+                        options={[
+                          { label: "Active", value: "active" },
+                          { label: "Inactive", value: "inactive" },
+                          { label: "Withdrawn", value: "withdrawn" },
+                        ]}
+                        className="basic-multi-select"
+                        menuPlacement="auto"
+                        classNamePrefix="Select2"
+                        placeholder="Status"
+                        onChange={(e: any) =>
+                          setData({ ...data, status: e.value })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-12 gap-4 mt-2">
+                    <div className="col-span-6">
+                      <label htmlFor="dateWithdrawn" className="form-label">
+                        Date Withdrawn
+                      </label>
+                      <DatePicker
+                        className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
+                        showIcon
+                        selected={
+                          data?.withdrawnAt
+                            ? moment(data?.withdrawnAt).toDate()
+                            : null
+                        }
+                        onChange={(date) =>
+                          setData({
+                            ...data,
+                            withdrawnAt: date,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className="col-span-6 mb-4">
+                      <label htmlFor="pointOfContact" className="form-label">
+                        Point of Contact
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder={`${selectedCompany?.contact?.firstName ?? ""
+                          } ${selectedCompany?.contact?.lastName ?? ""}`}
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-12 gap-4 mb-4">
+                    <div className="col-span-6">
                       <label
                         htmlFor="clienttype"
                         className="form-label"
@@ -1349,48 +1466,6 @@ const CreateModal = ({ fetchClients, pageData, fetchPageData }: any) => {
                     Contact Information
                   </label>
                 </div>
-                {/* Emails
-                <div className="col-span-6">
-                  <label htmlFor="emails" className="form-label">
-                    Emails
-                  </label>
-                  {emails.map((email, index) => (
-                    <div key={index} className="flex gap-2 items-center mb-2">
-                      <input
-                        type="email"
-                        className="form-control"
-                        placeholder="Enter Email"
-                        value={email.value}
-                        onChange={(e) =>
-                          handleFieldChange(
-                            setEmails,
-                            emails,
-                            index,
-                            "value",
-                            e.target.value
-                          )
-                        }
-                      />
-                      {index !== 0 && (
-                        <button
-                          type="button"
-                          className="ti-btn ti-btn-danger ti-btn-xs"
-                          onClick={() => removeField(setEmails, emails, index)}
-                        >
-                          &times;
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    className="mt-4 px-4 py-2 ti-btn bg-primary text-white !font-medium"
-                    onClick={() => addField(setEmails, emails)}
-                  >
-                    + Add Email
-                  </button>
-                </div> */}
-
                 <div className="xl:col-span-6 col-span-12">
                   <div className="grid grid-cols-12 gap-4 mb-4">
                     <div className="col-span-6">
@@ -1592,6 +1667,49 @@ const CreateModal = ({ fetchClients, pageData, fetchPageData }: any) => {
 
 
                 </div>
+
+                <div className="col-span-6">
+                  <label htmlFor="emails" className="form-label">
+                    Emails
+                  </label>
+                  {emails.map((email, index) => (
+                    <div key={index} className="flex gap-2 items-center mb-2">
+                      <input
+                        type="email"
+                        className="form-control"
+                        placeholder="Enter Email"
+                        value={email.value}
+                        onChange={(e) =>
+                          handleFieldChange(
+                            setEmails,
+                            emails,
+                            index,
+                            "value",
+                            e.target.value
+                          )
+                        }
+                      />
+                      {index !== 0 && (
+                        <button
+                          type="button"
+                          className="ti-btn ti-btn-danger ti-btn-xs"
+                          onClick={() => removeField(setEmails, emails, index)}
+                        >
+                          &times;
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="mt-4 px-4 py-2 ti-btn bg-primary text-white !font-medium"
+                    onClick={() => addField(setEmails, emails)}
+                  >
+                    + Add Email
+                  </button>
+                </div>
+
+
 
                 {/* Phone Information */}
                 <PhoneForm
