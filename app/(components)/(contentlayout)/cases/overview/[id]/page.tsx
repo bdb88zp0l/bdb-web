@@ -1,5 +1,6 @@
 "use client";
 import { userPrivateRequest } from "@/config/axios.config";
+import JsonPreview from "@/shared/common-components/JsonPreview";
 import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
 import Pageheader from "@/shared/layout-components/page-header/pageheader";
 import Seo from "@/shared/layout-components/seo/seo";
@@ -128,10 +129,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     Start Date
                   </span>
                   <span className="block text-[.875rem] font-semibold">
-                    {moment
-                      .utc(data.startDate)
-                      .format("DD,MMM YYYY")
-                      ?.toString()}
+                    {data?.startDate ? moment.utc(data.startDate).format("DD,MMM YYYY")?.toString() : "N/A"}
                   </span>
                 </div>
                 <div>
@@ -139,7 +137,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     End Date
                   </span>
                   <span className="block text-[.875rem] font-semibold">
-                    {moment.utc(data.endDate).format("DD,MMM YYYY")?.toString()}
+                    {data?.endDate ? moment.utc(data.endDate).format("DD,MMM YYYY")?.toString() : "N/A"}
                   </span>
                 </div>
                 <div>
@@ -168,9 +166,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           {/* Tooltip */}
                           {team.user?.firstName && (
                             <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                              {`${team.user?.firstName ?? ""} ${
-                                team.user?.lastName ?? ""
-                              }`}
+                              {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
+                                }`}
                             </div>
                           )}
                         </div>
@@ -235,7 +232,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                         <p className="mb-2">
                           <b>
                             {auth.user?.email?.toString() ==
-                            history?.updatedBy?.email?.toString()
+                              history?.updatedBy?.email?.toString()
                               ? "You"
                               : history?.updatedBy?.firstName}
                           </b>{" "}
@@ -325,6 +322,42 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div className="box custom-box">
+            <div className="box-header">
+              <div className="box-title">Billing Information</div>
+            </div>
+            <div className="box-body">
+              <div className="mb-6">
+                <p className="text-[.875rem] font-semibold mb-1">
+                  Currency:
+                </p>
+                <p className="text-[#8c9097] dark:text-white/50 op-8">
+                  {toWordUpperCase(data?.currency ?? "N/A")}
+                </p>
+              </div>
+              <div className="mb-6">
+                <p className="text-[.875rem] font-semibold mb-1">
+                  Billing Start Date:
+                </p>
+                <p className="text-[#8c9097] dark:text-white/50 op-8">
+                  {data?.billingStart ? moment.utc(data?.billingStart).format("DD,MMM YYYY")?.toString() : "N/A"}
+                </p>
+              </div>
+              <div className="mb-6">
+                <p className="text-[.875rem] font-semibold mb-1">
+                  Billing End Date:
+                </p>
+                <p className="text-[#8c9097] dark:text-white/50 op-8">
+                  {data?.billingEnd ? moment.utc(data?.billingEnd).format("DD,MMM YYYY")?.toString() : "N/A"}
+                </p>
+              </div>
+              <JsonPreview data={data?.metaData ?? {}} />
+            </div>
+            <div className="box-footer">
+
             </div>
           </div>
         </div>

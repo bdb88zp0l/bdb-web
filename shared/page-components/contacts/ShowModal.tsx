@@ -16,6 +16,7 @@ import { userPrivateRequest } from "@/config/axios.config";
 import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
 import Modal from "@/shared/modals/Modal";
 import moment from "moment";
+import JsonPreview from "@/shared/common-components/JsonPreview";
 
 // Dynamically import react-select to avoid SSR issues
 const Select = dynamic(() => import("react-select"), { ssr: false });
@@ -317,17 +318,16 @@ const ShowModal = ({ contact, isShowModalOpen, closeShowModal }: any) => {
                       <div key={index}>
                         <p>
                           <strong>{address.label}:</strong>{" "}
-                          {`${address.houseNumber || ""}, ${
-                            address.street || ""
-                          }, ${address.barangay || ""}, ${
-                            address.region || ""
-                          }, ${address.city || ""}- ${address.zip || ""}, ${
-                            address.country || ""
-                          }`}
+                          {`${address.houseNumber || ""}, ${address.street || ""
+                            }, ${address.barangay || ""}, ${address.region || ""
+                            }, ${address.city || ""}- ${address.zip || ""}, ${address.country || ""
+                            }`}
                         </p>
                       </div>
                     ))}
                   </div>
+
+                  <JsonPreview data={contact?.metaData ?? {}} />
                 </div>
               </div>
             </div>
