@@ -31,7 +31,7 @@ const FileExplorer = ({
   workspaceHomeFolderId,
 }: any) => {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(16);
   const [nodeData, setNodeData] = useState<any[]>([]);
   const [breadcrumbs, setBreadcrumbs] = useState<any>([]);
   const [serviceType, setServiceType] = useState<any>(null);
