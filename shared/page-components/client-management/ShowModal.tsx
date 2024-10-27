@@ -17,6 +17,7 @@ import ButtonSpinner from '@/shared/layout-components/loader/ButtonSpinner';
 import Modal from '@/shared/modals/Modal';
 import moment from 'moment';
 import { toWordUpperCase } from '@/utils/utils';
+import JsonPreview from '@/shared/common-components/JsonPreview';
 
 // Dynamically import react-select to avoid SSR issues
 const Select = dynamic(() => import('react-select'), { ssr: false });
@@ -131,8 +132,8 @@ const ShowModal = ({ data, IsmodalOpen, closeModal }: any) => {
                                         <p className="text-[#8c9097] dark:text-white/50 op-8">
                                             {data?.withdrawnAt
                                                 ? moment(
-                                                      data?.withdrawnAt
-                                                  ).format('MMM DD, YYYY')
+                                                    data?.withdrawnAt
+                                                ).format('MMM DD, YYYY')
                                                 : 'N/A'}
                                         </p>
                                     </div>
@@ -214,28 +215,21 @@ const ShowModal = ({ data, IsmodalOpen, closeModal }: any) => {
                                                                     address?._id
                                                                 }
                                                             >
-                                                                {`${
-                                                                    address.houseNumber ||
+                                                                {`${address.houseNumber ||
                                                                     'N/A'
-                                                                }, ${
-                                                                    address.street ||
+                                                                    }, ${address.street ||
                                                                     'N/A'
-                                                                }, ${
-                                                                    address.city ||
+                                                                    }, ${address.city ||
                                                                     'N/A'
-                                                                }, ${
-                                                                    address.barangay ||
+                                                                    }, ${address.barangay ||
                                                                     'N/A'
-                                                                }, ${
-                                                                    address.zip ||
+                                                                    }, ${address.zip ||
                                                                     'N/A'
-                                                                }, ${
-                                                                    address.region ||
+                                                                    }, ${address.region ||
                                                                     'N/A'
-                                                                }, ${
-                                                                    address.country ||
+                                                                    }, ${address.country ||
                                                                     'N/A'
-                                                                }`}{' '}
+                                                                    }`}{' '}
                                                                 <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
                                                                     {
                                                                         address?.label
@@ -246,8 +240,11 @@ const ShowModal = ({ data, IsmodalOpen, closeModal }: any) => {
                                                     )}
                                                 </div>
                                             </div>
+
+
                                         </div>
                                     </div>
+                                    <JsonPreview data={data?.metaData} />
                                 </div>
                             </div>
                             {/* Two-column layout ends here */}
