@@ -1,4 +1,3 @@
-import React from "react";
 
 const AddressForm = ({
   addresses,
@@ -101,7 +100,7 @@ const AddressForm = ({
                 handleFieldChange(index, "country", e.target.value)
               }
             />
-            {index !== 0 && (
+            {index !== 0 && !isDisabled && (
               <div>
                 <button
                   type="button"
