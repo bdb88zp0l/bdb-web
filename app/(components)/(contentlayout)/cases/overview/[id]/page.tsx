@@ -15,6 +15,7 @@ import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 const Select = dynamic(() => import("react-select"), { ssr: false });
+import Editor from "@/shared/common-components/Editor";
 export default function CaseOverview({ params }: { params: { id: string } }) {
   const { auth } = store.getState();
 
@@ -69,15 +70,19 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
 
     try {
       const res = await userPrivateRequest.patch(`/api/cases/${params.id}`, {
-        // ...data,
-        // ...(typeof data.client == "object"
-        //   ? { client: data.client._id }
-        //   : { client: data.client }),
-        // ...(typeof data.team == "object"
-        //   ? { team: data.team._id }
-        //   : { team: data.team }),
-        startDate: data?.startDate,
-        title: data?.title,
+        ...data,
+        ...(typeof data.client == "object"
+          ? { client: data.client._id }
+          : { client: data.client }),
+        ...(typeof data.team == "object"
+          ? { team: data.team._id }
+          : { team: data.team }),
+        // startDate: data?.startDate,
+        // endDate: data?.endDate,
+        // title: data?.title,
+        // description: data?.description,
+        // caseNumber: data?.caseNumber,
+        // serviceType: data?.serviceType,
       });
       toast.success(res.data?.message);
     } catch (err) {
@@ -102,43 +107,64 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
             <div className="box-header justify-between flex">
               <div className="box-title">Case Overview</div>
               <div className=" flex gap-2">
-                <Link
-                  href="/cases/create"
-                  className="ti-btn !py-1 !px-2 !text-[0.75rem] ti-btn-secondary-full btn-wave"
-                >
-                  <i className="ri-add-line align-middle me-1 font-semibold"></i>
-                  Create Case
-                </Link>
                 <button
                   onClick={handleCase}
                   className="ti-btn !py-1 !px-2 !text-[0.75rem] ti-btn-secondary-full btn-wave"
                 >
                   Edit Case
                 </button>
-                <button
-                  type="button"
-                  className="ti-btn bg-primary text-white !font-medium ms-auto float-right"
-                  disabled={isSubmitting}
-                  onClick={handleSubmit}
-                >
-                  {isSubmitting ? (
-                    <ButtonSpinner text="Updating Case" />
-                  ) : (
-                    "Update Case"
-                  )}
-                </button>
+                {isEdit && (
+                  <button
+                    type="button"
+                    className="ti-btn bg-primary text-white !font-medium ms-auto !py-1 !px-2 !text-[0.75rem] btn-wave"
+                    disabled={isSubmitting}
+                    onClick={handleSubmit}
+                  >
+                    {isSubmitting ? (
+                      <ButtonSpinner text="Updating Case" />
+                    ) : (
+                      "Update Case"
+                    )}
+                  </button>)}
               </div>
             </div>
             <div className="box-body">
-              <h5 className="font-semibold mb-4 task-title">{data?.title}</h5>
+              <div className="text-[.9375rem] font-semibold mb-2">
+                Case Title :
+              </div>
+              {isEdit ? (<input
+                type="text"
+                className="form-control"
+                id="input-label"
+                placeholder="Enter Title"
+                value={data?.title}
+                onChange={(e) => {
+                  setData({
+                    ...data,
+                    title: e.target.value,
+                  });
+                }}
+              />) : (<h5 className="font-semibold mb-4 task-title">{data?.title}</h5>)}
               <div className="text-[.9375rem] font-semibold mb-2">
                 Case Description :
               </div>
-              <div
+
+              {isEdit ? (<div id="project-descriptioin-editor">
+                <Editor
+                  onChange={(html) => {
+                    setData({
+                      ...data,
+                      description: html,
+                    });
+                  }}
+                  value={data?.description ?? ""}
+                />
+              </div>) : (<div
                 dangerouslySetInnerHTML={{
                   __html: data?.description,
                 }}
               />
+              )}
             </div>
             <div className="box-footer">
               <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -218,9 +244,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     <span className="block text-[.875rem] font-semibold">
                       {data?.startDate
                         ? moment
-                            .utc(data.startDate)
-                            .format("DD,MMM YYYY")
-                            ?.toString()
+                          .utc(data.startDate)
+                          .format("DD,MMM YYYY")
+                          ?.toString()
                         : "N/A"}
                     </span>
                   )}
@@ -251,9 +277,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     <span className="block text-[.875rem] font-semibold">
                       {data?.endDate
                         ? moment
-                            .utc(data.endDate)
-                            .format("DD,MMM YYYY")
-                            ?.toString()
+                          .utc(data.endDate)
+                          .format("DD,MMM YYYY")
+                          ?.toString()
                         : "N/A"}
                     </span>
                   )}
@@ -284,9 +310,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           {/* Tooltip */}
                           {team.user?.firstName && (
                             <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                              {`${team.user?.firstName ?? ""} ${
-                                team.user?.lastName ?? ""
-                              }`}
+                              {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
+                                }`}
                             </div>
                           )}
                         </div>
@@ -298,11 +323,33 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     Service Type
                   </span>
-                  <span className="block">
+
+                  {isEdit ? (<Select
+                    name="serviceType"
+                    options={config?.CASE_SERVICE_TYPE?.map((option: any) => {
+                      return {
+                        value: option,
+                        label: `${option}`,
+                      };
+                    })}
+                    value={config?.CASE_SERVICE_TYPE?.map((option: any) => ({
+                      value: option,
+                      label: option,
+                    }))?.find((option: any) => {
+                      return option.value === data?.serviceType;
+                    })}
+                    className="basic-multi-select"
+                    menuPlacement="auto"
+                    classNamePrefix="Select2"
+                    placeholder="Select Service Type"
+                    onChange={(e: any) =>
+                      setData({ ...data, serviceType: e.value })
+                    }
+                  />) : (<span className="block">
                     <span className="badge bg-primary/10 text-primary">
                       {toWordUpperCase(data?.serviceType ?? "N/A")}
                     </span>
-                  </span>
+                  </span>)}
                 </div>
                 {/* <div>
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
@@ -351,7 +398,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                         <p className="mb-2">
                           <b>
                             {auth.user?.email?.toString() ==
-                            history?.updatedBy?.email?.toString()
+                              history?.updatedBy?.email?.toString()
                               ? "You"
                               : history?.updatedBy?.firstName}
                           </b>{" "}
@@ -462,9 +509,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                 <p className="text-[#8c9097] dark:text-white/50 op-8">
                   {data?.billingStart
                     ? moment
-                        .utc(data?.billingStart)
-                        .format("DD,MMM YYYY")
-                        ?.toString()
+                      .utc(data?.billingStart)
+                      .format("DD,MMM YYYY")
+                      ?.toString()
                     : "N/A"}
                 </p>
               </div>
@@ -475,13 +522,16 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                 <p className="text-[#8c9097] dark:text-white/50 op-8">
                   {data?.billingEnd
                     ? moment
-                        .utc(data?.billingEnd)
-                        .format("DD,MMM YYYY")
-                        ?.toString()
+                      .utc(data?.billingEnd)
+                      .format("DD,MMM YYYY")
+                      ?.toString()
                     : "N/A"}
                 </p>
               </div>
-              <JsonPreview data={data?.metaData ?? {}} />
+
+              {Object.keys(data?.metaData ?? {}).length > 0 && (
+                <JsonPreview data={data?.metaData ?? {}} />
+              )}
             </div>
             <div className="box-footer"></div>
           </div>

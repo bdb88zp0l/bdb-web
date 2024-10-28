@@ -262,7 +262,8 @@ const CaseList = () => {
                               {" "}
                               {hasPermission("case.update") && (
                                 <Link
-                                  href={`/cases/edit/${item._id}`}
+                                  // href={`/cases/edit/${item._id}`}
+                                  href={`/cases/overview/${item._id}`}
                                   className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
                                 >
                                   <i className="ri-pencil-line"></i>
