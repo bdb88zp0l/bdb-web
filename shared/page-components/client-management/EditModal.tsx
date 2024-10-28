@@ -2,30 +2,34 @@
 import { userPrivateRequest } from "@/config/axios.config";
 import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
 import Modal from "@/shared/modals/Modal";
-import React, { useState } from "react";
-import { toast } from "react-toastify";
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import DatePicker from "react-datepicker";
-import CompanyForm from "../contacts/components/CompanyForm";
-import PhoneForm from "../contacts/components/PhoneForm";
-import AddressForm from "../contacts/components/AddressForm";
-import moment from "moment";
 import { useConfig } from "@/shared/providers/ConfigProvider";
+import moment from "moment";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
+import { toast } from "react-toastify";
+import AddressForm from "../contacts/components/AddressForm";
+import PhoneForm from "../contacts/components/PhoneForm";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
-const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
-  const [modalOpen, setModalOpen] = useState(false);
+const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOpen, setIsEditModalOpen }: any) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
   const [data, setData] = useState<any>(row);
+
+  useEffect(() => {
+    setData(row);
+  }, [row]);
 
   const openModal = (e: any) => {
     e.preventDefault();
-    setModalOpen(true);
+    setIsEditModalOpen(true);
   };
-
-  const closeModal = () => setModalOpen(false);
+  const toggleEditMode = () => {
+    setIsDisabled(!isDisabled);
+  };
+  const closeModal = () => setIsEditModalOpen(false);
 
   // State to manage multiple emails, phones, addresses, and companies
   const [emails, setEmails] = useState(row?.emails ?? [{ value: "" }]); // At least one email required
@@ -118,24 +122,21 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
 
   return (
     <>
-      <button
-        aria-label="button"
-        type="button"
-        className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
-        onClick={openModal}
-      >
-        <i className="ri-pencil-line"></i>
-      </button>
-      <Modal isOpen={modalOpen} close={closeModal}>
+
+      <Modal isOpen={isEditModalOpen} close={closeModal}>
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center  min-w-[calc(100%-3.5rem)]">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">
             <div className="ti-modal-header">
-              <h6
-                className="modal-title text-[1rem] font-semibold text-defaulttextcolor"
-                id="mail-ComposeLabel"
-              >
-                Update Client
-              </h6>
+              <div className="flex gap-2.5 items-center">
+                <h6
+                  className="modal-title text-[1rem] font-semibold text-defaulttextcolor"
+                  id="mail-ComposeLabel"
+                >
+                  {isDisabled ? 'Client Details' : 'Update Client'}
+                </h6>
+                <button aria-label="button" type="button" className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
+                  onClick={toggleEditMode} ><i className="ri-pencil-line"></i></button>
+              </div>
               <button
                 type="button"
                 className="hs-dropdown-toggle !text-[1rem] !font-semibold !text-defaulttextcolor"
@@ -258,7 +259,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                     </div>
                   )}
                 </div>
-
+{/* 
                 <div className="col-span-6">
                   {row && (
                     <div className="text-center flex justify-center items-center flex-col">
@@ -286,7 +287,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       </span>
                     </div>
                   )}
-                </div>
+                </div> */}
 
                 {/* Engagement Information */}
                 <div className="col-span-12">
@@ -302,6 +303,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       </label>
                       <input
                         type="text"
+                        disabled={isDisabled}
                         className="form-control"
                         id="clientCode"
                         placeholder="Client Code"
@@ -319,6 +321,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       <label className="form-label">Account Type</label>
                       <Select
                         name="accountType"
+                        isDisabled={isDisabled}
                         options={config?.CLIENT_ACCOUNT_TYPE?.map((option) => {
                           return {
                             value: option,
@@ -342,6 +345,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                         Date Engaged
                       </label>
                       <DatePicker
+                        disabled={isDisabled}
                         className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
                         showIcon
                         selected={
@@ -361,6 +365,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                     <div className="col-span-6">
                       <label className="form-label">Status</label>
                       <Select
+                        isDisabled={isDisabled}
                         name="status"
                         options={[
                           { label: "Active", value: "active" },
@@ -383,6 +388,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                         Date Withdrawn
                       </label>
                       <DatePicker
+                        disabled={isDisabled}
                         className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
                         showIcon
                         selected={
@@ -407,7 +413,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                 <div className="xl:col-span-6 col-span-12">
                   <div className="xl:col-span-12 col-span-12">
                     <div className="col-span-6">
-                      <label htmlFor="contact-mail" className="form-label mt-2">
+                      <label htmlFor="contact-mail" className="form-label">
                         Point of Contact
                       </label>
                       <input
@@ -417,7 +423,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                           }`}
                         disabled
                       />
-                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -436,6 +442,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                     <div key={index} className="flex gap-2 items-center mb-2">
                       <input
                         type="email"
+                        disabled={isDisabled}
                         className="form-control"
                         placeholder="Enter Email"
                         value={email.value}
@@ -449,7 +456,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                           )
                         }
                       />
-                      {index !== 0 && (
+                      {index !== 0 && !isDisabled && (
                         <button
                           type="button"
                           className="ti-btn ti-btn-danger ti-btn-xs"
@@ -460,19 +467,22 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                       )}
                     </div>
                   ))}
-                  <button
-                    type="button"
-                    className="mt-4 px-4 py-2 ti-btn bg-primary text-white !font-medium"
-                    onClick={() => addField(setEmails, emails)}
-                  >
-                    + Add Email
-                  </button>
+                  {!isDisabled && (
+                    <button
+                      type="button"
+                      className="mt-4 px-4 py-2 ti-btn bg-primary text-white !font-medium"
+                      onClick={() => addField(setEmails, emails)}
+                    >
+                      + Add Email
+                    </button>
+                  )}
                 </div>
 
 
                 {/* Phone Information */}
                 <PhoneForm
                   phones={phones}
+                  isDisabled={isDisabled}
                   setPhones={setPhones}
                   addField={addField}
                   removeField={removeField}
@@ -480,6 +490,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
 
                 {/* Address Information */}
                 <AddressForm
+                  isDisabled={isDisabled}
                   addresses={addresses}
                   setAddresses={setAddresses}
                   addField={addField}
@@ -494,20 +505,22 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                 className="hs-dropdown-toggle ti-btn  ti-btn-light align-middle"
                 onClick={closeModal}
               >
-                Cancel
+                Close
               </button>
-              <button
-                type="button"
-                className="ti-btn bg-primary text-white !font-medium"
-                onClick={handleSubmit}
-                disabled={isSubmitting || !row}
-              >
-                {isSubmitting ? (
-                  <ButtonSpinner text="Updating Client" />
-                ) : (
-                  "Update Client"
-                )}
-              </button>
+              {!isDisabled && (
+                <button
+                  type="button"
+                  className="ti-btn bg-primary text-white !font-medium"
+                  onClick={handleSubmit}
+                  disabled={isSubmitting || !row}
+                >
+                  {isSubmitting ? (
+                    <ButtonSpinner text="Updating Client" />
+                  ) : (
+                    "Update Client"
+                  )}
+                </button>
+              )}
             </div>
           </div>
         </div>
