@@ -1,6 +1,12 @@
 import React from "react";
 
-const PhoneForm = ({ phones, setPhones, addField, removeField }: any) => {
+const PhoneForm = ({
+  phones,
+  setPhones,
+  addField,
+  removeField,
+  isDisabled,
+}: any) => {
   const handleFieldChange = (index: number, field: string, value: string) => {
     setPhones(
       phones.map((phone: any, i: number) =>
@@ -18,6 +24,7 @@ const PhoneForm = ({ phones, setPhones, addField, removeField }: any) => {
             type="text"
             className="form-control"
             placeholder="Label"
+            disabled={isDisabled}
             value={phone.label}
             onChange={(e) => handleFieldChange(index, "label", e.target.value)}
           />
@@ -25,6 +32,7 @@ const PhoneForm = ({ phones, setPhones, addField, removeField }: any) => {
             type="text"
             className="form-control"
             placeholder="Country Code"
+            disabled={isDisabled}
             value={phone.dialCode}
             onChange={(e) =>
               handleFieldChange(index, "dialCode", e.target.value)
@@ -34,6 +42,7 @@ const PhoneForm = ({ phones, setPhones, addField, removeField }: any) => {
             type="text"
             className="form-control"
             placeholder="Phone Number"
+            disabled={isDisabled}
             value={phone.phoneNumber}
             onChange={(e) =>
               handleFieldChange(index, "phoneNumber", e.target.value)
@@ -53,13 +62,15 @@ const PhoneForm = ({ phones, setPhones, addField, removeField }: any) => {
           )}
         </div>
       ))}
-      <button
-        type="button"
-        className="mt-4 px-4 py-2 ti-btn bg-primary text-white !font-medium"
-        onClick={() => addField(setPhones, phones)}
-      >
-        + Add Phone
-      </button>
+      {!isDisabled && (
+        <button
+          type="button"
+          className="mt-4 px-4 py-2 ti-btn bg-primary text-white !font-medium"
+          onClick={() => addField(setPhones, phones)}
+        >
+          + Add Phone
+        </button>
+      )}
     </div>
   );
 };

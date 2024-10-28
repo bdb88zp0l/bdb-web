@@ -77,6 +77,7 @@ const Contacts = () => {
   useEffect(() => {
     fetchContacts();
   }, [page, limit, search, sortBy, sortOrder]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isShowModalOpen, setIsShowModalOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
 
@@ -155,10 +156,15 @@ const Contacts = () => {
                   />
                 )}
                 {hasPermission("contact.read") && selectedContact && (
-                  <ShowModal
+                  <EditModal
+                    // isShowModalOpen={isShowModalOpen}
+                    // closeShowModal={closeShowModal}
+                    isEditModalOpen={isEditModalOpen}
+                    setIsEditModalOpen={setIsEditModalOpen}
                     contact={selectedContact}
-                    isShowModalOpen={isShowModalOpen}
-                    closeShowModal={closeShowModal}
+                    fetchContacts={fetchContacts}
+                    pageData={pageData}
+                    fetchPageData={fetchPageData}
                   />
                 )}
 
@@ -250,8 +256,8 @@ const Contacts = () => {
                                   // aria-controls="offcanvasExample"
                                   // data-hs-overlay="#hs-overlay-contacts"
                                   onClick={() => {
+                                    setIsEditModalOpen(true);
                                     setSelectedContact(user);
-                                    openShowModal();
                                   }}
                                 >
                                   <span className="block font-semibold">
@@ -313,12 +319,17 @@ const Contacts = () => {
                           <td>
                             <div className="btn-list">
                               {hasPermission("contact.update") && (
-                                <EditModal
-                                  contact={user}
-                                  fetchContacts={fetchContacts}
-                                  pageData={pageData}
-                                  fetchPageData={fetchPageData}
-                                />
+                                <button
+                                  aria-label="button"
+                                  type="button"
+                                  className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
+                                  onClick={() => {
+                                    setIsEditModalOpen(true);
+                                    setSelectedContact(user);
+                                  }}
+                                >
+                                  <i className="ri-pencil-line"></i>
+                                </button>
                               )}{" "}
                               {hasPermission("contact.delete") && (
                                 <button

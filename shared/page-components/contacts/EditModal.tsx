@@ -20,9 +20,11 @@ const UpdateModal = ({
   fetchContacts,
   pageData,
   fetchPageData,
+  isEditModalOpen,
+  setIsEditModalOpen,
 }: any) => {
-  const [modalOpen, setModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
   const [data, setData] = useState<any>(contact); // Prefill with saved contact data
   const [selectedImage, setSelectedImage] = useState<any>(null); // Store image file
   const [previewImage, setPreviewImage] = useState<string | null>(
@@ -45,10 +47,10 @@ const UpdateModal = ({
 
   const openModal = (e: any) => {
     e.preventDefault();
-    setModalOpen(true);
+    setIsEditModalOpen(true);
   };
 
-  const closeModal = () => setModalOpen(false);
+  const closeModal = () => setIsEditModalOpen(false);
 
   // State to manage multiple emails, phones, addresses, and companies
   const [emails, setEmails] = useState(
@@ -163,6 +165,10 @@ const UpdateModal = ({
     }
   };
 
+  const toggleDisabled = () => {
+    setIsDisabled(!isDisabled);
+  };
+
   return (
     <>
       <button
@@ -173,7 +179,7 @@ const UpdateModal = ({
       >
         <i className="ri-pencil-line"></i>
       </button>
-      <Modal isOpen={modalOpen} close={closeModal}>
+      <Modal isOpen={isEditModalOpen} close={closeModal}>
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center  min-w-[calc(100%-3.5rem)]">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">
             <div className="ti-modal-header">
@@ -194,10 +200,19 @@ const UpdateModal = ({
             </div>
             <div className="ti-modal-body px-4 overflow-y-auto">
               <div className="grid grid-cols-12 gap-4">
-                <div className="col-span-12">
+                <div className="col-span-12 flex items-center gap-2">
                   <label htmlFor="basic" className="mt-2 text-[18px]">
                     Profile Information
                   </label>
+                  <div className="flex items-center text-blue-600 bg-blue-100 hover:bg-blue-600 hover:text-white transition-colors duration-300 ease-in-out rounded-full px-3 py-2 shadow-lg">
+                    <button
+                      type="button"
+                      onClick={toggleDisabled}
+                      className="flex items-center space-x-2"
+                    >
+                      <i className="ri-pencil-line text-lg"></i>
+                    </button>
+                  </div>
                 </div>
                 <div className="xl:col-span-6 col-span-12">
                   <div className="xl:col-span-6 col-span-12">
@@ -216,6 +231,7 @@ const UpdateModal = ({
                           title: e.target.value,
                         })
                       }
+                      disabled={isDisabled}
                     />
                   </div>
 
@@ -235,6 +251,7 @@ const UpdateModal = ({
                           prefix: e.target.value,
                         })
                       }
+                      disabled={isDisabled}
                     />
                   </div>
 
@@ -254,6 +271,7 @@ const UpdateModal = ({
                           firstName: e.target.value,
                         })
                       }
+                      disabled={isDisabled}
                     />
                   </div>
 
@@ -273,6 +291,7 @@ const UpdateModal = ({
                           middleName: e.target.value,
                         })
                       }
+                      disabled={isDisabled}
                     />
                   </div>
 
@@ -292,6 +311,7 @@ const UpdateModal = ({
                           lastName: e.target.value,
                         })
                       }
+                      disabled={isDisabled}
                     />
                   </div>
                   <div className="xl:col-span-6 col-span-12">
@@ -310,6 +330,7 @@ const UpdateModal = ({
                           suffix: e.target.value,
                         })
                       }
+                      disabled={isDisabled}
                     />
                   </div>
                   <div className="xl:col-span-6 col-span-12">
@@ -329,6 +350,7 @@ const UpdateModal = ({
                             nickName: e.target.value,
                           })
                         }
+                        disabled={isDisabled}
                       />
                     </div>
                   </div>
@@ -351,6 +373,7 @@ const UpdateModal = ({
                           dateOfBirth: date,
                         })
                       }
+                      disabled={isDisabled}
                     />
                   </div>
                 </div>
@@ -394,6 +417,7 @@ const UpdateModal = ({
                               className="absolute w-full h-full opacity-0"
                               id="profile-change"
                               onChange={handleFileChange}
+                              disabled={isDisabled}
                             />
                             <i className="fe fe-camera text-[1.25rem] !text-white"></i>{" "}
                           </label>
@@ -404,6 +428,7 @@ const UpdateModal = ({
                 </div>
 
                 {/* Company Information */}
+
                 <CompanyForm
                   companies={companies}
                   setCompanies={setCompanies}
@@ -411,6 +436,7 @@ const UpdateModal = ({
                   removeField={removeField}
                   pageData={pageData}
                   fetchPageData={fetchPageData}
+                  isDisabled={isDisabled}
                 />
 
                 <div className="col-span-12">
@@ -439,6 +465,7 @@ const UpdateModal = ({
                             e.target.value
                           )
                         }
+                        disabled={isDisabled}
                       />
                       {index !== 0 && (
                         <button
@@ -451,13 +478,16 @@ const UpdateModal = ({
                       )}
                     </div>
                   ))}
-                  <button
-                    type="button"
-                    className="mt-4 px-4 py-2 ti-btn bg-primary text-white !font-medium"
-                    onClick={() => addField(setEmails, emails)}
-                  >
-                    + Add Email
-                  </button>
+                  {!isDisabled && (
+                    <button
+                      type="button"
+                      className="mt-4 px-4 py-2 ti-btn bg-primary text-white !font-medium"
+                      onClick={() => addField(setEmails, emails)}
+                      disabled={isDisabled}
+                    >
+                      + Add Email
+                    </button>
+                  )}
                 </div>
 
                 {/* Phone Information */}
@@ -466,6 +496,7 @@ const UpdateModal = ({
                   setPhones={setPhones}
                   addField={addField}
                   removeField={removeField}
+                  isDisabled={isDisabled}
                 />
 
                 {/* Address Information */}
@@ -474,6 +505,7 @@ const UpdateModal = ({
                   setAddresses={setAddresses}
                   addField={addField}
                   removeField={removeField}
+                  isDisabled={isDisabled}
                 />
               </div>
             </div>
@@ -486,18 +518,20 @@ const UpdateModal = ({
               >
                 Cancel
               </button>
-              <button
-                type="button"
-                className="ti-btn bg-primary text-white !font-medium"
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <ButtonSpinner text="Updating Contact" />
-                ) : (
-                  "Update Contact"
-                )}
-              </button>
+              {!isDisabled && (
+                <button
+                  type="button"
+                  className="ti-btn bg-primary text-white !font-medium"
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <ButtonSpinner text="Updating Contact" />
+                  ) : (
+                    "Update Contact"
+                  )}
+                </button>
+              )}
             </div>
           </div>
         </div>
