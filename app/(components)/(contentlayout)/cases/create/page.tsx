@@ -259,7 +259,7 @@ const CreateCase = () => {
                     </div>
                   </div>
                 </div>{" "}
-                <div className="xl:col-span-12 col-span-12">
+                {/* <div className="xl:col-span-12 col-span-12">
                   <label
                     htmlFor="text-area"
                     className="text-[1rem] font-semibold"
@@ -303,7 +303,7 @@ const CreateCase = () => {
                     placeholder="Select Team"
                     onChange={(e: any) => setData({ ...data, team: e.value })}
                   />
-                </div>
+                </div> */}
                 <div className="xl:col-span-12 col-span-12">
                   <label
                     htmlFor="text-area"
