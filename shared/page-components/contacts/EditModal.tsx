@@ -183,12 +183,15 @@ const UpdateModal = ({
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center  min-w-[calc(100%-3.5rem)]">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">
             <div className="ti-modal-header">
-              <h6
-                className="modal-title text-[1rem] font-semibold text-defaulttextcolor"
-                id="mail-ComposeLabel"
-              >
-                Update Contact
-              </h6>
+              <div className="flex gap-2.5 items-center">
+                <h6
+                  className="modal-title text-[1rem] font-semibold text-defaulttextcolor"
+                  id="mail-ComposeLabel"
+                >
+                  Update Contact
+                </h6>
+
+              </div>
               <button
                 type="button"
                 className="hs-dropdown-toggle !text-[1rem] !font-semibold !text-defaulttextcolor"
@@ -207,8 +210,6 @@ const UpdateModal = ({
                   >
                     Profile Information
                   </h6>
-                  <button aria-label="button" type="button" className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
-                onClick={toggleDisabled} ><i className="ri-pencil-line"></i></button>
                 </div>
                 <div className="xl:col-span-6 col-span-12">
                   <div className="xl:col-span-6 col-span-12">
@@ -520,7 +521,8 @@ const UpdateModal = ({
               >
                 Close
               </button>
-              {!isDisabled && (
+
+              {!isDisabled ? (
                 <button
                   type="button"
                   className="ti-btn bg-primary text-white !font-medium"
@@ -532,6 +534,14 @@ const UpdateModal = ({
                   ) : (
                     "Update Contact"
                   )}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="ti-btn bg-primary text-white !font-medium ti-btn-secondary-full btn-wave"
+                  onClick={toggleDisabled}
+                >
+                  Edit Contact
                 </button>
               )}
             </div>

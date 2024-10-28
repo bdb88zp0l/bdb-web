@@ -71,10 +71,10 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
     try {
       const res = await userPrivateRequest.patch(`/api/cases/${params.id}`, {
         ...data,
-        ...(typeof data.client == "object"
+        ...(data.client && typeof data.client == "object"
           ? { client: data.client._id }
           : { client: data.client }),
-        ...(typeof data.team == "object"
+        ...(data.team && typeof data.team == "object"
           ? { team: data.team._id }
           : { team: data.team }),
         // startDate: data?.startDate,
@@ -86,6 +86,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
       });
       toast.success(res.data?.message);
     } catch (err) {
+      console.log(err.message);
       toast.error(err.response?.data?.message || "Error occurred");
     } finally {
       setIsSubmitting(false);
@@ -112,7 +113,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     onClick={handleCase}
                     className="ti-btn !py-1 !px-2 !text-[0.75rem] ti-btn-secondary-full btn-wave"
                   >
-                    Edit Case
+                    {isEdit ? "Cancel" : "Edit Case"}
                   </button>
                 )}
                 {isEdit && (
@@ -127,45 +128,53 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     ) : (
                       "Update Case"
                     )}
-                  </button>)}
+                  </button>
+                )}
               </div>
             </div>
             <div className="box-body">
               <div className="text-[.9375rem] font-semibold mb-2">
                 Case Title :
               </div>
-              {isEdit ? (<input
-                type="text"
-                className="form-control"
-                id="input-label"
-                placeholder="Enter Title"
-                value={data?.title}
-                onChange={(e) => {
-                  setData({
-                    ...data,
-                    title: e.target.value,
-                  });
-                }}
-              />) : (<h5 className="font-semibold mb-4 task-title">{data?.title}</h5>)}
+              {isEdit ? (
+                <input
+                  type="text"
+                  className="form-control"
+                  id="input-label"
+                  placeholder="Enter Title"
+                  value={data?.title}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      title: e.target.value,
+                    });
+                  }}
+                />
+              ) : (
+                <h5 className="font-semibold mb-4 task-title">{data?.title}</h5>
+              )}
               <div className="text-[.9375rem] font-semibold mb-2">
                 Case Description :
               </div>
 
-              {isEdit ? (<div id="project-descriptioin-editor">
-                <Editor
-                  onChange={(html) => {
-                    setData({
-                      ...data,
-                      description: html,
-                    });
+              {isEdit ? (
+                <div id="project-descriptioin-editor">
+                  <Editor
+                    onChange={(html) => {
+                      setData({
+                        ...data,
+                        description: html,
+                      });
+                    }}
+                    value={data?.description ?? ""}
+                  />
+                </div>
+              ) : (
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: data?.description,
                   }}
-                  value={data?.description ?? ""}
                 />
-              </div>) : (<div
-                dangerouslySetInnerHTML={{
-                  __html: data?.description,
-                }}
-              />
               )}
             </div>
             <div className="box-footer">
@@ -196,30 +205,64 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     </span>
                   )}
                 </div>
-                {/* <div>
+                <div>
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
-                    Senior Partner
+                    Client / Stakeholder
                   </span>
-                  <div className="flex items-center">
-                    <div className="me-2 leading-none">
-                      <span className="avatar avatar-xs !rounded-full">
-                        <img
-                          src={
-                            getImageUrl(data?.supervisingPartner?.photo) ||
-                            "../../../assets/images/faces/13.jpg"
-                          }
-                                          style={{ objectFit: "cover" }}
-                          alt=""
-                        />
+
+                  {isEdit ? (
+                    <Select
+                      name="client"
+                      options={pageData?.clients?.map((option: any) => {
+                        return {
+                          value: option._id,
+                          label: `${option?.companyName ?? ""} - ${
+                            option?.clientNumber ?? ""
+                          }`,
+                        };
+                      })}
+                      defaultValue={pageData?.clients
+                        ?.map((option: any) => {
+                          return {
+                            value: option._id,
+                            label: `${option?.companyName ?? ""} - ${
+                              option?.clientNumber ?? ""
+                            }`,
+                          };
+                        })
+                        ?.find((option: any) => {
+                          return option.value === data?.client?._id;
+                        })}
+                      value={pageData?.clients
+                        ?.map((option: any) => {
+                          return {
+                            value: option._id,
+                            label: `${option?.companyName ?? ""} - ${
+                              option?.clientNumber ?? ""
+                            }`,
+                          };
+                        })
+                        ?.find((option: any) => {
+                          return option.value === data?.client?._id;
+                        })}
+                      className="basic-multi-select"
+                      menuPlacement="auto"
+                      classNamePrefix="Select2"
+                      placeholder="Select Client/Stakeholder"
+                      onChange={(e: any) =>
+                        setData({ ...data, client: e.value })
+                      }
+                    />
+                  ) : (
+                    <>
+                      <span className="block text-[.875rem] font-semibold">
+                        {`${data?.client?.companyName ?? ""} - ${
+                          data?.client?.clientNumber ?? ""
+                        }`}
                       </span>
-                    </div>
-                    <span className="block text-[.875rem] font-semibold">
-                      {`${data?.supervisingPartner?.firstName ?? ""}  ${
-                        data?.supervisingPartner?.lastName ?? ""
-                      }`}
-                    </span>
-                  </div>
-                </div> */}
+                    </>
+                  )}
+                </div>
                 <div>
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     Start Date
@@ -246,9 +289,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     <span className="block text-[.875rem] font-semibold">
                       {data?.startDate
                         ? moment
-                          .utc(data.startDate)
-                          .format("DD,MMM YYYY")
-                          ?.toString()
+                            .utc(data.startDate)
+                            .format("DD,MMM YYYY")
+                            ?.toString()
                         : "N/A"}
                     </span>
                   )}
@@ -279,9 +322,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     <span className="block text-[.875rem] font-semibold">
                       {data?.endDate
                         ? moment
-                          .utc(data.endDate)
-                          .format("DD,MMM YYYY")
-                          ?.toString()
+                            .utc(data.endDate)
+                            .format("DD,MMM YYYY")
+                            ?.toString()
                         : "N/A"}
                     </span>
                   )}
@@ -312,8 +355,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           {/* Tooltip */}
                           {team.user?.firstName && (
                             <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                              {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
-                                }`}
+                              {`${team.user?.firstName ?? ""} ${
+                                team.user?.lastName ?? ""
+                              }`}
                             </div>
                           )}
                         </div>
@@ -326,32 +370,36 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     Service Type
                   </span>
 
-                  {isEdit ? (<Select
-                    name="serviceType"
-                    options={config?.CASE_SERVICE_TYPE?.map((option: any) => {
-                      return {
+                  {isEdit ? (
+                    <Select
+                      name="serviceType"
+                      options={config?.CASE_SERVICE_TYPE?.map((option: any) => {
+                        return {
+                          value: option,
+                          label: `${option}`,
+                        };
+                      })}
+                      value={config?.CASE_SERVICE_TYPE?.map((option: any) => ({
                         value: option,
-                        label: `${option}`,
-                      };
-                    })}
-                    value={config?.CASE_SERVICE_TYPE?.map((option: any) => ({
-                      value: option,
-                      label: option,
-                    }))?.find((option: any) => {
-                      return option.value === data?.serviceType;
-                    })}
-                    className="basic-multi-select"
-                    menuPlacement="auto"
-                    classNamePrefix="Select2"
-                    placeholder="Select Service Type"
-                    onChange={(e: any) =>
-                      setData({ ...data, serviceType: e.value })
-                    }
-                  />) : (<span className="block">
-                    <span className="badge bg-primary/10 text-primary">
-                      {toWordUpperCase(data?.serviceType ?? "N/A")}
+                        label: option,
+                      }))?.find((option: any) => {
+                        return option.value === data?.serviceType;
+                      })}
+                      className="basic-multi-select"
+                      menuPlacement="auto"
+                      classNamePrefix="Select2"
+                      placeholder="Select Service Type"
+                      onChange={(e: any) =>
+                        setData({ ...data, serviceType: e.value })
+                      }
+                    />
+                  ) : (
+                    <span className="block">
+                      <span className="badge bg-primary/10 text-primary">
+                        {toWordUpperCase(data?.serviceType ?? "N/A")}
+                      </span>
                     </span>
-                  </span>)}
+                  )}
                 </div>
                 {/* <div>
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
@@ -400,7 +448,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                         <p className="mb-2">
                           <b>
                             {auth.user?.email?.toString() ==
-                              history?.updatedBy?.email?.toString()
+                            history?.updatedBy?.email?.toString()
                               ? "You"
                               : history?.updatedBy?.firstName}
                           </b>{" "}
@@ -551,9 +599,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                 <p className="text-[#8c9097] dark:text-white/50 op-8">
                   {data?.billingStart
                     ? moment
-                      .utc(data?.billingStart)
-                      .format("DD,MMM YYYY")
-                      ?.toString()
+                        .utc(data?.billingStart)
+                        .format("DD,MMM YYYY")
+                        ?.toString()
                     : "N/A"}
                 </p>
               </div>
@@ -585,9 +633,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                 <p className="text-[#8c9097] dark:text-white/50 op-8">
                   {data?.billingEnd
                     ? moment
-                      .utc(data?.billingEnd)
-                      .format("DD,MMM YYYY")
-                      ?.toString()
+                        .utc(data?.billingEnd)
+                        .format("DD,MMM YYYY")
+                        ?.toString()
                     : "N/A"}
                 </p>
               </div>

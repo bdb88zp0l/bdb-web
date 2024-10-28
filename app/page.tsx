@@ -45,8 +45,8 @@ const Signincover = ({ local_varaiable }) => {
 
   // Local state for managing form data and error messages
   const [data, setData] = useState({
-    email: "admin@metatrend.com.ph",
-    password: "12345678",
+    email: "",
+    password: "",
   });
   const [passwordShow, setPasswordShow] = useState(false); // Manage password visibility toggle
 
