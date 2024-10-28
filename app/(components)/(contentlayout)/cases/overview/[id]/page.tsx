@@ -362,6 +362,34 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           )}
                         </div>
                       )
+                    )}{data?.members?.map(
+                      (team: { user: any }, index: number) => (
+                        <div key={index} className="relative group">
+                          <span className="avatar avatar-sm avatar-rounded">
+                            {team?.user?.photo ? (
+                              <img
+                                src={
+                                  getImageUrl(team.user?.photo) ||
+                                  "../../../assets/images/faces/2.jpg"
+                                }
+                                alt={team.user?.firstName || "User"}
+                                style={{ objectFit: "cover" }}
+                              />
+                            ) : (
+                              <i className="ri-account-circle-line me-1 align-middle text-3xl"></i>
+                            )}
+                          </span>
+
+                          {/* Tooltip */}
+                          {team.user?.firstName && (
+                            <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
+                              {`${team.user?.firstName ?? ""} ${
+                                team.user?.lastName ?? ""
+                              }`}
+                            </div>
+                          )}
+                        </div>
+                      )
                     )}
                   </div>
                 </div>
