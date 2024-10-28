@@ -177,9 +177,13 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                 />
               )}
             </div>
+            <div className="grid grid-cols-12 gap-4">
+                <div className="xl:col-span-4 col-span-12">
+            </div>
+            </div>
             <div className="box-footer">
-              <div className="flex items-center justify-between gap-2 flex-wrap">
-                <div>
+              <div className="grid grid-cols-12 gap-4">
+                <div className="xl:col-span-4 col-span-12">
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     Case Number
                   </span>
@@ -205,7 +209,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     </span>
                   )}
                 </div>
-                <div>
+                <div className="xl:col-span-4 col-span-12">
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     Client / Stakeholder
                   </span>
@@ -263,7 +267,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     </>
                   )}
                 </div>
-                <div>
+                <div className="xl:col-span-4 col-span-12">
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     Start Date
                   </span>
@@ -296,7 +300,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     </span>
                   )}
                 </div>
-                <div>
+                <div className="xl:col-span-4 col-span-12">
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     End Date
                   </span>
@@ -329,7 +333,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     </span>
                   )}
                 </div>
-                <div>
+                <div className="xl:col-span-4 col-span-12">
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     Assigned To
                   </span>
@@ -365,7 +369,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     )}
                   </div>
                 </div>
-                <div>
+                <div className="xl:col-span-4 col-span-12">
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     Service Type
                   </span>
