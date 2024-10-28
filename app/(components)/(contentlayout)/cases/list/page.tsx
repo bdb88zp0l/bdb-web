@@ -260,20 +260,20 @@ const CaseList = () => {
                           <td>
                             <div className="btn-list">
                               {" "}
-                              {/* {hasPermission("case.update") && (
+                              {hasPermission("case.update") && (
                                 <Link
                                   href={`/cases/edit/${item._id}`}
                                   className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
                                 >
                                   <i className="ri-pencil-line"></i>
                                 </Link>
-                              )}{" "} */}
-                              <Link
+                              )}{" "}
+                              {/* <Link
                                 href={`/cases/overview/${item._id}`}
                                 className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
                               >
                                 <i className="ri-pencil-line"></i>
-                              </Link>
+                              </Link> */}
                               {hasPermission("case.delete") && (
                                 <button
                                   aria-label="button"

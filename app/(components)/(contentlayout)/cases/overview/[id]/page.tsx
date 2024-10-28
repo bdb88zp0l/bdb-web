@@ -23,6 +23,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
   const [addMemberData, setAddMemberData] = useState<any>({});
   const [pageData, setPageData] = useState<any>({});
   const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const DatePicker = dynamic(() => import("react-datepicker"), { ssr: false });
 
   const fetchPageData = async () => {
     const res = await userPrivateRequest.get("/api/cases/data/get");
@@ -55,7 +57,37 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
     }
   };
 
+  const handleCase = () => {
+    setIsEdit(!isEdit);
+  };
+
   const config = useConfig();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+
+    try {
+      const res = await userPrivateRequest.patch(`/api/cases/${params.id}`, {
+        // ...data,
+        // ...(typeof data.client == "object"
+        //   ? { client: data.client._id }
+        //   : { client: data.client }),
+        // ...(typeof data.team == "object"
+        //   ? { team: data.team._id }
+        //   : { team: data.team }),
+        startDate: data?.startDate,
+        title: data?.title,
+      });
+      toast.success(res.data?.message);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Error occurred");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  console.log(data);
   return (
     <Fragment>
       <Seo title={"Case Overview"} />
@@ -69,7 +101,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
           <div className="box custom-box">
             <div className="box-header justify-between flex">
               <div className="box-title">Case Overview</div>
-              <div>
+              <div className=" flex gap-2">
                 <Link
                   href="/cases/create"
                   className="ti-btn !py-1 !px-2 !text-[0.75rem] ti-btn-secondary-full btn-wave"
@@ -77,6 +109,24 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                   <i className="ri-add-line align-middle me-1 font-semibold"></i>
                   Create Case
                 </Link>
+                <button
+                  onClick={handleCase}
+                  className="ti-btn !py-1 !px-2 !text-[0.75rem] ti-btn-secondary-full btn-wave"
+                >
+                  Edit Case
+                </button>
+                <button
+                  type="button"
+                  className="ti-btn bg-primary text-white !font-medium ms-auto float-right"
+                  disabled={isSubmitting}
+                  onClick={handleSubmit}
+                >
+                  {isSubmitting ? (
+                    <ButtonSpinner text="Updating Case" />
+                  ) : (
+                    "Update Case"
+                  )}
+                </button>
               </div>
             </div>
             <div className="box-body">
@@ -96,9 +146,27 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     Case Number
                   </span>
-                  <span className="block block text-[.875rem] font-semibold">
-                    {data?.caseNumber ?? ""}
-                  </span>
+                  {isEdit ? (
+                    <>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="input-label"
+                        placeholder="Enter Case Number"
+                        value={data?.caseNumber}
+                        onChange={(e) => {
+                          setData({
+                            ...data,
+                            caseNumber: e.target.value,
+                          });
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <span className="block text-[.875rem] font-semibold">
+                      {data?.caseNumber ?? ""}
+                    </span>
+                  )}
                 </div>
                 {/* <div>
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
@@ -128,17 +196,67 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     Start Date
                   </span>
-                  <span className="block text-[.875rem] font-semibold">
-                    {data?.startDate ? moment.utc(data.startDate).format("DD,MMM YYYY")?.toString() : "N/A"}
-                  </span>
+                  {isEdit ? (
+                    <>
+                      <div className="form-group">
+                        <div className="input-group">
+                          <div className="input-group-text text-muted">
+                            {" "}
+                            <i className="ri-calendar-line"></i>{" "}
+                          </div>
+                          <DatePicker
+                            className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
+                            selected={data?.startDate}
+                            onChange={(date) => {
+                              setData({ ...data, startDate: date });
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <span className="block text-[.875rem] font-semibold">
+                      {data?.startDate
+                        ? moment
+                            .utc(data.startDate)
+                            .format("DD,MMM YYYY")
+                            ?.toString()
+                        : "N/A"}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     End Date
                   </span>
-                  <span className="block text-[.875rem] font-semibold">
-                    {data?.endDate ? moment.utc(data.endDate).format("DD,MMM YYYY")?.toString() : "N/A"}
-                  </span>
+                  {isEdit ? (
+                    <>
+                      <div className="form-group">
+                        <div className="input-group">
+                          <div className="input-group-text text-muted">
+                            {" "}
+                            <i className="ri-calendar-line"></i>{" "}
+                          </div>
+                          <DatePicker
+                            className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
+                            selected={data?.endDate}
+                            onChange={(date) => {
+                              setData({ ...data, endDate: date });
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <span className="block text-[.875rem] font-semibold">
+                      {data?.endDate
+                        ? moment
+                            .utc(data.endDate)
+                            .format("DD,MMM YYYY")
+                            ?.toString()
+                        : "N/A"}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
@@ -166,8 +284,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           {/* Tooltip */}
                           {team.user?.firstName && (
                             <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                              {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
-                                }`}
+                              {`${team.user?.firstName ?? ""} ${
+                                team.user?.lastName ?? ""
+                              }`}
                             </div>
                           )}
                         </div>
@@ -232,7 +351,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                         <p className="mb-2">
                           <b>
                             {auth.user?.email?.toString() ==
-                              history?.updatedBy?.email?.toString()
+                            history?.updatedBy?.email?.toString()
                               ? "You"
                               : history?.updatedBy?.firstName}
                           </b>{" "}
@@ -331,9 +450,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
             </div>
             <div className="box-body">
               <div className="mb-6">
-                <p className="text-[.875rem] font-semibold mb-1">
-                  Currency:
-                </p>
+                <p className="text-[.875rem] font-semibold mb-1">Currency:</p>
                 <p className="text-[#8c9097] dark:text-white/50 op-8">
                   {toWordUpperCase(data?.currency ?? "N/A")}
                 </p>
@@ -343,7 +460,12 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                   Billing Start Date:
                 </p>
                 <p className="text-[#8c9097] dark:text-white/50 op-8">
-                  {data?.billingStart ? moment.utc(data?.billingStart).format("DD,MMM YYYY")?.toString() : "N/A"}
+                  {data?.billingStart
+                    ? moment
+                        .utc(data?.billingStart)
+                        .format("DD,MMM YYYY")
+                        ?.toString()
+                    : "N/A"}
                 </p>
               </div>
               <div className="mb-6">
@@ -351,14 +473,17 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                   Billing End Date:
                 </p>
                 <p className="text-[#8c9097] dark:text-white/50 op-8">
-                  {data?.billingEnd ? moment.utc(data?.billingEnd).format("DD,MMM YYYY")?.toString() : "N/A"}
+                  {data?.billingEnd
+                    ? moment
+                        .utc(data?.billingEnd)
+                        .format("DD,MMM YYYY")
+                        ?.toString()
+                    : "N/A"}
                 </p>
               </div>
               <JsonPreview data={data?.metaData ?? {}} />
             </div>
-            <div className="box-footer">
-
-            </div>
+            <div className="box-footer"></div>
           </div>
         </div>
         <div className="xl:col-span-4 col-span-12">
