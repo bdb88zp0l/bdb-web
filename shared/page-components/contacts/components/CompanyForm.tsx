@@ -15,6 +15,7 @@ const CompanyForm = ({
   removeField,
   pageData,
   fetchPageData,
+  isDisabled,
 }: any) => {
   const handleFieldChange = (index: number, field: string, value: string) => {
     setCompanies(
@@ -81,6 +82,7 @@ const CompanyForm = ({
                     onChange={(e) =>
                       handleFieldChange(index, "companyName", e.target.value)
                     }
+                    disabled={isDisabled}
                   />
                 </div>
 
@@ -101,6 +103,7 @@ const CompanyForm = ({
                     menuPlacement="auto"
                     classNamePrefix="Select2"
                     placeholder="Select or Enter Company Group"
+                    isDisabled={isDisabled}
                     onChange={(e: any) =>
                       handleFieldChange(index, "companyGroup", e?.value)
                     }
@@ -153,6 +156,7 @@ const CompanyForm = ({
                     onChange={(e) =>
                       handleFieldChange(index, "tin", e.target.value)
                     }
+                    disabled={isDisabled}
                   />
                 </div>
 
@@ -169,6 +173,7 @@ const CompanyForm = ({
                     onChange={(e) =>
                       handleFieldChange(index, "businessStyle", e.target.value)
                     }
+                    disabled={isDisabled}
                   />
                 </div>
 
@@ -185,6 +190,7 @@ const CompanyForm = ({
                     onChange={(e) =>
                       handleFieldChange(index, "industry", e.target.value)
                     }
+                    disabled={isDisabled}
                   />
                 </div>
 
@@ -205,6 +211,7 @@ const CompanyForm = ({
                     menuPlacement="auto"
                     classNamePrefix="Select2"
                     placeholder="Select Supervising Partner"
+                    isDisabled={isDisabled}
                     onChange={(e: any) =>
                       handleFieldChange(index, "supervisingPartner", e.value)
                     }
@@ -243,6 +250,7 @@ const CompanyForm = ({
                     menuPlacement="auto"
                     classNamePrefix="Select2"
                     placeholder="Select Referred By"
+                    isDisabled={isDisabled}
                     onChange={(e: any) =>
                       handleFieldChange(index, "referredBy", e.value)
                     }
@@ -261,7 +269,6 @@ const CompanyForm = ({
                       })}
                   />
                 </div>
-                
               </div>
             </div>
           </div>
@@ -282,8 +289,8 @@ const CompanyForm = ({
                       !company?.logo
                         ? "../../../assets/images/faces/9.jpg"
                         : company?.logo?.includes("base64")
-                          ? company?.logo
-                          : `${process.env.NEXT_PUBLIC_AWS_S3_URL}/${company?.logo}`
+                        ? company?.logo
+                        : `${process.env.NEXT_PUBLIC_AWS_S3_URL}/${company?.logo}`
                     }
                     alt="Company Logo Preview"
                     style={{
@@ -306,6 +313,7 @@ const CompanyForm = ({
                         className="absolute w-full h-full opacity-0"
                         id={`company-logo-${index}`}
                         onChange={(e) => handleCompanyLogoChange(index, e)}
+                        disabled={isDisabled}
                       />
                       <i className="fe fe-camera text-[1.25rem] !text-white"></i>
                     </label>
@@ -317,13 +325,15 @@ const CompanyForm = ({
         </div>
       ))}
 
-      <button
-        type="button"
-        className="mt-4 px-4 py-2 ti-btn bg-primary text-white !font-medium"
-        onClick={() => addField(setCompanies, companies)}
-      >
-        + Add Company
-      </button>
+      {!isDisabled && (
+        <button
+          type="button"
+          className="mt-4 px-4 py-2 ti-btn bg-primary text-white !font-medium"
+          onClick={() => addField(setCompanies, companies)}
+        >
+          + Add Company
+        </button>
+      )}
     </div>
   );
 };

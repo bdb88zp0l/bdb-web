@@ -318,10 +318,13 @@ const ShowModal = ({ contact, isShowModalOpen, closeShowModal }: any) => {
                       <div key={index}>
                         <p>
                           <strong>{address.label}:</strong>{" "}
-                          {`${address.houseNumber || ""}, ${address.street || ""
-                            }, ${address.barangay || ""}, ${address.region || ""
-                            }, ${address.city || ""}- ${address.zip || ""}, ${address.country || ""
-                            }`}
+                          {`${address.houseNumber || ""}, ${
+                            address.street || ""
+                          }, ${address.barangay || ""}, ${
+                            address.region || ""
+                          }, ${address.city || ""}- ${address.zip || ""}, ${
+                            address.country || ""
+                          }`}
                         </p>
                       </div>
                     ))}
