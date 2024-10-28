@@ -460,7 +460,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
                           )
                         }
                       />
-                      {index !== 0 && (
+                      {index !== 0 && !isDisabled && (
                         <button
                           type="button"
                           className="ti-btn ti-btn-danger ti-btn-xs"

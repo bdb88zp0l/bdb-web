@@ -1,4 +1,3 @@
-import React from "react";
 
 const PhoneForm = ({
   phones,
@@ -48,7 +47,7 @@ const PhoneForm = ({
               handleFieldChange(index, "phoneNumber", e.target.value)
             }
           />
-          {index !== 0 && (
+          {index !== 0 && !isDisabled && (
             <div>
               {" "}
               <button

@@ -203,18 +203,14 @@ const CaseManagement = () => {
                           className="border border-defaultborder crm-contact"
                           key={Math.random()}
                         >  
-                          <button
+                          <td 
                             onClick={() => {
                               setSelectedClient(row);
                               openModal();
-                            }}
-                          >
-                            <td>
-                                <span className="block font-semibold">
-                                  {row?.companyName}
-                                </span>
+                            }} 
+                            className="font-semibold cursor-pointer">
+                            {row?.companyName}
                             </td>
-                          </button>
                           <td>{row?.clientNumber}</td>
                           <td>
                             <div>
