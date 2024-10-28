@@ -260,7 +260,7 @@ const CaseList = () => {
                           <td>
                             <div className="btn-list">
                               {" "}
-                              {hasPermission("case.update") && (
+                              {hasPermission("case.read") && (
                                 <Link
                                   // href={`/cases/edit/${item._id}`}
                                   href={`/cases/overview/${item._id}`}

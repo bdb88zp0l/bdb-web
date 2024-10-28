@@ -8,7 +8,7 @@ import CaseTeamOverview from "@/shared/page-components/case-management/CaseTeamO
 import FileRow from "@/shared/page-components/case-management/FileRow";
 import { useConfig } from "@/shared/providers/ConfigProvider";
 import store from "@/shared/redux/store";
-import { getImageUrl, toWordUpperCase } from "@/utils/utils";
+import { getImageUrl, hasPermission, toWordUpperCase } from "@/utils/utils";
 import moment from "moment";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -107,12 +107,14 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
             <div className="box-header justify-between flex">
               <div className="box-title">Case Overview</div>
               <div className=" flex gap-2">
-                <button
-                  onClick={handleCase}
-                  className="ti-btn !py-1 !px-2 !text-[0.75rem] ti-btn-secondary-full btn-wave"
-                >
-                  Edit Case
-                </button>
+                {hasPermission("case.update") && (
+                  <button
+                    onClick={handleCase}
+                    className="ti-btn !py-1 !px-2 !text-[0.75rem] ti-btn-secondary-full btn-wave"
+                  >
+                    Edit Case
+                  </button>
+                )}
                 {isEdit && (
                   <button
                     type="button"
