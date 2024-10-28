@@ -5,7 +5,7 @@ import Modal from "@/shared/modals/Modal";
 import { useConfig } from "@/shared/providers/ConfigProvider";
 import moment from "moment";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
 import AddressForm from "../contacts/components/AddressForm";
@@ -13,10 +13,14 @@ import PhoneForm from "../contacts/components/PhoneForm";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
-const UpdateModal = ({ row, fetchClients, pageData, fetchPageData,isEditModalOpen,setIsEditModalOpen }: any) => {
+const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOpen, setIsEditModalOpen }: any) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [data, setData] = useState<any>(row);
+
+  useEffect(() => {
+    setData(row);
+  }, [row]);
 
   const openModal = (e: any) => {
     e.preventDefault();
@@ -118,20 +122,20 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData,isEditModalOpe
 
   return (
     <>
-      
+
       <Modal isOpen={isEditModalOpen} close={closeModal}>
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center  min-w-[calc(100%-3.5rem)]">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">
             <div className="ti-modal-header">
               <div className="flex gap-2.5 items-center">
-                  <h6
+                <h6
                   className="modal-title text-[1rem] font-semibold text-defaulttextcolor"
                   id="mail-ComposeLabel"
                 >
                   {isDisabled ? 'Client Details' : 'Update Client'}
                 </h6>
                 <button aria-label="button" type="button" className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
-                onClick={toggleEditMode} ><i className="ri-pencil-line"></i></button>
+                  onClick={toggleEditMode} ><i className="ri-pencil-line"></i></button>
               </div>
               <button
                 type="button"
@@ -255,7 +259,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData,isEditModalOpe
                     </div>
                   )}
                 </div>
-
+{/* 
                 <div className="col-span-6">
                   {row && (
                     <div className="text-center flex justify-center items-center flex-col">
@@ -283,7 +287,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData,isEditModalOpe
                       </span>
                     </div>
                   )}
-                </div>
+                </div> */}
 
                 {/* Engagement Information */}
                 <div className="col-span-12">
@@ -317,7 +321,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData,isEditModalOpe
                       <label className="form-label">Account Type</label>
                       <Select
                         name="accountType"
-                        isDisabled={isDisabled} 
+                        isDisabled={isDisabled}
                         options={config?.CLIENT_ACCOUNT_TYPE?.map((option) => {
                           return {
                             value: option,
@@ -419,7 +423,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData,isEditModalOpe
                           }`}
                         disabled
                       />
-                      </div>
+                    </div>
                   </div>
                 </div>
 
