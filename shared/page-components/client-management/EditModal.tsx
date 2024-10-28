@@ -148,8 +148,6 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
                 >
                   {isDisabled ? 'Client Details' : 'Update Client'}
                 </h6>
-                <button aria-label="button" type="button" className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
-                  onClick={toggleEditMode} ><i className="ri-pencil-line"></i></button>
               </div>
               <button
                 type="button"
@@ -521,7 +519,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
               >
                 Close
               </button>
-              {!isDisabled && (
+              {!isDisabled ? (
                 <button
                   type="button"
                   className="ti-btn bg-primary text-white !font-medium"
@@ -533,6 +531,14 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
                   ) : (
                     "Update Client"
                   )}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="ti-btn bg-primary text-white !font-medium ti-btn-secondary-full btn-wave"
+                  onClick={toggleEditMode}
+                >
+                  Edit Client
                 </button>
               )}
             </div>
