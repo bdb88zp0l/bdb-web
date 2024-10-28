@@ -52,11 +52,13 @@ const CaseTeamOverview = ({
     setIsSubmittingMember(true);
 
     try {
-      let existingTeams = data.team?.users?.map((team) => ({
-        user: team.user._id,
-        designation: team.designation._id,
-        rate: team.rate,
-      }));
+      let existingTeams = data?.members
+        ? data?.members?.map((team) => ({
+          user: team.user._id,
+          designation: team.designation._id,
+          rate: team.rate,
+        }))
+        : [];
 
       if (editMode && editIndex !== null) {
         // Update the team member if in edit mode
@@ -66,8 +68,8 @@ const CaseTeamOverview = ({
         existingTeams.push(addMemberData);
       }
 
-      const res = await userPrivateRequest.patch(
-        `/api/team/${data.team?._id}/bulkUpdate`,
+      const res = await userPrivateRequest.post(
+        `/api/cases/${data?._id}/members`,
         {
           users: existingTeams,
         }
@@ -90,17 +92,19 @@ const CaseTeamOverview = ({
     if (!confirmDelete) return;
 
     try {
-      let existingTeams = data.team?.users?.map((team) => ({
-        user: team.user._id,
-        designation: team.designation._id,
-        rate: team.rate,
-      }));
+      let existingTeams = data?.members
+        ? data?.members?.map((team) => ({
+          user: team.user._id,
+          designation: team.designation._id,
+          rate: team.rate,
+        }))
+        : [];
 
       // Remove the member at the specific index
       existingTeams.splice(index, 1);
 
-      const res = await userPrivateRequest.patch(
-        `/api/team/${data.team?._id}/bulkUpdate`,
+      const res = await userPrivateRequest.post(
+        `/api/cases/${data?._id}/members`,
         {
           users: existingTeams,
         }
@@ -170,9 +174,69 @@ const CaseTeamOverview = ({
                             )}
                           </span>
                         </div>
-                        <div className="font-semibold">{`${
-                          team.user?.firstName ?? ""
-                        }  ${team.user?.lastName ?? ""}`}</div>
+                        <div className="font-semibold">{`${team.user?.firstName ?? ""
+                          }  ${team.user?.lastName ?? ""}`}</div>
+                      </div>
+                    </td>
+                    <td>
+                      <span className="badge bg-primary/10 text-primary">
+                        {team?.designation?.name ?? ""}
+                      </span>
+                    </td>
+                    <td>
+                      {team?.rate} {data.currency}
+                      <br />
+                      <span className="badge bg-primary/10 text-primary">
+                        {data.defaultBillingType}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="inline-flex">
+                        <button
+                          aria-label="button"
+                          type="button"
+                          className="ti-btn ti-btn-sm ti-btn-info me-[0.375rem]"
+                          onClick={(e) => openModal(e, team, index)}
+                        >
+                          <i className="ri-edit-line"></i>
+                        </button>
+                        <button
+                          aria-label="button"
+                          type="button"
+                          className="ti-btn ti-btn-sm ti-btn-danger"
+                          onClick={() => handleDelete(index)}
+                        >
+                          <i className="ri-delete-bin-line"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+
+
+                {data?.members?.map((team, index) => (
+                  <tr key={index} className="border border-defaultborder">
+                    <td>
+                      <div className="flex items-center">
+                        <div className="me-2 leading-none">
+                          <span className="avatar avatar-sm ">
+                            {team?.user?.photo ? (
+                              <img
+                                src={
+                                  getImageUrl(team.user?.photo) ||
+                                  "../../../assets/images/faces/2.jpg"
+                                }
+                                alt=""
+                                className="!rounded-full"
+                                style={{ objectFit: "cover" }}
+                              />
+                            ) : (
+                              <i className="ri-account-circle-line me-1 align-middle text-3xl"></i>
+                            )}
+                          </span>
+                        </div>
+                        <div className="font-semibold">{`${team.user?.firstName ?? ""
+                          }  ${team.user?.lastName ?? ""}`}</div>
                       </div>
                     </td>
                     <td>
@@ -269,16 +333,14 @@ const CaseTeamOverview = ({
                     name="user"
                     options={pageData?.users?.map((option: any) => ({
                       value: option._id,
-                      label: `${option?.firstName ?? ""}  ${
-                        option?.lastName ?? ""
-                      }`,
+                      label: `${option?.firstName ?? ""}  ${option?.lastName ?? ""
+                        }`,
                     }))}
                     value={pageData?.users
                       ?.map((option: any) => ({
                         value: option._id,
-                        label: `${option?.firstName ?? ""}  ${
-                          option?.lastName ?? ""
-                        }`,
+                        label: `${option?.firstName ?? ""}  ${option?.lastName ?? ""
+                          }`,
                       }))
                       ?.find(
                         (option: any) => option.value === addMemberData?.user
