@@ -317,7 +317,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData,isEditModalOpe
                       <label className="form-label">Account Type</label>
                       <Select
                         name="accountType"
-                        disabled={isDisabled} 
+                        isDisabled={isDisabled} 
                         options={config?.CLIENT_ACCOUNT_TYPE?.map((option) => {
                           return {
                             value: option,
@@ -361,7 +361,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData,isEditModalOpe
                     <div className="col-span-6">
                       <label className="form-label">Status</label>
                       <Select
-                        disabled={isDisabled}
+                        isDisabled={isDisabled}
                         name="status"
                         options={[
                           { label: "Active", value: "active" },
