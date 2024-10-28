@@ -20,6 +20,20 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
 
   useEffect(() => {
     setData(row);
+    setAddresses(row?.addresses ?? [{
+      houseNumber: "",
+      building: "",
+      street: "",
+      city: "",
+      barangay: "",
+      zip: "",
+      region: "",
+      country: "",
+      label: "",
+    },
+    ]);
+    setEmails(row?.emails ?? [{ value: "" }]);
+    setPhones(row?.phones ?? [{ dialCode: "", phoneNumber: "", label: "" }]);
   }, [row]);
 
   const openModal = (e: any) => {
@@ -134,8 +148,6 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
                 >
                   {isDisabled ? 'Client Details' : 'Update Client'}
                 </h6>
-                <button aria-label="button" type="button" className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
-                  onClick={toggleEditMode} ><i className="ri-pencil-line"></i></button>
               </div>
               <button
                 type="button"
@@ -259,7 +271,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
                     </div>
                   )}
                 </div>
-{/* 
+                {/* 
                 <div className="col-span-6">
                   {row && (
                     <div className="text-center flex justify-center items-center flex-col">
@@ -507,7 +519,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
               >
                 Close
               </button>
-              {!isDisabled && (
+              {!isDisabled ? (
                 <button
                   type="button"
                   className="ti-btn bg-primary text-white !font-medium"
@@ -519,6 +531,14 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
                   ) : (
                     "Update Client"
                   )}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="ti-btn bg-primary text-white !font-medium ti-btn-secondary-full btn-wave"
+                  onClick={toggleEditMode}
+                >
+                  Edit Client
                 </button>
               )}
             </div>

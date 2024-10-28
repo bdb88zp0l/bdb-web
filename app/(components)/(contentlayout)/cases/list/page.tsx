@@ -247,9 +247,38 @@ const CaseList = () => {
                                     {/* Tooltip */}
                                     {user?.firstName && (
                                       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                                        {`${user?.firstName ?? ""} ${
-                                          user?.lastName ?? ""
-                                        }`}
+                                        {`${user?.firstName ?? ""} ${user?.lastName ?? ""
+                                          }`}
+                                      </div>
+                                    )}
+                                  </div>
+                                )
+                              )}{item?.members?.map(
+                                (
+                                  user: {
+                                    photo: any;
+                                    firstName: any;
+                                    lastName: any;
+                                  },
+                                  index: number
+                                ) => (
+                                  <div key={index} className="relative group">
+                                    <span className="avatar avatar-sm avatar-rounded">
+                                      {getImageUrl(user?.photo) ? (
+                                        <img
+                                          src={`  ${getImageUrl(user?.photo)}`}
+                                          alt=""
+                                        />
+                                      ) : (
+                                        <i className="ri-account-circle-line me-1 align-middle text-3xl  text-[#8c9097]"></i>
+                                      )}
+                                    </span>
+
+                                    {/* Tooltip */}
+                                    {user?.firstName && (
+                                      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
+                                        {`${user?.firstName ?? ""} ${user?.lastName ?? ""
+                                          }`}
                                       </div>
                                     )}
                                   </div>

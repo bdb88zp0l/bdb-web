@@ -11,6 +11,7 @@ import AddFileModal from "../AddFileModal";
 import AddFolderModal from "../AddFolderModal";
 import BreadCrumb from "../BreadCrumb";
 import NodeView from "../NodeView";
+import NoFileFolder from "../NoFileFolder";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
@@ -191,19 +192,23 @@ const FileExplorer = ({
           <div ref={topRef} className="h-12"></div>
 
           <div className="grid grid-cols-12 gap-x-6 mb-4">
-            {nodeData?.map((item: any) => (
-              <NodeView
-                key={item.id}
-                item={item}
-                setParentId={setParentId}
-                setSelectedDocumentId={setSelectedDocumentId}
-                setScreen={setScreen}
-                handleDeleteDocument={handleDeleteDocument}
-                toggleFavourite={toggleFavourite}
-                setSingleFileDetail={setSingleFileDetail}
-                fetchNode={fetchNode}
-              />
-            ))}
+            {nodeData?.length === 0 ? (
+              <NoFileFolder /> 
+            ) : (
+              nodeData.map((item) => (
+                <NodeView
+                  key={item.id}
+                  item={item}
+                  setParentId={setParentId}
+                  setSelectedDocumentId={setSelectedDocumentId}
+                  setScreen={setScreen}
+                  handleDeleteDocument={handleDeleteDocument}
+                  toggleFavourite={toggleFavourite}
+                  setSingleFileDetail={setSingleFileDetail}
+                  fetchNode={fetchNode}
+                />
+              ))
+            )}
           </div>
 
           <div ref={bottomRef} className="h-12"></div>

@@ -1,5 +1,6 @@
 "use client";
 import { userPrivateRequest } from "@/config/axios.config";
+import Editor from "@/shared/common-components/Editor";
 import JsonPreview from "@/shared/common-components/JsonPreview";
 import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
 import Pageheader from "@/shared/layout-components/page-header/pageheader";
@@ -15,7 +16,6 @@ import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 const Select = dynamic(() => import("react-select"), { ssr: false });
-import Editor from "@/shared/common-components/Editor";
 export default function CaseOverview({ params }: { params: { id: string } }) {
   const { auth } = store.getState();
 
@@ -71,10 +71,10 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
     try {
       const res = await userPrivateRequest.patch(`/api/cases/${params.id}`, {
         ...data,
-        ...(typeof data.client == "object"
+        ...(data.client && typeof data.client == "object"
           ? { client: data.client._id }
           : { client: data.client }),
-        ...(typeof data.team == "object"
+        ...(data.team && typeof data.team == "object"
           ? { team: data.team._id }
           : { team: data.team }),
         // startDate: data?.startDate,
@@ -86,6 +86,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
       });
       toast.success(res.data?.message);
     } catch (err) {
+      console.log(err.message);
       toast.error(err.response?.data?.message || "Error occurred");
     } finally {
       setIsSubmitting(false);
@@ -112,7 +113,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     onClick={handleCase}
                     className="ti-btn !py-1 !px-2 !text-[0.75rem] ti-btn-secondary-full btn-wave"
                   >
-                    Edit Case
+                    {isEdit ? "Cancel" : "Edit Case"}
                   </button>
                 )}
                 {isEdit && (
@@ -127,50 +128,62 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     ) : (
                       "Update Case"
                     )}
-                  </button>)}
+                  </button>
+                )}
               </div>
             </div>
             <div className="box-body">
               <div className="text-[.9375rem] font-semibold mb-2">
                 Case Title :
               </div>
-              {isEdit ? (<input
-                type="text"
-                className="form-control"
-                id="input-label"
-                placeholder="Enter Title"
-                value={data?.title}
-                onChange={(e) => {
-                  setData({
-                    ...data,
-                    title: e.target.value,
-                  });
-                }}
-              />) : (<h5 className="font-semibold mb-4 task-title">{data?.title}</h5>)}
+              {isEdit ? (
+                <input
+                  type="text"
+                  className="form-control"
+                  id="input-label"
+                  placeholder="Enter Title"
+                  value={data?.title}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      title: e.target.value,
+                    });
+                  }}
+                />
+              ) : (
+                <h5 className="font-semibold mb-4 task-title">{data?.title}</h5>
+              )}
               <div className="text-[.9375rem] font-semibold mb-2">
                 Case Description :
               </div>
 
-              {isEdit ? (<div id="project-descriptioin-editor">
-                <Editor
-                  onChange={(html) => {
-                    setData({
-                      ...data,
-                      description: html,
-                    });
+              {isEdit ? (
+                <div id="project-descriptioin-editor">
+                  <Editor
+                    onChange={(html) => {
+                      setData({
+                        ...data,
+                        description: html,
+                      });
+                    }}
+                    value={data?.description ?? ""}
+                  />
+                </div>
+              ) : (
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: data?.description,
                   }}
-                  value={data?.description ?? ""}
                 />
-              </div>) : (<div
-                dangerouslySetInnerHTML={{
-                  __html: data?.description,
-                }}
-              />
               )}
             </div>
+            <div className="grid grid-cols-12 gap-4">
+                <div className="xl:col-span-4 col-span-12">
+            </div>
+            </div>
             <div className="box-footer">
-              <div className="flex items-center justify-between gap-2 flex-wrap">
-                <div>
+              <div className="grid grid-cols-12 gap-4">
+                <div className="xl:col-span-4 col-span-12">
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     Case Number
                   </span>
@@ -196,31 +209,61 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     </span>
                   )}
                 </div>
-                {/* <div>
+                <div className="xl:col-span-4 col-span-12">
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
-                    Senior Partner
+                    Client / Stakeholder
                   </span>
-                  <div className="flex items-center">
-                    <div className="me-2 leading-none">
-                      <span className="avatar avatar-xs !rounded-full">
-                        <img
-                          src={
-                            getImageUrl(data?.supervisingPartner?.photo) ||
-                            "../../../assets/images/faces/13.jpg"
-                          }
-                                          style={{ objectFit: "cover" }}
-                          alt=""
-                        />
+
+                  {isEdit ? (
+                    <Select
+                      name="client"
+                      options={pageData?.clients?.map((option: any) => {
+                        return {
+                          value: option._id,
+                          label: `${option?.companyName ?? ""} - ${option?.clientNumber ?? ""
+                            }`,
+                        };
+                      })}
+                      defaultValue={pageData?.clients
+                        ?.map((option: any) => {
+                          return {
+                            value: option._id,
+                            label: `${option?.companyName ?? ""} - ${option?.clientNumber ?? ""
+                              }`,
+                          };
+                        })
+                        ?.find((option: any) => {
+                          return option.value === data?.client?._id;
+                        })}
+                      value={pageData?.clients
+                        ?.map((option: any) => {
+                          return {
+                            value: option._id,
+                            label: `${option?.companyName ?? ""} - ${option?.clientNumber ?? ""
+                              }`,
+                          };
+                        })
+                        ?.find((option: any) => {
+                          return option.value === data?.client?._id;
+                        })}
+                      className="basic-multi-select"
+                      menuPlacement="auto"
+                      classNamePrefix="Select2"
+                      placeholder="Select Client/Stakeholder"
+                      onChange={(e: any) =>
+                        setData({ ...data, client: e.value })
+                      }
+                    />
+                  ) : (
+                    <>
+                      <span className="block text-[.875rem] font-semibold">
+                        {`${data?.client?.companyName ?? ""} - ${data?.client?.clientNumber ?? ""
+                          }`}
                       </span>
-                    </div>
-                    <span className="block text-[.875rem] font-semibold">
-                      {`${data?.supervisingPartner?.firstName ?? ""}  ${
-                        data?.supervisingPartner?.lastName ?? ""
-                      }`}
-                    </span>
-                  </div>
-                </div> */}
-                <div>
+                    </>
+                  )}
+                </div>
+                <div className="xl:col-span-4 col-span-12">
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     Start Date
                   </span>
@@ -253,7 +296,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     </span>
                   )}
                 </div>
-                <div>
+                <div className="xl:col-span-4 col-span-12">
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     End Date
                   </span>
@@ -286,7 +329,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     </span>
                   )}
                 </div>
-                <div>
+                <div className="xl:col-span-4 col-span-12">
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     Assigned To
                   </span>
@@ -318,40 +361,71 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           )}
                         </div>
                       )
+                    )}{data?.members?.map(
+                      (team: { user: any }, index: number) => (
+                        <div key={index} className="relative group">
+                          <span className="avatar avatar-sm avatar-rounded">
+                            {team?.user?.photo ? (
+                              <img
+                                src={
+                                  getImageUrl(team.user?.photo) ||
+                                  "../../../assets/images/faces/2.jpg"
+                                }
+                                alt={team.user?.firstName || "User"}
+                                style={{ objectFit: "cover" }}
+                              />
+                            ) : (
+                              <i className="ri-account-circle-line me-1 align-middle text-3xl"></i>
+                            )}
+                          </span>
+
+                          {/* Tooltip */}
+                          {team.user?.firstName && (
+                            <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
+                              {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
+                                }`}
+                            </div>
+                          )}
+                        </div>
+                      )
                     )}
                   </div>
                 </div>
-                <div>
+                <div className="xl:col-span-4 col-span-12">
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                     Service Type
                   </span>
 
-                  {isEdit ? (<Select
-                    name="serviceType"
-                    options={config?.CASE_SERVICE_TYPE?.map((option: any) => {
-                      return {
+                  {isEdit ? (
+                    <Select
+                      name="serviceType"
+                      options={config?.CASE_SERVICE_TYPE?.map((option: any) => {
+                        return {
+                          value: option,
+                          label: `${option}`,
+                        };
+                      })}
+                      value={config?.CASE_SERVICE_TYPE?.map((option: any) => ({
                         value: option,
-                        label: `${option}`,
-                      };
-                    })}
-                    value={config?.CASE_SERVICE_TYPE?.map((option: any) => ({
-                      value: option,
-                      label: option,
-                    }))?.find((option: any) => {
-                      return option.value === data?.serviceType;
-                    })}
-                    className="basic-multi-select"
-                    menuPlacement="auto"
-                    classNamePrefix="Select2"
-                    placeholder="Select Service Type"
-                    onChange={(e: any) =>
-                      setData({ ...data, serviceType: e.value })
-                    }
-                  />) : (<span className="block">
-                    <span className="badge bg-primary/10 text-primary">
-                      {toWordUpperCase(data?.serviceType ?? "N/A")}
+                        label: option,
+                      }))?.find((option: any) => {
+                        return option.value === data?.serviceType;
+                      })}
+                      className="basic-multi-select"
+                      menuPlacement="auto"
+                      classNamePrefix="Select2"
+                      placeholder="Select Service Type"
+                      onChange={(e: any) =>
+                        setData({ ...data, serviceType: e.value })
+                      }
+                    />
+                  ) : (
+                    <span className="block">
+                      <span className="badge bg-primary/10 text-primary">
+                        {toWordUpperCase(data?.serviceType ?? "N/A")}
+                      </span>
                     </span>
-                  </span>)}
+                  )}
                 </div>
                 {/* <div>
                   <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
@@ -495,42 +569,122 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
 
           <div className="box custom-box">
             <div className="box-header">
-              <div className="box-title">Billing Information</div>
+              <div className="box-title">Billing Information pp</div>
             </div>
             <div className="box-body">
-              <div className="mb-6">
-                <p className="text-[.875rem] font-semibold mb-1">Currency:</p>
-                <p className="text-[#8c9097] dark:text-white/50 op-8">
-                  {toWordUpperCase(data?.currency ?? "N/A")}
-                </p>
-              </div>
-              <div className="mb-6">
-                <p className="text-[.875rem] font-semibold mb-1">
-                  Billing Start Date:
-                </p>
-                <p className="text-[#8c9097] dark:text-white/50 op-8">
-                  {data?.billingStart
-                    ? moment
-                      .utc(data?.billingStart)
-                      .format("DD,MMM YYYY")
-                      ?.toString()
-                    : "N/A"}
-                </p>
-              </div>
-              <div className="mb-6">
-                <p className="text-[.875rem] font-semibold mb-1">
-                  Billing End Date:
-                </p>
-                <p className="text-[#8c9097] dark:text-white/50 op-8">
-                  {data?.billingEnd
-                    ? moment
-                      .utc(data?.billingEnd)
-                      .format("DD,MMM YYYY")
-                      ?.toString()
-                    : "N/A"}
-                </p>
-              </div>
+              {!isEdit ? (
+                <div className="mb-6">
+                  <p className="text-[.875rem] font-semibold mb-1">Currency:</p>
+                  <p className="text-[#8c9097] dark:text-white/50 op-8">
+                    {toWordUpperCase(data?.currency ?? "N/A")}
+                  </p>
+                </div>
+              ) : (
+                <div className="mb-6">
+                  <label htmlFor="input-label2" className="form-label">
+                    Currency :
+                  </label>
 
+                  <Select
+                    name="currency"
+                    options={config?.CASE_CURRENCIES?.map((option: any) => {
+                      return {
+                        value: option,
+                        label: `${option}`,
+                      };
+                    })}
+                    defaultValue={config?.CASE_CURRENCIES?.map(
+                      (option: any) => ({
+                        value: option,
+                        label: option,
+                      })
+                    )?.find((option: any) => {
+                      return option.value === data?.currency;
+                    })}
+                    value={config?.CASE_CURRENCIES?.map((option: any) => ({
+                      value: option,
+                      label: option,
+                    }))?.find((option: any) => {
+                      return option.value === data?.currency;
+                    })}
+                    className="basic-multi-select"
+                    menuPlacement="auto"
+                    classNamePrefix="Select2"
+                    placeholder="Select Currency"
+                    onChange={(e: any) =>
+                      setData({ ...data, currency: e.value })
+                    }
+                  />
+                </div>
+              )}
+              {!isEdit ? (
+                <div className="mb-6">
+                  <p className="text-[.875rem] font-semibold mb-1">
+                    Billing Start Date:
+                  </p>
+                  <p className="text-[#8c9097] dark:text-white/50 op-8">
+                    {data?.billingStart
+                      ? moment
+                        .utc(data?.billingStart)
+                        .format("DD,MMM YYYY")
+                        ?.toString()
+                      : "N/A"}
+                  </p>
+                </div>
+              ) : (
+                <div className="mb-6">
+                  <label className="form-label">Billing Start At :</label>
+                  <div className="form-group">
+                    <div className="input-group">
+                      <div className="input-group-text text-muted">
+                        {" "}
+                        <i className="ri-calendar-line"></i>{" "}
+                      </div>
+                      <DatePicker
+                        className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
+                        selected={data.billingStart}
+                        onChange={(date) => {
+                          setData({ ...data, billingStart: date });
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+              {!isEdit ? (
+                <div className="mb-6">
+                  <p className="text-[.875rem] font-semibold mb-1">
+                    Billing End Date:
+                  </p>
+                  <p className="text-[#8c9097] dark:text-white/50 op-8">
+                    {data?.billingEnd
+                      ? moment
+                        .utc(data?.billingEnd)
+                        .format("DD,MMM YYYY")
+                        ?.toString()
+                      : "N/A"}
+                  </p>
+                </div>
+              ) : (
+                <div className="mb-6">
+                  <label className="form-label">Billing End At :</label>
+                  <div className="form-group">
+                    <div className="input-group">
+                      <div className="input-group-text text-muted">
+                        {" "}
+                        <i className="ri-calendar-line"></i>{" "}
+                      </div>
+                      <DatePicker
+                        className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
+                        selected={data.billingEnd}
+                        onChange={(date) => {
+                          setData({ ...data, billingEnd: date });
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
               {Object.keys(data?.metaData ?? {}).length > 0 && (
                 <JsonPreview data={data?.metaData ?? {}} />
               )}
