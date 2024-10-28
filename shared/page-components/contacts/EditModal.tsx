@@ -11,6 +11,7 @@ import CompanyForm from "./components/CompanyForm";
 import PhoneForm from "./components/PhoneForm";
 import AddressForm from "./components/AddressForm";
 import moment from "moment";
+import JsonPreview from "@/shared/common-components/JsonPreview";
 
 // Dynamically import react-select to avoid SSR issues
 const Select = dynamic(() => import("react-select"), { ssr: false });
@@ -507,6 +508,12 @@ const UpdateModal = ({
                   removeField={removeField}
                   isDisabled={isDisabled}
                 />
+
+                {Object.keys(contact?.metaData ?? {}).length > 0 &&
+                  <div className="col-span-12">
+                    <JsonPreview data={contact?.metaData ?? {}} />
+                  </div>
+                }
               </div>
             </div>
 
