@@ -1,17 +1,16 @@
 "use client";
 import { userPrivateRequest } from "@/config/axios.config";
+import JsonPreview from "@/shared/common-components/JsonPreview";
 import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
 import Modal from "@/shared/modals/Modal";
-import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import moment from "moment";
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import { useState } from "react";
 import DatePicker from "react-datepicker";
+import { toast } from "react-toastify";
+import AddressForm from "./components/AddressForm";
 import CompanyForm from "./components/CompanyForm";
 import PhoneForm from "./components/PhoneForm";
-import AddressForm from "./components/AddressForm";
-import moment from "moment";
-import JsonPreview from "@/shared/common-components/JsonPreview";
 
 // Dynamically import react-select to avoid SSR issues
 const Select = dynamic(() => import("react-select"), { ssr: false });
@@ -202,18 +201,14 @@ const UpdateModal = ({
             <div className="ti-modal-body px-4 overflow-y-auto">
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-12 flex items-center gap-2">
-                  <label htmlFor="basic" className="mt-2 text-[18px]">
+                  <h6
+                    className="modal-title text-[1rem] font-semibold text-defaulttextcolor"
+                    id="mail-ComposeLabel"
+                  >
                     Profile Information
-                  </label>
-                  <div className="flex items-center text-blue-600 bg-blue-100 hover:bg-blue-600 hover:text-white transition-colors duration-300 ease-in-out rounded-full px-3 py-2 shadow-lg">
-                    <button
-                      type="button"
-                      onClick={toggleDisabled}
-                      className="flex items-center space-x-2"
-                    >
-                      <i className="ri-pencil-line text-lg"></i>
-                    </button>
-                  </div>
+                  </h6>
+                  <button aria-label="button" type="button" className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
+                onClick={toggleDisabled} ><i className="ri-pencil-line"></i></button>
                 </div>
                 <div className="xl:col-span-6 col-span-12">
                   <div className="xl:col-span-6 col-span-12">
@@ -523,7 +518,7 @@ const UpdateModal = ({
                 className="hs-dropdown-toggle ti-btn  ti-btn-light align-middle"
                 onClick={closeModal}
               >
-                Cancel
+                Close
               </button>
               {!isDisabled && (
                 <button
