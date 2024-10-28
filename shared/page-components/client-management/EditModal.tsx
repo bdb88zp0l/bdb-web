@@ -20,6 +20,20 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
 
   useEffect(() => {
     setData(row);
+    setAddresses(row?.addresses ?? [{
+      houseNumber: "",
+      building: "",
+      street: "",
+      city: "",
+      barangay: "",
+      zip: "",
+      region: "",
+      country: "",
+      label: "",
+    },
+    ]);
+    setEmails(row?.emails ?? [{ value: "" }]);
+    setPhones(row?.phones ?? [{ dialCode: "", phoneNumber: "", label: "" }]);
   }, [row]);
 
   const openModal = (e: any) => {
@@ -259,7 +273,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
                     </div>
                   )}
                 </div>
-{/* 
+                {/* 
                 <div className="col-span-6">
                   {row && (
                     <div className="text-center flex justify-center items-center flex-col">

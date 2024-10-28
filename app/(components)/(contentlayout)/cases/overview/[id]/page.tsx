@@ -113,7 +113,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     onClick={handleCase}
                     className="ti-btn !py-1 !px-2 !text-[0.75rem] ti-btn-secondary-full btn-wave"
                   >
-                    Edit Case
+                    {isEdit ? "Cancel" : "Edit Case"}
                   </button>
                 )}
                 {isEdit && (
