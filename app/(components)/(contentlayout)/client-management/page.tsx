@@ -1,26 +1,17 @@
 "use client";
-import { Data, Data1, Loopingdata } from "@/shared/data/apps/crm/contactsdata";
+import { userPrivateRequest } from "@/config/axios.config";
+import Pagination from "@/shared/common-components/Pagination";
+import SortBy from "@/shared/common-components/SortBy";
 import Pageheader from "@/shared/layout-components/page-header/pageheader";
 import Seo from "@/shared/layout-components/seo/seo";
-import Link from "next/link";
-import React, { Fragment, useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
-import dynamic from "next/dynamic";
-const Select = dynamic(() => import("react-select"), { ssr: false });
-import Swal from "sweetalert2";
-import { userPrivateRequest } from "@/config/axios.config";
-import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
-import { AnyListenerPredicate } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
-import Modal from "@/shared/modals/Modal";
-import Pagination from "@/shared/common-components/Pagination";
-import Spinners from "../ui-elements/spinners/page";
-import EditModal from "@/shared/page-components/client-management/EditModal";
 import CreateModal from "@/shared/page-components/client-management/CreateModal";
+import EditModal from "@/shared/page-components/client-management/EditModal";
 import ShowModal from "@/shared/page-components/client-management/ShowModal";
-import { useConfig } from "@/shared/providers/ConfigProvider";
-import { getImageUrl, hasPermission, toWordUpperCase } from "@/utils/utils";
-import SortBy from "@/shared/common-components/SortBy";
+import { hasPermission, toWordUpperCase } from "@/utils/utils";
+import dynamic from "next/dynamic";
+import { Fragment, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+const Select = dynamic(() => import("react-select"), { ssr: false });
 
 const CaseManagement = () => {
   const [pageData, setPageData] = useState({});
@@ -211,22 +202,19 @@ const CaseManagement = () => {
                         <tr
                           className="border border-defaultborder crm-contact"
                           key={Math.random()}
-                        >
-                          <td>
-                            <button
-                              // href="#offcanvasExample"
-                              // aria-controls="offcanvasExample"
-                              // data-hs-overlay="#hs-overlay-contacts"
-                              onClick={() => {
-                                setSelectedClient(row);
-                                openModal();
-                              }}
-                            >
-                              <span className="block font-semibold">
-                                {row?.companyName}
-                              </span>
-                            </button>
-                          </td>
+                        >  
+                          <button
+                            onClick={() => {
+                              setSelectedClient(row);
+                              openModal();
+                            }}
+                          >
+                            <td>
+                                <span className="block font-semibold">
+                                  {row?.companyName}
+                                </span>
+                            </td>
+                          </button>
                           <td>{row?.clientNumber}</td>
                           <td>
                             <div>
@@ -256,16 +244,16 @@ const CaseManagement = () => {
                                 */}
                               </div>
                               <div>
-                                <Link
+                                {/* <Link
                                   href="#offcanvasExample"
                                   aria-controls="offcanvasExample"
                                   data-hs-overlay="#hs-overlay-contacts"
-                                >
+                                > */}
                                   <span className="block font-semibold">
                                     {row?.contact?.firstName ?? ""}{" "}
                                     {row?.contact?.lastName ?? ""}
                                   </span>
-                                </Link>
+                                
                                 {/* <span
                                   className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem]"
                                   title="Email"
