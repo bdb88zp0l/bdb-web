@@ -216,18 +216,16 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                       options={pageData?.clients?.map((option: any) => {
                         return {
                           value: option._id,
-                          label: `${option?.companyName ?? ""} - ${
-                            option?.clientNumber ?? ""
-                          }`,
+                          label: `${option?.companyName ?? ""} - ${option?.clientNumber ?? ""
+                            }`,
                         };
                       })}
                       defaultValue={pageData?.clients
                         ?.map((option: any) => {
                           return {
                             value: option._id,
-                            label: `${option?.companyName ?? ""} - ${
-                              option?.clientNumber ?? ""
-                            }`,
+                            label: `${option?.companyName ?? ""} - ${option?.clientNumber ?? ""
+                              }`,
                           };
                         })
                         ?.find((option: any) => {
@@ -237,9 +235,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                         ?.map((option: any) => {
                           return {
                             value: option._id,
-                            label: `${option?.companyName ?? ""} - ${
-                              option?.clientNumber ?? ""
-                            }`,
+                            label: `${option?.companyName ?? ""} - ${option?.clientNumber ?? ""
+                              }`,
                           };
                         })
                         ?.find((option: any) => {
@@ -256,9 +253,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                   ) : (
                     <>
                       <span className="block text-[.875rem] font-semibold">
-                        {`${data?.client?.companyName ?? ""} - ${
-                          data?.client?.clientNumber ?? ""
-                        }`}
+                        {`${data?.client?.companyName ?? ""} - ${data?.client?.clientNumber ?? ""
+                          }`}
                       </span>
                     </>
                   )}
@@ -289,9 +285,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     <span className="block text-[.875rem] font-semibold">
                       {data?.startDate
                         ? moment
-                            .utc(data.startDate)
-                            .format("DD,MMM YYYY")
-                            ?.toString()
+                          .utc(data.startDate)
+                          .format("DD,MMM YYYY")
+                          ?.toString()
                         : "N/A"}
                     </span>
                   )}
@@ -322,9 +318,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     <span className="block text-[.875rem] font-semibold">
                       {data?.endDate
                         ? moment
-                            .utc(data.endDate)
-                            .format("DD,MMM YYYY")
-                            ?.toString()
+                          .utc(data.endDate)
+                          .format("DD,MMM YYYY")
+                          ?.toString()
                         : "N/A"}
                     </span>
                   )}
@@ -355,9 +351,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           {/* Tooltip */}
                           {team.user?.firstName && (
                             <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                              {`${team.user?.firstName ?? ""} ${
-                                team.user?.lastName ?? ""
-                              }`}
+                              {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
+                                }`}
                             </div>
                           )}
                         </div>
@@ -383,9 +378,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           {/* Tooltip */}
                           {team.user?.firstName && (
                             <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                              {`${team.user?.firstName ?? ""} ${
-                                team.user?.lastName ?? ""
-                              }`}
+                              {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
+                                }`}
                             </div>
                           )}
                         </div>
@@ -476,7 +470,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                         <p className="mb-2">
                           <b>
                             {auth.user?.email?.toString() ==
-                            history?.updatedBy?.email?.toString()
+                              history?.updatedBy?.email?.toString()
                               ? "You"
                               : history?.updatedBy?.firstName}
                           </b>{" "}
@@ -617,24 +611,24 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                       setData({ ...data, currency: e.value })
                     }
                   />
-                </div> 
+                </div>
               )}
-            {!isEdit ? (
-              <div className="mb-6">
-                <p className="text-[.875rem] font-semibold mb-1">
-                  Billing Start Date:
-                </p>
-                <p className="text-[#8c9097] dark:text-white/50 op-8">
-                  {data?.billingStart
-                    ? moment
+              {!isEdit ? (
+                <div className="mb-6">
+                  <p className="text-[.875rem] font-semibold mb-1">
+                    Billing Start Date:
+                  </p>
+                  <p className="text-[#8c9097] dark:text-white/50 op-8">
+                    {data?.billingStart
+                      ? moment
                         .utc(data?.billingStart)
                         .format("DD,MMM YYYY")
                         ?.toString()
-                    : "N/A"}
-                </p>
-              </div>
-            ) : (
-              <div className="mb-6">
+                      : "N/A"}
+                  </p>
+                </div>
+              ) : (
+                <div className="mb-6">
                   <label className="form-label">Billing Start At :</label>
                   <div className="form-group">
                     <div className="input-group">
@@ -652,23 +646,23 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     </div>
                   </div>
                 </div>
-            )}
-          {!isEdit ? (
-              <div className="mb-6">
-                <p className="text-[.875rem] font-semibold mb-1">
-                  Billing End Date:
-                </p>
-                <p className="text-[#8c9097] dark:text-white/50 op-8">
-                  {data?.billingEnd
-                    ? moment
+              )}
+              {!isEdit ? (
+                <div className="mb-6">
+                  <p className="text-[.875rem] font-semibold mb-1">
+                    Billing End Date:
+                  </p>
+                  <p className="text-[#8c9097] dark:text-white/50 op-8">
+                    {data?.billingEnd
+                      ? moment
                         .utc(data?.billingEnd)
                         .format("DD,MMM YYYY")
                         ?.toString()
-                    : "N/A"}
-                </p>
-              </div>
-          ) : (
-              <div className="mb-6">
+                      : "N/A"}
+                  </p>
+                </div>
+              ) : (
+                <div className="mb-6">
                   <label className="form-label">Billing End At :</label>
                   <div className="form-group">
                     <div className="input-group">
@@ -686,7 +680,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     </div>
                   </div>
                 </div>
-          )}
+              )}
               {Object.keys(data?.metaData ?? {}).length > 0 && (
                 <JsonPreview data={data?.metaData ?? {}} />
               )}
