@@ -13,20 +13,19 @@ import PhoneForm from "../contacts/components/PhoneForm";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
-const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
-  const [modalOpen, setModalOpen] = useState(false);
+const UpdateModal = ({ row, fetchClients, pageData, fetchPageData,isEditModalOpen,setIsEditModalOpen }: any) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [data, setData] = useState<any>(row);
 
   const openModal = (e: any) => {
     e.preventDefault();
-    setModalOpen(true);
+    setIsEditModalOpen(true);
   };
   const toggleEditMode = () => {
     setIsDisabled(!isDisabled);
   };
-  const closeModal = () => setModalOpen(false);
+  const closeModal = () => setIsEditModalOpen(false);
 
   // State to manage multiple emails, phones, addresses, and companies
   const [emails, setEmails] = useState(row?.emails ?? [{ value: "" }]); // At least one email required
@@ -119,15 +118,8 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData }: any) => {
 
   return (
     <>
-      <button
-        aria-label="button"
-        type="button"
-        className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
-        onClick={openModal}
-      >
-        <i className="ri-pencil-line"></i>
-      </button>
-      <Modal isOpen={modalOpen} close={closeModal}>
+      
+      <Modal isOpen={isEditModalOpen} close={closeModal}>
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center  min-w-[calc(100%-3.5rem)]">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">
             <div className="ti-modal-header">

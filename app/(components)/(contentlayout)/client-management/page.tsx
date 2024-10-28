@@ -60,9 +60,13 @@ const CaseManagement = () => {
   }, [page, limit, search, sortBy, sortOrder]);
   const [IsmodalOpen, setIsModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openModal = (row) => {
+    setIsEditModalOpen(true)
+    setSelectedClient(row);
+  };
+  const closeModal = () => setIsEditModalOpen(false);
 
   return (
     <Fragment>
@@ -122,6 +126,16 @@ const CaseManagement = () => {
                     data={selectedClient}
                     IsmodalOpen={IsmodalOpen}
                     closeModal={closeModal}
+                  />
+                )}
+                {hasPermission("client.update") && (
+                  <EditModal
+                    row={selectedClient}
+                    pageData={pageData}
+                    fetchClients={fetchClients}
+                    fetchPageData={fetchPageData}
+                    isEditModalOpen={isEditModalOpen}
+                    setIsEditModalOpen={setIsEditModalOpen}
                   />
                 )}
                 <button
@@ -202,15 +216,14 @@ const CaseManagement = () => {
                         <tr
                           className="border border-defaultborder crm-contact"
                           key={Math.random()}
-                        >  
-                          <td 
+                        >
+                          <td
                             onClick={() => {
-                              setSelectedClient(row);
-                              openModal();
-                            }} 
+                              openModal(row);
+                            }}
                             className="font-semibold cursor-pointer">
                             {row?.companyName}
-                            </td>
+                          </td>
                           <td>{row?.clientNumber}</td>
                           <td>
                             <div>
@@ -245,11 +258,11 @@ const CaseManagement = () => {
                                   aria-controls="offcanvasExample"
                                   data-hs-overlay="#hs-overlay-contacts"
                                 > */}
-                                  <span className="block font-semibold">
-                                    {row?.contact?.firstName ?? ""}{" "}
-                                    {row?.contact?.lastName ?? ""}
-                                  </span>
-                                
+                                <span className="block font-semibold">
+                                  {row?.contact?.firstName ?? ""}{" "}
+                                  {row?.contact?.lastName ?? ""}
+                                </span>
+
                                 {/* <span
                                   className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem]"
                                   title="Email"
@@ -264,12 +277,22 @@ const CaseManagement = () => {
                           <td>
                             <div className="btn-list">
                               {hasPermission("client.update") && (
-                                <EditModal
-                                  row={row}
-                                  pageData={pageData}
-                                  fetchClients={fetchClients}
-                                  fetchPageData={fetchPageData}
-                                />
+                                // <EditModal
+                                //   row={row}
+                                //   pageData={pageData}
+                                //   fetchClients={fetchClients}
+                                //   fetchPageData={fetchPageData}
+                                // />
+                                <button
+                                  aria-label="button"
+                                  type="button"
+                                  className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
+                                  onClick={() => {
+                                    openModal(row)
+                                  }}
+                                >
+                                  <i className="ri-pencil-line"></i>
+                                </button>
                               )}
                               {hasPermission("client.delete") && (
                                 <button
