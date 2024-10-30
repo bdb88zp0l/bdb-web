@@ -47,10 +47,17 @@ const EditEventModal = ({
         setIsSubmitting(false);
       });
   };
-  const calendarOptions = calendars?.map((calendar) => ({
-    value: calendar._id,
-    label: calendar.title,
-  }));
+  const calendarOptions = calendars
+    ?.filter((i) => {
+      if (i.source == "outlook") {
+        return false;
+      }
+      return true;
+    })
+    ?.map((calendar) => ({
+      value: calendar._id,
+      label: calendar.title,
+    }));
 
   const handleAddReminder = () => {
     setReminders([...reminders, { time: new Date() }]); // Add a new reminder with default current time
@@ -83,163 +90,161 @@ const EditEventModal = ({
               <i className="ri-close-line"></i>
             </button>
           </div>
-          <form onSubmit={handleSubmit}>
-            <div className="ti-modal-body overflow-y-auto px-4">
-              <div className="grid grid-cols-12 gap-4">
-                <div className="xl:col-span-12 col-span-12">
-                  <label className="form-label">Calendar</label>
-                  <Select
-                    name="calendar"
-                    options={calendarOptions}
-                    className="basic-multi-select"
-                    classNamePrefix="Select2"
-                    placeholder="Select Calendar"
-                    value={calendarOptions?.find((option: any) => {
-                      return option.value === formData?.calendar;
-                    })}
-                    defaultValue={calendarOptions?.find((option: any) => {
-                      return option.value === formData?.calendar;
-                    })}
-                    onChange={(selectedOption: any) =>
+          {/* <form onSubmit={handleSubmit}> */}
+          <div className="ti-modal-body overflow-y-auto px-4">
+            <div className="grid grid-cols-12 gap-4">
+              <div className="xl:col-span-12 col-span-12">
+                <label className="form-label">Calendar</label>
+                <Select
+                  name="calendar"
+                  options={calendarOptions}
+                  className="basic-multi-select"
+                  classNamePrefix="Select2"
+                  placeholder="Select Calendar"
+                  value={calendarOptions?.find((option: any) => {
+                    return option.value === formData?.calendar;
+                  })}
+                  defaultValue={calendarOptions?.find((option: any) => {
+                    return option.value === formData?.calendar;
+                  })}
+                  onChange={(selectedOption: any) =>
+                    setFormData({
+                      ...formData,
+                      calendar: selectedOption.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="xl:col-span-12 col-span-12">
+                <label className="form-label">Title</label>
+                <input
+                  type="text"
+                  name="title"
+                  className="form-control"
+                  placeholder="Event Title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+
+              <div className="xl:col-span-12 col-span-12">
+                <label className="form-label">Description</label>
+                <textarea
+                  name="description"
+                  className="form-control"
+                  placeholder="Event Description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  required
+                ></textarea>
+              </div>
+
+              <div className="xl:col-span-12 col-span-12">
+                <label className="form-label">Location</label>
+                <input
+                  type="text"
+                  name="location"
+                  className="form-control"
+                  placeholder="Event Location"
+                  value={formData.location}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="xl:col-span-12 col-span-12">
+                <label className="form-label">Start Date</label>
+                <div className="input-group">
+                  <div className="input-group-text text-[#8c9097] dark:text-white/50">
+                    {" "}
+                    <i className="ri-calendar-line"></i>{" "}
+                  </div>
+                  <DatePicker
+                    className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
+                    selected={new Date(formData?.startDate)}
+                    onChange={(date) => {
                       setFormData({
                         ...formData,
-                        calendar: selectedOption.value,
-                      })
-                    }
+                        startDate: date,
+                      });
+                    }}
+                    showTimeSelect
+                    dateFormat="MMMM d, yyyy h:mm aa"
                   />
-                </div>
-                <div className="xl:col-span-12 col-span-12">
-                  <label className="form-label">Title</label>
-                  <input
-                    type="text"
-                    name="title"
-                    className="form-control"
-                    placeholder="Event Title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-
-                <div className="xl:col-span-12 col-span-12">
-                  <label className="form-label">Description</label>
-                  <textarea
-                    name="description"
-                    className="form-control"
-                    placeholder="Event Description"
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    required
-                  ></textarea>
-                </div>
-
-                <div className="xl:col-span-12 col-span-12">
-                  <label className="form-label">Location</label>
-                  <input
-                    type="text"
-                    name="location"
-                    className="form-control"
-                    placeholder="Event Location"
-                    value={formData.location}
-                    onChange={handleInputChange}
-                  />
-                </div>
-
-                <div className="xl:col-span-12 col-span-12">
-                  <label className="form-label">Start Date</label>
-                  <div className="input-group">
-                    <div className="input-group-text text-[#8c9097] dark:text-white/50">
-                      {" "}
-                      <i className="ri-calendar-line"></i>{" "}
-                    </div>
-                    <DatePicker
-                      className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
-                      selected={new Date(formData?.startDate)}
-                      onChange={(date) => {
-                        setFormData({
-                          ...formData,
-                          startDate: date,
-                        });
-                      }}
-                      showTimeSelect
-                      dateFormat="MMMM d, yyyy h:mm aa"
-                    />
-                  </div>
-                </div>
-
-                <div className="xl:col-span-12 col-span-12">
-                  <label className="form-label">End Date</label>
-                  <div className="input-group">
-                    <div className="input-group-text text-[#8c9097] dark:text-white/50">
-                      {" "}
-                      <i className="ri-calendar-line"></i>{" "}
-                    </div>
-                    <DatePicker
-                      className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
-                      selected={new Date(formData?.endDate)}
-                      onChange={(date) => {
-                        setFormData({
-                          ...formData,
-                          endDate: date,
-                        });
-                      }}
-                      showTimeSelect
-                      dateFormat="MMMM d, yyyy h:mm aa"
-                    />
-                  </div>
-                </div>
-
-                {/* Reminders */}
-                <div className="xl:col-span-12 col-span-12">
-                  <label className="form-label">Reminders</label>
-                  {reminders.map((reminder, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center space-x-2 mb-2"
-                    >
-                      <DatePicker
-                        selected={new Date(reminder.time)}
-                        onChange={(date) => handleReminderChange(index, date)}
-                        showTimeSelect
-                        dateFormat="Pp"
-                        className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
-                      />
-                      <button
-                        type="button"
-                        className="ti-btn ti-btn-danger-full !px-2 !py-1"
-                        onClick={() => handleRemoveReminder(index)}
-                      >
-                        &times;
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    className="ti-btn ti-btn-light"
-                    onClick={handleAddReminder}
-                  >
-                    Add Reminder
-                  </button>
                 </div>
               </div>
+
+              <div className="xl:col-span-12 col-span-12">
+                <label className="form-label">End Date</label>
+                <div className="input-group">
+                  <div className="input-group-text text-[#8c9097] dark:text-white/50">
+                    {" "}
+                    <i className="ri-calendar-line"></i>{" "}
+                  </div>
+                  <DatePicker
+                    className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
+                    selected={new Date(formData?.endDate)}
+                    onChange={(date) => {
+                      setFormData({
+                        ...formData,
+                        endDate: date,
+                      });
+                    }}
+                    showTimeSelect
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                  />
+                </div>
+              </div>
+
+              {/* Reminders */}
+              <div className="xl:col-span-12 col-span-12">
+                <label className="form-label">Reminders</label>
+                {reminders.map((reminder, index) => (
+                  <div key={index} className="flex items-center space-x-2 mb-2">
+                    <DatePicker
+                      selected={new Date(reminder.time)}
+                      onChange={(date) => handleReminderChange(index, date)}
+                      showTimeSelect
+                      dateFormat="Pp"
+                      className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
+                    />
+                    <button
+                      type="button"
+                      className="ti-btn ti-btn-danger-full !px-2 !py-1"
+                      onClick={() => handleRemoveReminder(index)}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  className="ti-btn ti-btn-light"
+                  onClick={handleAddReminder}
+                >
+                  Add Reminder
+                </button>
+              </div>
             </div>
-            <div className="ti-modal-footer">
-              <button
-                type="button"
-                className="ti-btn ti-btn-light"
-                onClick={onClose}
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="ti-btn bg-primary text-white"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? <ButtonSpinner text="Updating" /> : "Update"}
-              </button>
-            </div>
-          </form>
+          </div>
+          <div className="ti-modal-footer">
+            <button
+              type="button"
+              className="ti-btn ti-btn-light"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="ti-btn bg-primary text-white"
+              disabled={isSubmitting}
+              onClick={handleSubmit}
+            >
+              {isSubmitting ? <ButtonSpinner text="Updating" /> : "Update"}
+            </button>
+          </div>
+          {/* </form> */}
         </div>
       </div>
     </Modal>

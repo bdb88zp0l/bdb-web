@@ -64,7 +64,7 @@ const NodeView = ({
       };
     }
   }, [data]);
-  console.log("data",data)
+  console.log("data", data);
 
   return (
     <>
@@ -87,12 +87,12 @@ const NodeView = ({
       >
         <div className="box border dark:border-defaultborder/10  !shadow-none">
           <div className={`box-body bg-primary/10`}>
-            <div className="mb-4 folder-svg-container flex flex-wrap justify-between items-start">
+            <div className="mb-4 folder-svg-container flex flex-wrap justify-between items-start h-[100px]">
               {data.ctype === "folder" ? (
                 <div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="fill-primary"
+                    className="fill-primary !h-[100px] !w-auto"
                     data-name="Layer 1"
                     viewBox="0 0 24 24"
                   >
@@ -107,9 +107,9 @@ const NodeView = ({
                   </svg>
                 </div>
               ) : (
-                <>
-                  <div>{protected_image.data}</div>
-                </>
+                <div className="transform scale-y-75 origin-top">
+                  <div className="">{protected_image.data}</div>
+                </div>
               )}
               <div>
                 <div className="hs-dropdown ti-dropdown ltr:[--placement:left-top] rtl:[--placement:right-top]">
