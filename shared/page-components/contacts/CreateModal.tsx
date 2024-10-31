@@ -323,7 +323,6 @@ const CreateModal = ({
                       }
                     />
                   </div>
-                  
                 </div>
                 <div className="xl:col-span-6 col-span-12">
                   <div className="xl:col-span-12 col-span-12">

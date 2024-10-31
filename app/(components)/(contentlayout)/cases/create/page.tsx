@@ -73,7 +73,6 @@ const CreateCase = () => {
           let caseId = caseDetails?._id;
           const formData = new FormData();
 
-
           // Add uploaded files to FormData
           files?.forEach((fileItem: any) => {
             if (fileItem.file) {
@@ -140,8 +139,9 @@ const CreateCase = () => {
                     options={pageData?.clients?.map((option: any) => {
                       return {
                         value: option._id,
-                        label: `${option?.companyName ?? ""} - ${option?.clientNumber ?? ""
-                          }`,
+                        label: `${option?.companyName ?? ""} - ${
+                          option?.clientNumber ?? ""
+                        }`,
                       };
                     })}
                     className="basic-multi-select"
@@ -369,8 +369,9 @@ const CreateCase = () => {
                         label:
                           option.type === "percentage"
                             ? `${option.rate}%`
-                            : `Flat Rate: ${option.rate} ${data?.currency ?? "PHP"
-                            }`,
+                            : `Flat Rate: ${option.rate} ${
+                                data?.currency ?? "PHP"
+                              }`,
                       };
                     })}
                     className="basic-multi-select"
