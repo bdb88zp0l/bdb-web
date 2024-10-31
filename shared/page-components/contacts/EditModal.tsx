@@ -200,6 +200,7 @@ const UpdateModal = ({
                 <i className="ri-close-line"></i>
               </button>
             </div>
+
             <div className="ti-modal-body px-4 overflow-y-auto">
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-12 flex items-center gap-2">
