@@ -54,10 +54,10 @@ const CaseTeamOverview = ({
     try {
       let existingTeams = data?.members
         ? data?.members?.map((team) => ({
-          user: team.user._id,
-          designation: team.designation._id,
-          rate: team.rate,
-        }))
+            user: team.user._id,
+            designation: team.designation._id,
+            rate: team.rate,
+          }))
         : [];
 
       if (editMode && editIndex !== null) {
@@ -94,10 +94,10 @@ const CaseTeamOverview = ({
     try {
       let existingTeams = data?.members
         ? data?.members?.map((team) => ({
-          user: team.user._id,
-          designation: team.designation._id,
-          rate: team.rate,
-        }))
+            user: team.user._id,
+            designation: team.designation._id,
+            rate: team.rate,
+          }))
         : [];
 
       // Remove the member at the specific index
@@ -174,8 +174,9 @@ const CaseTeamOverview = ({
                             )}
                           </span>
                         </div>
-                        <div className="font-semibold">{`${team.user?.firstName ?? ""
-                          }  ${team.user?.lastName ?? ""}`}</div>
+                        <div className="font-semibold">{`${
+                          team.user?.firstName ?? ""
+                        }  ${team.user?.lastName ?? ""}`}</div>
                       </div>
                     </td>
                     <td>
@@ -213,7 +214,6 @@ const CaseTeamOverview = ({
                   </tr>
                 ))}
 
-
                 {data?.members?.map((team, index) => (
                   <tr key={index} className="border border-defaultborder">
                     <td>
@@ -235,8 +235,9 @@ const CaseTeamOverview = ({
                             )}
                           </span>
                         </div>
-                        <div className="font-semibold">{`${team.user?.firstName ?? ""
-                          }  ${team.user?.lastName ?? ""}`}</div>
+                        <div className="font-semibold">{`${
+                          team.user?.firstName ?? ""
+                        }  ${team.user?.lastName ?? ""}`}</div>
                       </div>
                     </td>
                     <td>
@@ -333,14 +334,16 @@ const CaseTeamOverview = ({
                     name="user"
                     options={pageData?.users?.map((option: any) => ({
                       value: option._id,
-                      label: `${option?.firstName ?? ""}  ${option?.lastName ?? ""
-                        }`,
+                      label: `${option?.firstName ?? ""}  ${
+                        option?.lastName ?? ""
+                      }`,
                     }))}
                     value={pageData?.users
                       ?.map((option: any) => ({
                         value: option._id,
-                        label: `${option?.firstName ?? ""}  ${option?.lastName ?? ""
-                          }`,
+                        label: `${option?.firstName ?? ""}  ${
+                          option?.lastName ?? ""
+                        }`,
                       }))
                       ?.find(
                         (option: any) => option.value === addMemberData?.user

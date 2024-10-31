@@ -273,9 +273,11 @@ const CreateModal = ({ fetchClients, pageData, fetchPageData }: any) => {
                           disabled
                           type="text"
                           className="form-control"
-                          value={`${selectedCompany?.supervisingPartner?.firstName ?? ""
-                            } ${selectedCompany?.supervisingPartner?.lastName ?? ""
-                            }`}
+                          value={`${
+                            selectedCompany?.supervisingPartner?.firstName ?? ""
+                          } ${
+                            selectedCompany?.supervisingPartner?.lastName ?? ""
+                          }`}
                         />
                       </div>
 
@@ -288,8 +290,9 @@ const CreateModal = ({ fetchClients, pageData, fetchPageData }: any) => {
                           disabled
                           type="text"
                           className="form-control"
-                          value={`${selectedCompany?.referredBy?.firstName ?? ""
-                            } ${selectedCompany?.referredBy?.lastName ?? ""}`}
+                          value={`${
+                            selectedCompany?.referredBy?.firstName ?? ""
+                          } ${selectedCompany?.referredBy?.lastName ?? ""}`}
                         />
                       </div>
                     </div>
@@ -443,13 +446,13 @@ const CreateModal = ({ fetchClients, pageData, fetchPageData }: any) => {
                       <input
                         type="text"
                         className="form-control"
-                        placeholder={`${selectedCompany?.contact?.firstName ?? ""
-                          } ${selectedCompany?.contact?.lastName ?? ""}`}
+                        placeholder={`${
+                          selectedCompany?.contact?.firstName ?? ""
+                        } ${selectedCompany?.contact?.lastName ?? ""}`}
                         disabled
                       />
                     </div>
                   </div>
-                  
                 </div>
 
                 <div className="col-span-6">
@@ -466,8 +469,8 @@ const CreateModal = ({ fetchClients, pageData, fetchPageData }: any) => {
                           src={
                             selectedCompany?.contact?.photo
                               ? `${getImageUrl(
-                                selectedCompany?.contact?.photo
-                              )}`
+                                  selectedCompany?.contact?.photo
+                                )}`
                               : "../../../assets/images/faces/9.jpg"
                           }
                           alt="Profile Image"
@@ -488,7 +491,6 @@ const CreateModal = ({ fetchClients, pageData, fetchPageData }: any) => {
                     Contact Information
                   </label>
                 </div>
-                
 
                 <div className="col-span-6">
                   <label htmlFor="emails" className="form-label">
@@ -530,8 +532,6 @@ const CreateModal = ({ fetchClients, pageData, fetchPageData }: any) => {
                     + Add Email
                   </button>
                 </div>
-
-
 
                 {/* Phone Information */}
                 <PhoneForm
