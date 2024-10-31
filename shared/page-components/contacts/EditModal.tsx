@@ -171,14 +171,14 @@ const UpdateModal = ({
 
   return (
     <>
-      <button
-        aria-label="button"
+      {/* <button
+        aria-label="button"xes
         type="button"
         className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
         onClick={openModal}
       >
         <i className="ri-pencil-line"></i>
-      </button>
+      </button> */}
       <Modal isOpen={isEditModalOpen} close={closeModal}>
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center  min-w-[calc(100%-3.5rem)]">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">
@@ -190,7 +190,6 @@ const UpdateModal = ({
                 >
                   Update Contact
                 </h6>
-
               </div>
               <button
                 type="button"
@@ -505,11 +504,11 @@ const UpdateModal = ({
                   isDisabled={isDisabled}
                 />
 
-                {Object.keys(contact?.metaData ?? {}).length > 0 &&
+                {Object.keys(contact?.metaData ?? {}).length > 0 && (
                   <div className="col-span-12">
                     <JsonPreview data={contact?.metaData ?? {}} />
                   </div>
-                }
+                )}
               </div>
             </div>
 
