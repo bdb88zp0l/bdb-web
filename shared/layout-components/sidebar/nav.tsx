@@ -163,6 +163,15 @@ export const MenuItems: any = [
         title: "Case Setting",
         permission: "case.setting",
       },
+      {
+        path: "/admin/dashboard-setting",
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Dashboard Setting",
+        permission: "dashboard.setting",
+      },
     ],
   },
 ];
