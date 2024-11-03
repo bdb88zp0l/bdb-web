@@ -6,7 +6,7 @@ import { useConfig } from "@/shared/providers/ConfigProvider";
 
 export default function CurrencySetting() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [values, setValues] = useState<string[]>([]);
+  const [announcement, setAnnouncement] = useState("");
   const [inputValue, setInputValue] = useState("");
 
   const config = useConfig();
@@ -21,9 +21,8 @@ export default function CurrencySetting() {
         {
           records: [
             {
-              // name: "CASE_CURRENCIES",
-              name: "Announcement_SETTINGS",
-              value: values,
+              name: "ANNOUNCEMENT_SETTINGS",
+              value: announcement,
             },
           ],
         },
@@ -41,29 +40,12 @@ export default function CurrencySetting() {
       });
   };
   useEffect(() => {
-    setValues(config?.Announcement_SETTINGS ?? []);
-  }, [config?.Announcement_SETTINGS]);
+    setAnnouncement(config?.ANNOUNCEMENT_SETTINGS ?? "");
+  }, [config?.ANNOUNCEMENT_SETTINGS]);
 
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
-  // Handle key press event for Enter key
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && inputValue.trim()) {
-      if (!values.includes(inputValue.trim())) {
-        setValues([...values, inputValue.trim()]);
-      }
-      setInputValue(""); // Reset input field
-    }
-  };
-
-  // Handle removing a value
-  const handleRemove = (valueToRemove: string) => {
-    if (window.confirm("Are you sure you want to delete this item?")) {
-      setValues(values.filter((value) => value !== valueToRemove));
-    }
+    setAnnouncement(e.target.value);
   };
 
   return (
@@ -73,11 +55,6 @@ export default function CurrencySetting() {
           <div className="box-title !text-start">Announcement Setup</div>
         </div>
         <div className="box-body">
-          <p>
-            Case tiled 'Erronoous Payments of Real Property tax for the year'
-            for client
-            <b> Enter</b>.
-          </p>
           <div className="xl:col-span-6 col-span-12">
             <label htmlFor="service-type" className="form-label">
               Announcement
@@ -86,32 +63,12 @@ export default function CurrencySetting() {
               type="text"
               className="form-control"
               id="service-type"
-              placeholder="Enter currency and press Enter"
-              value={inputValue}
+              placeholder="Type announcement"
+              value={announcement}
               onChange={handleInputChange}
-              onKeyPress={handleKeyPress}
             />
           </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {values.map((value, index) => (
-              <div
-                key={index}
-                className="bg-blue-500 text-white text-sm font-medium pl-2 flex items-center gap-2"
-                style={{
-                  borderRadius: "2px",
-                }}
-              >
-                {value}
-                <button
-                  type="button"
-                  className="text-white hover:bg-blue-700 px-1"
-                  onClick={() => handleRemove(value)}
-                >
-                  &times;
-                </button>
-              </div>
-            ))}
-          </div>
+
         </div>
         <div className="box-body">
           <button

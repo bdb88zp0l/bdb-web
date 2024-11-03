@@ -6,51 +6,31 @@ import React, { Fragment, useEffect, useState } from "react";
 import * as Crmdata from "@/shared/data/dashboards/crmdata";
 import dynamic from "next/dynamic";
 import { userPrivateRequest } from "@/config/axios.config";
+import { useConfig } from "@/shared/providers/ConfigProvider";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 const Crm = () => {
-  const [totalCases, setTotalCases] = useState<number>(0);
-  const [totalClients, setTotalClients] = useState<number>(0);
-  const [getAnnouncement, setTotalAnnouncement] = useState<string[]>([]);
 
-  const fetchTotalClients = async () => {
-    try {
-      const res = await userPrivateRequest.get(`/api/clients`);
-      setTotalClients(res.data?.data?.totalDocs ?? 0);
-    } catch (err) {
-      console.error("Error fetching total cases:", err);
-    }
-  };
-  const fetchTotalCases = async () => {
-    try {
-      const res = await userPrivateRequest.get(`/api/cases`);
-      setTotalCases(res.data?.data?.totalDocs ?? 0);
-    } catch (err) {
-      console.error("Error fetching total cases:", err);
-    }
-  };
+  const config = useConfig();
 
-  const fetchTotalAnnouncement = async () => {
-    try {
-      const res = await userPrivateRequest.get(`/api/config/get`);
-      setTotalAnnouncement(res.data.data.Announcement_SETTINGS || []);
-      console.log(
-        "Announcements fetched:",
-        res.data.data.Announcement_SETTINGS
-      );
-    } catch (err) {
-      console.error("Error fetching announcements:", err);
-    }
-  };
+  const getAnnouncement = config?.ANNOUNCEMENT_SETTINGS;
+  const [data, setData] = useState({})
+
+  const fetchDashboardData = async () => {
+    const res = await userPrivateRequest.get(`api/dashboard`)
+    setData(res.data)
+  }
 
   useEffect(() => {
-    fetchTotalCases();
-    fetchTotalClients();
-    fetchTotalAnnouncement();
+    fetchDashboardData()
+
   }, []);
 
+
+
+  console.log(data)
   return (
     <Fragment>
       <Seo title={"Crm"} />
@@ -82,26 +62,21 @@ const Crm = () => {
         <div className="xxl:col-span-9 xl:col-span-12  col-span-12">
           <div className="grid grid-cols-12 gap-x-6">
             <div className="xxl:col-span-4 xl:col-span-4  col-span-12">
-              <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
-                <div className="box crm-highlight-card">
-                  <div className="box-body">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-semibold text-[1.125rem] text-white mb-2">
-                          Announcement
-                        </div>
-                        <span className="block text-[0.75rem] text-white">
-                          <span className="opacity-[0.7] text-nowrap me-1 rtl:ms-1">
-                            {getAnnouncement?.length > 0 ? (
-                              getAnnouncement.map((value, index) => (
-                                <li key={index}>{value}</li>
-                              ))
-                            ) : (
-                              <span>Announcement not avalable !</span>
-                            )}
+              {getAnnouncement &&
+                <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
+                  <div className="box crm-highlight-card">
+                    <div className="box-body">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-semibold text-[1.125rem] text-white mb-2">
+                            Announcement
+                          </div>
+                          <span className="block text-[0.75rem] text-white">
+                            <span className="opacity-[0.7] text-nowrap me-1 rtl:ms-1">
+                              {getAnnouncement}
+                            </span>
                           </span>
-                        </span>
-                        {/* <span className="block font-semibold mt-[0.125rem]">
+                          {/* <span className="block font-semibold mt-[0.125rem]">
                           <Link
                             className="text-white text-[0.813rem]"
                             href="#!"
@@ -110,22 +85,22 @@ const Crm = () => {
                             <u>Click here</u>
                           </Link>
                         </span> */}
-                      </div>
-                      <div>
-                        <div id="crm-main">
-                          <ReactApexChart
-                            options={Crmdata.Target.options}
-                            series={Crmdata.Target.series}
-                            type="radialBar"
-                            width={100}
-                            height={127}
-                          />
+                        </div>
+                        <div>
+                          <div id="crm-main">
+                            <ReactApexChart
+                              options={Crmdata.Target.options}
+                              series={Crmdata.Target.series}
+                              type="radialBar"
+                              width={100}
+                              height={127}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                </div>}
               <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
                 <div className="box">
                   <div className="box-header flex justify-between">
@@ -365,7 +340,7 @@ const Crm = () => {
                                 Total Client
                               </p>
                               <h4 className="font-semibold  text-[1.5rem] !mb-2 ">
-                                {totalClients}
+                                {"totalClients"}
                               </h4>
                             </div>
                             <div id="crm-total-customers">
@@ -419,7 +394,7 @@ const Crm = () => {
                                 Total Cases
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                {totalCases}
+                                {"totalCases"}
                               </h4>
                             </div>
                             <div id="crm-total-revenue">
