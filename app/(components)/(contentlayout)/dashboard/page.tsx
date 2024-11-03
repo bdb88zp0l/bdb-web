@@ -1,11 +1,11 @@
 "use client";
-import { userPrivateRequest } from "@/config/axios.config";
-import * as Crmdata from "@/shared/data/dashboards/crmdata";
 import { Dealsstatistics } from "@/shared/data/dashboards/crmdata";
 import Seo from "@/shared/layout-components/seo/seo";
-import dynamic from "next/dynamic";
 import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
+import * as Crmdata from "@/shared/data/dashboards/crmdata";
+import dynamic from "next/dynamic";
+import { userPrivateRequest } from "@/config/axios.config";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -13,6 +13,8 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 const Crm = () => {
   const [totalCases, setTotalCases] = useState<number>(0);
   const [totalClients, setTotalClients] = useState<number>(0);
+  const [getAnnouncement, setTotalAnnouncement] = useState<string[]>([]);
+
   const fetchTotalClients = async () => {
     try {
       const res = await userPrivateRequest.get(`/api/clients`);
@@ -27,12 +29,24 @@ const Crm = () => {
       setTotalCases(res.data?.data?.totalDocs ?? 0);
     } catch (err) {
       console.error("Error fetching total cases:", err);
+
+  const fetchTotalAnnouncement = async () => {
+    try {
+      const res = await userPrivateRequest.get(`/api/config/get`);
+      setTotalAnnouncement(res.data.data.Announcement_SETTINGS || []);
+      console.log(
+        "Announcements fetched:",
+        res.data.data.Announcement_SETTINGS
+      );
+    } catch (err) {
+      console.error("Error fetching announcements:", err);
     }
   };
 
   useEffect(() => {
     fetchTotalCases();
     fetchTotalClients();
+    fetchTotalAnnouncement();
   }, []);
 
   return (
@@ -76,15 +90,14 @@ const Crm = () => {
                         </div>
                         <span className="block text-[0.75rem] text-white">
                           <span className="opacity-[0.7] text-nowrap me-1 rtl:ms-1">
-                            Case title here "Announcement" payment
+                            {getAnnouncement?.length > 0 ? (
+                              getAnnouncement.map((value, index) => (
+                                <li key={index}>{value}</li>
+                              ))
+                            ) : (
+                              <span>Announcement not avalable !</span>
+                            )}
                           </span>
-                          <span className="font-semibold text-warning">
-                            48%
-                          </span>{" "}
-                          <span className="opacity-[0.7]">
-                            of the given target, you can also check your status
-                          </span>
-                          .
                         </span>
                         <span className="block font-semibold mt-[0.125rem]">
                           <Link
