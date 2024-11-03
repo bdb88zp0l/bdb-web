@@ -276,11 +276,11 @@ Toast
 }
 
 .crm-lead-legend.D:before {
-  @apply bg-[#e4e7ed];
+  @apply bg-[#845adf];
 }
 
 .crm-lead-legend.T:before {
-  @apply bg-[#e4e7ed];
+  @apply bg-[#8699a3];
 }
 
 
