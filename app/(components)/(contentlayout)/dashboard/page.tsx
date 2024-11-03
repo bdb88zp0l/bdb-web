@@ -12,7 +12,7 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 import store from "@/shared/redux/store";
-import { formatAmount, formatMonth, getImageUrl } from "@/utils/utils";
+import { formatAmount, formatMonth, formatNumber, getImageUrl } from "@/utils/utils";
 
 const Crm = () => {
 
@@ -176,7 +176,7 @@ const Crm = () => {
                                 </span>
                               </span>
                             </div>
-                            <div className="flex-grow w-[50%]">
+                            <div className="flex-grow w-[50%] mr-[20px]">
                               <p className="font-semibold mb-[1.4px]  text-[0.813rem]">
                                 {item?.clientInfo?.companyName ?? ""}
                               </p>
@@ -273,7 +273,7 @@ const Crm = () => {
                                 Total Client
                               </p>
                               <h4 className="font-semibold  text-[1.5rem] !mb-2 ">
-                                {data?.clientMonthlyData?.active?.totalCount ?? 0}
+                                {formatNumber(data?.clientMonthlyData?.active?.totalCount ?? 0)}
                               </h4>
                             </div>
                             <div id="crm-total-customers">
@@ -333,7 +333,7 @@ const Crm = () => {
                                 Total Cases
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                {data?.caseMonthlyData?.active?.totalCount ?? 0}
+                                {formatNumber(data?.caseMonthlyData?.active?.totalCount ?? 0)}
                               </h4>
                             </div>
                             <div id="crm-total-revenue">
@@ -394,7 +394,7 @@ const Crm = () => {
                                 Inactive Clients
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                {data?.clientMonthlyData?.inactive?.totalCount ?? 0}
+                                {formatNumber(data?.clientMonthlyData?.inactive?.totalCount ?? 0)}
                               </h4>
                             </div>
                             <div id="crm-conversion-ratio">
@@ -452,7 +452,7 @@ const Crm = () => {
                                 Inactive Cases
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                {data?.caseMonthlyData?.inactive?.totalCount ?? 0}
+                                {formatNumber(data?.caseMonthlyData?.inactive?.totalCount ?? 0)}
                               </h4>
                             </div>
                             <div id="crm-total-deals">
@@ -941,7 +941,7 @@ const Crm = () => {
                     <div className="lead-source-value ">
                       <span className="block text-[0.875rem] ">Total</span>
                       <span className="block text-[1.5625rem] font-bold">
-                        {data?.caseStatusStatistics?.reduce((acc: number, curr: any) => acc + curr?.count, 0)}
+                        {formatNumber(data?.caseStatusStatistics?.reduce((acc: number, curr: any) => acc + curr?.count, 0))}
                       </span>
                     </div>
                   </div>
@@ -956,7 +956,7 @@ const Crm = () => {
                         </span>
                         <div>
                           <span className="text-[1rem]  font-semibold">
-                            {item?.count}
+                            {formatNumber(item?.count)}
                           </span>
                         </div>
                       </div>
