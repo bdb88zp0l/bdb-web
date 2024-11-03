@@ -3,6 +3,7 @@ import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
 import { userPrivateRequest } from "@/config/axios.config";
 import { toast } from "react-toastify";
 import { useConfig } from "@/shared/providers/ConfigProvider";
+import Editor from "@/shared/common-components/Editor";
 
 export default function CurrencySetting() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,7 +50,7 @@ export default function CurrencySetting() {
   };
 
   return (
-    <div className="xl:col-span-4 col-span-12">
+    <div className="xl:col-span-6 col-span-12">
       <div className="box custom-box">
         <div className="box-header">
           <div className="box-title !text-start">Announcement Setup</div>
@@ -59,14 +60,22 @@ export default function CurrencySetting() {
             <label htmlFor="service-type" className="form-label">
               Announcement
             </label>
-            <input
+            {/* <input
               type="text"
               className="form-control"
               id="service-type"
               placeholder="Type announcement"
               value={announcement}
               onChange={handleInputChange}
-            />
+            /> */}
+            <div id="project-descriptioin-editor">
+              <Editor
+                onChange={(html) => {
+                  setAnnouncement(html);
+                }}
+                value={announcement ?? ""}
+              />
+            </div>
           </div>
 
         </div>
