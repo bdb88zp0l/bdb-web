@@ -60,7 +60,7 @@ const Crm = () => {
             Welcome back, Prefix First Name Last Name Suffix!
           </p>
           <p className="font-normal text-[#8c9097] dark:text-white/50 text-[0.813rem]">
-            Track your sales activity, leads and deals here.
+            Designation
           </p>
         </div>
         <div className="btn-list md:mt-0 mt-2">
@@ -101,7 +101,7 @@ const Crm = () => {
                             )}
                           </span>
                         </span>
-                        <span className="block font-semibold mt-[0.125rem]">
+                        {/* <span className="block font-semibold mt-[0.125rem]">
                           <Link
                             className="text-white text-[0.813rem]"
                             href="#!"
@@ -109,7 +109,7 @@ const Crm = () => {
                           >
                             <u>Click here</u>
                           </Link>
-                        </span>
+                        </span> */}
                       </div>
                       <div>
                         <div id="crm-main">
@@ -928,7 +928,7 @@ const Crm = () => {
                   <div className="col !p-0">
                     <div className="!ps-4 p-[0.95rem] text-center border-e border-dashed dark:border-defaultborder/10">
                       <span className="text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend mobile inline-block">
-                        Mobile
+                        AC
                       </span>
                       <div>
                         <span className="text-[1rem]  font-semibold">
@@ -940,7 +940,7 @@ const Crm = () => {
                   <div className="col !p-0">
                     <div className="p-[0.95rem] text-center border-e border-dashed dark:border-defaultborder/10">
                       <span className="text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend desktop inline-block">
-                        Desktop
+                        AR
                       </span>
                       <div>
                         <span className="text-[1rem]  font-semibold">
@@ -952,7 +952,7 @@ const Crm = () => {
                   <div className="col !p-0">
                     <div className="p-[0.95rem] text-center border-e border-dashed dark:border-defaultborder/10">
                       <span className="text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend laptop inline-block">
-                        Laptop
+                        C
                       </span>
                       <div>
                         <span className="text-[1rem]  font-semibold">
@@ -964,7 +964,7 @@ const Crm = () => {
                   <div className="col !p-0">
                     <div className="!pe-4 p-[0.95rem] text-center">
                       <span className="text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend tablet inline-block">
-                        Tablet
+                        D
                       </span>
                       <div>
                         <span className="text-[1rem]  font-semibold">679</span>
@@ -1065,9 +1065,9 @@ const Crm = () => {
                   <ul className="list-none mb-0 pt-2 crm-deals-status">
                     <li className="primary">
                       <div className="flex items-center text-[0.813rem]  justify-between">
-                        <div>Successful Deals</div>
+                        <div>Case Title</div>
                         <div className="text-[0.75rem] text-[#8c9097] dark:text-white/50">
-                          987 deals
+                          Contact Price
                         </div>
                       </div>
                     </li>
