@@ -1,959 +1,1086 @@
-"use client"
-import Pageheader from '@/shared/layout-components/page-header/pageheader'
-import Seo from '@/shared/layout-components/seo/seo'
-import Link from 'next/link'
-import React, { Fragment } from 'react'
-import * as Projectdata from "@/shared/data/dashboards/projectsdata";
+"use client";
+import { Dealsstatistics } from "@/shared/data/dashboards/crmdata";
+import Seo from "@/shared/layout-components/seo/seo";
+import Link from "next/link";
+import React, { Fragment, useEffect, useState } from "react";
+import * as Crmdata from "@/shared/data/dashboards/crmdata";
 import dynamic from "next/dynamic";
-const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import { userPrivateRequest } from "@/config/axios.config";
+import { useConfig } from "@/shared/providers/ConfigProvider";
+import moment from "moment";
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
+import store from "@/shared/redux/store";
+import { getImageUrl } from "@/utils/utils";
 
-const Projects = () => {
-    return (
-        <Fragment>
-            <Seo title={"Projects"} />
-            <Pageheader currentpage="Dashboard" activepage="Dashboard" mainpage="Cases" />
-            <div className="grid grid-cols-12 gap-x-6">
-                <div className="xxl:col-span-9 col-span-12">
-                    <div className="grid grid-cols-12 gap-x-6">
-                        <div className="xxl:col-span-5 col-span-12">
-                            <div className="grid grid-cols-12 gap-x-6">
-                                <div className="sm:col-span-6 col-span-12">
-                                    <div className="box">
-                                        <div className="box-body flex justify-between items-center">
-                                            <div>
-                                                <p className="mb-1">Active Cases</p>
-                                                <h4 className="font-semibold mb-1 text-[1.5rem]">109</h4>
-                                                <span className="badge bg-success/10 text-success">1.5% <i className="ti ti-trending-up ms-1"></i></span><span className="text-[#8c9097] dark:text-white/50 text-[0.6875rem] ms-1">this month</span>
-                                            </div>
-                                            <div>
-                                                <span className="avatar avatar-md bg-primary text-white p-2">
-                                                    <i className="ti ti-file-check text-[1.25rem] text-white opacity-[0.7]"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="sm:col-span-6 col-span-12">
-                                    <div className="box">
-                                        <div className="box-body flex justify-between items-center">
-                                            <div>
-                                                <p className="mb-1">Total Cases</p>
-                                                <h4 className="font-semibold mb-1 text-[1.5rem]">18</h4>
-                                                <span className="badge bg-danger/10 text-danger">0.23% <i className="ti ti-trending-down ms-1"></i></span><span className="text-[#8c9097] dark:text-white/50 text-[0.6875rem] ms-1">this month</span>
-                                            </div>
-                                            <div>
-                                                <span className="avatar avatar-md bg-secondary text-white p-2">
-                                                    <i className="ti ti-briefcase text-[1.25rem] opacity-[0.7]"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="sm:col-span-6 col-span-12">
-                                    <div className="box">
-                                        <div className="box-body flex justify-between items-center">
-                                            <div>
-                                                <p className="mb-1">Won</p>
-                                                <h4 className="font-semibold mb-1 text-[1.5rem]">389</h4>
-                                                <span className="badge bg-success/10 text-success">0.67% <i className="ti ti-trending-up ms-1"></i></span><span className="text-[#8c9097] dark:text-white/50 text-[0.6875rem] ms-1">this month</span>
-                                            </div>
-                                            <div>
-                                                <span className="avatar avatar-md bg-success text-white p-2">
-                                                    <i className="ti ti-album text-[1.25rem] opacity-[0.7]"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="sm:col-span-6 col-span-12">
-                                    <div className="box">
-                                        <div className="box-body flex justify-between items-center">
-                                            <div>
-                                                <p className="mb-1">Loss</p>
-                                                <h4 className="font-semibold mb-1 text-[1.5rem]">227</h4>
-                                                <span className="badge bg-success/10 text-success">0.53% <i className="ti ti-trending-up ms-1"></i></span><span className="text-[#8c9097] dark:text-white/50 text-[0.6875rem] ms-1">this month</span>
-                                            </div>
-                                            <div>
-                                                <span className="avatar avatar-md bg-warning text-white p-2">
-                                                    <i className="ti ti-chart-pie-2 text-[1.25rem] opacity-[0.7]"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="xl:col-span-12 col-span-12">
-                                    <div className="box">
-                                        <div className="box-header justify-between">
-                                            <div className="box-title">
-                                                Case Analysis
-                                            </div>
-                                            <div className="hs-dropdown ti-dropdown">
-                                                <Link href="#!" scroll={false} className="px-2 font-normal text-[0.75rem] text-[#8c9097] dark:text-white/50"
-                                                    aria-expanded="false">
-                                                    View All<i className="ri-arrow-down-s-line align-middle ms-1 inline-block"></i>
-                                                </Link>
-                                                <ul className="hs-dropdown-menu ti-dropdown-menu hidden" role="menu">
-                                                    <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                        href="#!" scroll={false}>Today</Link></li>
-                                                    <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                        href="#!" scroll={false}>This Week</Link></li>
-                                                    <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                        href="#!" scroll={false}>Last Week</Link></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div className="box-body">
-                                            <div id="projectAnalysis">
-                                                <ReactApexChart options={Projectdata.ProjectAnalysis.options} series={Projectdata.ProjectAnalysis.series} type="line" width={"100%"} height={315} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="xxl:col-span-4 col-span-12">
-                            <div className="grid grid-cols-12 gap-x-6">
-                                <div className="xl:col-span-12 col-span-12">
-                                    <div className="box">
-                                        <div className="box-header justify-between">
-                                            <div className="box-title">
-                                                Teams
-                                            </div>
-                                            <div className="hs-dropdown ti-dropdown">
-                                                <Link href="#!" scroll={false} className="px-2 font-normal text-[0.75rem] text-[#8c9097] dark:text-white/50"
-                                                    aria-expanded="false">
-                                                    View All<i className="ri-arrow-down-s-line align-middle ms-1 inline-block"></i>
-                                                </Link>
-                                                <ul className="hs-dropdown-menu ti-dropdown-menu hidden" role="menu">
-                                                    <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                        href="#!" scroll={false}>Today</Link></li>
-                                                    <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                        href="#!" scroll={false}>This Week</Link></li>
-                                                    <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                        href="#!" scroll={false}>Last Week</Link></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div className="box-body">
-                                            <ul className="list-none team-members-card mb-0">
-                                                <li>
-                                                    <Link href="#!" scroll={false}>
-                                                        <div className="flex items-center justify-between">
-                                                            <div className="flex items-start">
-                                                                <span className="avatar avatar-sm leading-none">
-                                                                    <img src="../../assets/images/faces/2.jpg" alt="" className="rounded-md" />
-                                                                </span>
-                                                                <div className="ms-4 leading-none">
-                                                                    <span className="font-semibold">Melissa Smith</span>
-                                                                    <span className="block text-[0.6875rem] text-[#8c9097] dark:text-white/50 mt-2">Sr Partner</span>
-                                                                </div>
-                                                            </div>
-                                                            <div id="user1">
-                                                                <ReactApexChart options={Projectdata.Team1.options} series={Projectdata.Team1.series} type="line" height={20} width={80} />
-                                                            </div>
-                                                        </div>
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="#!" scroll={false}>
-                                                        <div className="flex items-center justify-between">
-                                                            <div className="flex items-start">
-                                                                <span className="avatar avatar-sm leading-none">
-                                                                    <img src="../../assets/images/faces/12.jpg" alt="" className="rounded-md" />
-                                                                </span>
-                                                                <div className="ms-4 leading-none">
-                                                                    <span className="font-semibold">Jason Momoa</span>
-                                                                    <span className="block text-[0.6875rem] text-[#8c9097] dark:text-white/50 mt-2">Jr Partner</span>
-                                                                </div>
-                                                            </div>
-                                                            <div id="user2">
-                                                                <ReactApexChart options={Projectdata.Team2.options} series={Projectdata.Team2.series} type="line" height={20} width={80} />
-                                                            </div>
-                                                        </div>
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="#!" scroll={false}>
-                                                        <div className="flex items-center justify-between">
-                                                            <div className="flex items-start">
-                                                                <span className="avatar avatar-sm leading-none">
-                                                                    <img src="../../assets/images/faces/1.jpg" alt="" className="rounded-md" />
-                                                                </span>
-                                                                <div className="ms-4 leading-none">
-                                                                    <span className="font-semibold">Kamala Hars</span>
-                                                                    <span className="block text-[0.6875rem] text-[#8c9097] dark:text-white/50 mt-2">Secretary</span>
-                                                                </div>
-                                                            </div>
-                                                            <div id="user3">
-                                                                <ReactApexChart options={Projectdata.Team3.options} series={Projectdata.Team3.series} type="line" height={20} width={80} />
-                                                            </div>
-                                                        </div>
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="#!" scroll={false}>
-                                                        <div className="flex items-center justify-between">
-                                                            <div className="flex items-start">
-                                                                <span className="avatar avatar-sm leading-none">
-                                                                    <img src="../../assets/images/faces/15.jpg" alt="" className="rounded-md" />
-                                                                </span>
-                                                                <div className="ms-4 leading-none">
-                                                                    <span className="font-semibold">Diego Sanch</span>
-                                                                    <span className="block text-[0.6875rem] text-[#8c9097] dark:text-white/50 mt-2">Assistant</span>
-                                                                </div>
-                                                            </div>
-                                                            <div id="user4">
-                                                                
-                                                                <ReactApexChart options={Projectdata.Team4.options} series={Projectdata.Team4.series} type="line" height={20} width={80} />
-                                                            </div>
-                                                        </div>
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="#!" scroll={false}>
-                                                        <div className="flex items-center justify-between">
-                                                            <div className="flex items-start">
-                                                                <span className="avatar avatar-sm leading-none">
-                                                                    <img src="../../assets/images/faces/10.jpg" alt="" className="rounded-md" />
-                                                                </span>
-                                                                <div className="ms-4 leading-none">
-                                                                    <span className="font-semibold">Jake Sully</span>
-                                                                    <span className="block text-[0.6875rem] text-[#8c9097] dark:text-white/50 mt-2">Admin</span>
-                                                                </div>
-                                                            </div>
-                                                            <div id="user5">
-                                                                <ReactApexChart options={Projectdata.Team5.options} series={Projectdata.Team5.series} type="line" height={20} width={80} />
-                                                            </div>
-                                                        </div>
-                                                    </Link>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="xl:col-span-12 col-span-12">
-                                    <div className="box">
-                                        <div className="box-header justify-between">
-                                            <div className="box-title">
-                                                Main Tasks
-                                            </div>
-                                            <div className="hs-dropdown ti-dropdown">
-                                                <Link href="#!" scroll={false} className="px-2 font-normal text-[0.75rem] text-[#8c9097] dark:text-white/50"
-                                                    aria-expanded="false">
-                                                    Today<i className="ri-arrow-down-s-line align-middle ms-1 inline-block"></i>
-                                                </Link>
-                                                <ul className="hs-dropdown-menu ti-dropdown-menu hidden" role="menu">
-                                                    <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                        href="#!" scroll={false}>Weak</Link></li>
-                                                    <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                        href="#!" scroll={false}>Month</Link></li>
-                                                    <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                        href="#!" scroll={false}>Year</Link></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div className="box-body">
-                                            <ul className="list-none projects-maintask-card">
-                                                <li>
-                                                    <div className="flex items-start">
-                                                        <div className="flex items-start flex-grow">
-                                                            <span className="me-4">
-                                                                <input className="form-check-input" type="checkbox" id="checkboxNoLabel1" defaultValue="" aria-label="..." />
-                                                            </span>
-                                                            <div className="flex-grow">
-                                                                <span>
-                                                                    Research
-                                                                </span>
-                                                                <span className="block mt-1">
-                                                                    <span className="avatar-list-stacked">
-                                                                        <span className="avatar avatar-xs avatar-rounded">
-                                                                            <img src="../../assets/images/faces/2.jpg" alt="img" />
-                                                                        </span>
-                                                                        <span className="avatar avatar-xs avatar-rounded">
-                                                                            <img src="../../assets/images/faces/8.jpg" alt="img" />
-                                                                        </span>
-                                                                        <span className="avatar avatar-xs avatar-rounded">
-                                                                            <img src="../../assets/images/faces/2.jpg" alt="img" />
-                                                                        </span>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <span className="badge bg-primary/10 text-primary">
-                                                                In progress
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div className="flex items-start">
-                                                        <div className="flex items-start flex-grow">
-                                                            <span className="me-4">
-                                                                <input className="form-check-input" type="checkbox"  defaultValue="" aria-label="..." defaultChecked />
-                                                            </span>
-                                                            <div className="flex-grow">
-                                                                <span>
-                                                                    Documentation
-                                                                </span>
-                                                                <span className="block mt-1">
-                                                                    <span className="avatar-list-stacked">
-                                                                        <span className="avatar avatar-xs avatar-rounded">
-                                                                            <img src="../../assets/images/faces/10.jpg" alt="img" />
-                                                                        </span>
-                                                                        <span className="avatar avatar-xs avatar-rounded">
-                                                                            <img src="../../assets/images/faces/15.jpg" alt="img" />
-                                                                        </span>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <span className="badge bg-success/10 text-success">
-                                                                Completed
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div className="flex items-start">
-                                                        <div className="flex items-start flex-grow">
-                                                            <span className="me-4">
-                                                                <input className="form-check-input" type="checkbox" id="checkboxNoLabel3" defaultValue="" aria-label="..." />
-                                                            </span>
-                                                            <div className="flex-grow">
-                                                                <span>
-                                                                    Hearing
-                                                                </span>
-                                                                <span className="block mt-1">
-                                                                    <span className="avatar-list-stacked">
-                                                                        <span className="avatar avatar-xs avatar-rounded">
-                                                                            <img src="../../assets/images/faces/11.jpg" alt="img" />
-                                                                        </span>
-                                                                        <span className="avatar avatar-xs avatar-rounded">
-                                                                            <img src="../../assets/images/faces/4.jpg" alt="img" />
-                                                                        </span>
-                                                                        <span className="avatar avatar-xs avatar-rounded">
-                                                                            <img src="../../assets/images/faces/8.jpg" alt="img" />
-                                                                        </span>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <span className="badge bg-warning/10 text-warning">
-                                                                pending
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div className="flex items-start">
-                                                        <div className="flex items-start flex-grow">
-                                                            <span className="me-4">
-                                                                <input className="form-check-input" type="checkbox" id="checkboxNoLabel4" defaultValue="" aria-label="..." defaultChecked />
-                                                            </span>
-                                                            <div className="flex-grow">
-                                                                <span>
-                                                                    Hearing
-                                                                </span>
-                                                                <span className="block mt-1">
-                                                                    <span className="avatar-list-stacked">
-                                                                        <span className="avatar avatar-xs avatar-rounded">
-                                                                            <img src="../../assets/images/faces/10.jpg" alt="img" />
-                                                                        </span>
-                                                                        <span className="avatar avatar-xs avatar-rounded">
-                                                                            <img src="../../assets/images/faces/11.jpg" alt="img" />
-                                                                        </span>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <span className="badge bg-primary/10 text-primary">
-                                                                In progress
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="xxl:col-span-3 col-span-12">
-                            <div className="box">
-                                <div className="box-header justify-between">
-                                    <div className="box-title">
-                                        Daily Tasks
-                                    </div>
-                                    <div className="hs-dropdown ti-dropdown">
-                                        <Link href="#!" scroll={false} className="px-2 font-normal text-[0.75rem] text-[#8c9097] dark:text-white/50"
-                                            aria-expanded="false">
-                                            View All<i className="ri-arrow-down-s-line align-middle ms-1 inline-block"></i>
-                                        </Link>
-                                        <ul className="hs-dropdown-menu ti-dropdown-menu hidden" role="menu">
-                                            <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                href="#!" scroll={false}>Download</Link></li>
-                                            <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                href="#!" scroll={false}>Import</Link></li>
-                                            <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                href="#!" scroll={false}>Export</Link></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div className="box-body">
-                                    <ul className="list-none daily-task-card my-2">
-                                        <li>
-                                            <div className="box border border-primary/25 shadow-none mb-0">
-                                                <div className="box-body">
-                                                    <p className="text-[0.875rem] font-semibold mb-2 leadining-none">Hearing
-                                                        <Link aria-label="anchor" href="#!" scroll={false}><i className="bi bi-plus-square ltr:float-right rtl:float-left text-primary ms-2 text-[1.125rem]"></i></Link>
-                                                    </p>
-                                                    <div className="flex flex-wrap gap-2 mb-4">
-                                                        <span className="badge text-primary bg-primary/10">Active</span>
-                                                        <span className="badge text-secondary bg-secondary/10">CAS-001</span>
-                                                        
-                                                    </div>
-                                                    <div className="avatar-list-stacked">
-                                                        <span className="avatar avatar-sm avatar-rounded">
-                                                            <img src="../../assets/images/faces/2.jpg" alt="img" />
-                                                        </span>
-                                                        <span className="avatar avatar-sm avatar-rounded">
-                                                            <img src="../../assets/images/faces/8.jpg" alt="img" />
-                                                        </span>
-                                                        <span className="avatar avatar-sm avatar-rounded">
-                                                            <img src="../../assets/images/faces/2.jpg" alt="img" />
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div className="box border border-warning/25 shadow-none custom-card">
-                                                <div className="box-body">
-                                                    <p className="text-[0.875rem] font-semibold mb-2 leadining-none">Documentation
-                                                        <Link aria-label="anchor" href="#!" scroll={false}><i className="bi bi-plus-square ltr:float-right rtl:float-left text-warning ms-2  text-[1.125rem]"></i></Link>
-                                                    </p>
-                                                    <div className="flex flex-wrap gap-2 mb-4">
-                                                        <span className="badge text-danger bg-danger/10">Inactive</span>
-                                                        <span className="badge text-warning bg-warning/10">CAS-002</span>
-                                                        
-                                                    </div>
-                                                    <div className="avatar-list-stacked">
-                                                        <span className="avatar avatar-sm avatar-rounded">
-                                                            <img src="../../assets/images/faces/6.jpg" alt="img" />
-                                                        </span>
-                                                        <span className="avatar avatar-sm avatar-rounded">
-                                                            <img src="../../assets/images/faces/9.jpg" alt="img" />
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div className="box border border-success/25 shadow-none custom-card">
-                                                <div className="box-body">
-                                                    <p className="text-[0.875rem] font-semibold mb-2 leadining-none">Deliberation
-                                                        <Link aria-label="anchor" href="#!" scroll={false}><i className="bi bi-plus-square ltr:float-right rtl:float-left text-success ms-2 text-[1.125rem]"></i></Link>
-                                                    </p>
-                                                    <div className="flex flex-wrap gap-2 mb-4">
-                                                        <span className="badge text-danger bg-danger/10">Active</span>
-                                                        <span className="badge text-warning bg-warning/10">CAS-003</span>
-                                                        
-                                                    </div>
-                                                    <div className="avatar-list-stacked">
-                                                        <span className="avatar avatar-sm avatar-rounded">
-                                                            <img src="../../assets/images/faces/6.jpg" alt="img" />
-                                                        </span>
-                                                        <span className="avatar avatar-sm avatar-rounded">
-                                                            <img src="../../assets/images/faces/9.jpg" alt="img" />
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div className="box border border-secondary/25 shadow-none custom-card !mb-0">
-                                                <div className="box-body">
-                                                    <p className="text-[0.875rem] font-semibold mb-2 leadining-none">New Case Discussion
-                                                        <Link aria-label="anchor" href="#!" scroll={false}><i className="bi bi-plus-square ltr:float-right rtl:float-left text-secondary ms-2 text-[1.125rem]"></i></Link>
-                                                    </p>
-                                                    <div className="flex flex-wrap gap-2 mb-4">
-                                                        <span className="badge text-info bg-info/10">Actve</span>
-                                                        <span className="badge text-primary bg-primary/10">CAS-004</span>
-                                                    </div>
-                                                    <div className="avatar-list-stacked">
-                                                        <span className="avatar avatar-sm avatar-rounded">
-                                                            <img src="../../assets/images/faces/3.jpg" alt="img" />
-                                                        </span>
-                                                        <span className="avatar avatar-sm avatar-rounded">
-                                                            <img src="../../assets/images/faces/14.jpg" alt="img" />
-                                                        </span>
-                                                        <span className="avatar avatar-sm avatar-rounded">
-                                                            <img src="../../assets/images/faces/11.jpg" alt="img" />
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="xxl:col-span-3 col-span-12">
-                    <div className="grid grid-cols-12 gap-x-6">
-                        <div className="xxl:col-span-12 col-span-12">
-                            <div className="box shadow-none projects-tracking-card overflow-hidden text-center">
-                                <div className="box-body">
-                                    <img src="../../assets/images/media/media-86.svg" alt="" className="mb-1 inline-flex" />
-                                    <div>
-                                        <span className="text-[0.9375rem] font-semibold block mt-6 mb-4">Knowledge Base</span>
-                                        <button type="button" className="ti-btn !py-1 !px-2 bg-primary !text-[0.75rem] text-white  ti-btn-wave">Search Here</button>
-                                    </div>
-                                    <span className="shape-1 text-primary"><i className="ti ti-circle text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-2 text-secondary"><i className="ti ti-triangle text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-3 text-warning"><i className="ti ti-square text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-4 text-info"><i className="ti ti-square-rotated text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-5 text-success"><i className="ti ti-pentagon text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-6 text-danger"><i className="ti ti-star text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-7 text-pink"><i className="ti ti-hexagon text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-8 text-teal"><i className="ti ti-octagon text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-9 text-primary"><i className="ti ti-circle text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-10 text-secondary"><i className="ti ti-triangle text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-11 text-warning"><i className="ti ti-square text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-12 text-info"><i className="ti ti-square-rotated text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-13 text-success"><i className="ti ti-pentagon text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-14 text-danger"><i className="ti ti-star text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-15 text-pink"><i className="ti ti-hexagon text-[1.25rem] font-bold"></i></span>
-                                    <span className="shape-16 text-teal"><i className="ti ti-octagon text-[1.25rem] font-bold"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="xxl:col-span-12 col-span-12">
-                            <div className="box">
-                                <div className="box-header justify-between">
-                                    <div className="box-title">
-                                        Recent Transactions
-                                    </div>
-                                    <div className="hs-dropdown ti-dropdown">
-                                        <Link href="#!" scroll={false} className="px-2 font-normal text-[0.75rem] text-[#8c9097] dark:text-white/50"
-                                            aria-expanded="false">
-                                            View All<i className="ri-arrow-down-s-line align-middle ms-1 inline-block"></i>
-                                        </Link>
-                                        <ul className="hs-dropdown-menu ti-dropdown-menu hidden" role="menu">
-                                            <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                href="#!" scroll={false}>Download</Link></li>
-                                            <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                href="#!" scroll={false}>Import</Link></li>
-                                            <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                                href="#!" scroll={false}>Export</Link></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div className="box-body">
-                                    <ul className="list-none project-transactions-card">
-                                        <li>
-                                            <div className="flex items-start">
-                                                <div className="me-3">
-                                                    <span className="avatar avatar-rounded font-bold avatar-md !text-primary bg-primary/10">
-                                                        S
-                                                    </span>
-                                                </div>
-                                                <div className="flex-grow">
-                                                    <span className="block font-semibold">Simon Cowall</span>
-                                                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem]">Feb 28,2024 - 12:54PM</span>
-                                                </div>
-                                                <div>
-                                                    <h6 className="font-semibold text-[1rem]">$21,442</h6>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div className="flex items-start">
-                                                <div className="me-3">
-                                                    <span className="avatar avatar-rounded font-bold avatar-md !text-secondary bg-secondary/10">
-                                                        M
-                                                    </span>
-                                                </div>
-                                                <div className="flex-grow">
-                                                    <span className="block font-semibold">Melissa Blue</span>
-                                                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem]">Mar 28,2024 - 10:14AM</span>
-                                                </div>
-                                                <div>
-                                                    <h6 className="font-semibold text-[1rem]">$8,789</h6>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div className="flex items-start">
-                                                <div className="me-3">
-                                                    <span className="avatar avatar-rounded font-bold avatar-md !text-success bg-success/10">
-                                                        G
-                                                    </span>
-                                                </div>
-                                                <div className="flex-grow">
-                                                    <span className="block font-semibold">Gabriel Shin</span>
-                                                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem]">Mar 16,2024 - 05:27PM</span>
-                                                </div>
-                                                <div>
-                                                    <h6 className="font-semibold text-[1rem]">$13,677</h6>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div className="flex items-start">
-                                                <div className="me-3">
-                                                    <span className="avatar avatar-rounded font-bold avatar-md !text-warning bg-warning/10">
-                                                        Y
-                                                    </span>
-                                                </div>
-                                                <div className="flex-grow">
-                                                    <span className="block font-semibold">Yohasimi Nakiyaro</span>
-                                                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem]">Mar 19,2024 - 04:45PM</span>
-                                                </div>
-                                                <div>
-                                                    <h6 className="font-semibold text-[1rem]">$3,543</h6>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div className="flex items-start">
-                                                <div className="me-3">
-                                                    <span className="avatar avatar-rounded font-bold avatar-md !text-info bg-info/10">
-                                                        B
-                                                    </span>
-                                                </div>
-                                                <div className="flex-grow">
-                                                    <span className="block font-semibold">Brenda Lynn</span>
-                                                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem]">Mar 10,2024 - 05:25PM</span>
-                                                </div>
-                                                <div>
-                                                    <h6 className="font-semibold text-[1rem]">$7,890</h6>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="grid grid-cols-12 gap-x-6">
-                <div className="xxl:col-span-12 col-span-12">
-                    <div className="box">
-                        <div className="box-header justify-between">
-                            <div className="box-title">
-                                Cases Summary
-                            </div>
-                            <div className="flex flex-wrap">
-                                <div className="me-4 my-1">
-                                    <input className="ti-form-control form-control-sm !rounded-sm" type="text" placeholder="Search Here" aria-label=".form-control-sm example" />
-                                </div>
-                                <div className="hs-dropdown ti-dropdown !py-1 !mb-2">
-                                    <Link href="#!" scroll={false}
-                                        className="ti-btn ti-btn-primary !bg-primary !text-white !py-1 !px-2 !text-[0.75rem] !m-0 !gap-0 !font-medium"
-                                        aria-expanded="false">
-                                        Sort By<i className="ri-arrow-down-s-line align-middle ms-1 inline-block"></i>
-                                    </Link>
-                                    <ul className="hs-dropdown-menu ti-dropdown-menu hidden" role="menu">
-                                        <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                            href="#!" scroll={false}>New</Link></li>
-                                        <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                            href="#!" scroll={false}>Popular</Link></li>
-                                        <li><Link className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
-                                            href="#!" scroll={false}>Relevant</Link></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="box-body">
-                            <div className="table-responsive">
-                                <table className="table table-hover whitespace-nowrap table-bordered min-w-full">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" className="!text-start">Case ID</th>
-                                            <th scope="col" className="!text-start">Case Title</th>
-                                            <th scope="col" className="!text-start">Supervising Partner</th>
-                                            <th scope="col" className="!text-start">Tasks</th>
-                                            <th scope="col" className="!text-start">Progress</th>
-                                            <th scope="col" className="!text-start">Status</th>
-                                            <th scope="col" className="!text-start">End Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr className="border border-inherit border-solid hover:bg-gray-100 dark:hover:bg-light dark:border-defaultborder/10">
-                                            <th scope="row" className="!text-start">
-                                                1
-                                            </th>
-                                            <td>
-                                                Home Page
-                                            </td>
-                                            <td>
-                                                <div className="avatar-list-stacked">
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/2.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/8.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/2.jpg" alt="img" />
-                                                    </span>
-                                                    <Link className="avatar avatar-xs bg-primary avatar-rounded text-white text-[0.65rem] font-normal" href="#!" scroll={false}>
-                                                        +2
-                                                    </Link>
-                                                </div>
-                                            </td>
-                                            <td>110/180</td>
-                                            <td>
-                                                <div className="flex items-center">
-                                                    <div className="progress progress-animate progress-xs w-full" role="progressbar" aria-valuenow={0} aria-valuemin={0} aria-valuemax={100}>
-                                                        <div className="progress-bar progress-bar-striped progress-bar-animated bg-primary w-0"></div>
-                                                    </div>
-                                                    <div className="ms-2">0%</div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span className="badge bg-primary/10 text-primary">In Progress</span>
-                                            </td>
-                                            <td>
-                                                14-04-2024
-                                            </td>
-                                        </tr>
-                                        <tr className="border border-inherit border-solid hover:bg-gray-100 dark:hover:bg-light dark:border-defaultborder/10">
-                                            <th scope="row" className="!text-start">
-                                                2
-                                            </th>
-                                            <td>
-                                                Landing Design
-                                            </td>
-                                            <td>
-                                                <div className="avatar-list-stacked">
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/5.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/6.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/9.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/15.jpg" alt="img" />
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>95/100</td>
-                                            <td>
-                                                <div className="flex items-center">
-                                                    <div className=" progress progress-animate progress-xs w-full" role="progressbar" aria-valuenow={95} aria-valuemin={0} aria-valuemax={100}>
-                                                        <div className="progress-bar progress-bar-striped progress-bar-animated bg-primary w-[95%]"></div>
-                                                    </div>
-                                                    <div className="ms-2">95%</div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span className="badge bg-primary/10 text-primary">In Progress</span>
-                                            </td>
-                                            <td>
-                                                20-04-2024
-                                            </td>
-                                        </tr>
-                                        <tr className="border border-inherit border-solid hover:bg-gray-100 dark:hover:bg-light dark:border-defaultborder/10">
-                                            <th scope="row" className="!text-start">
-                                                3
-                                            </th>
-                                            <td>
-                                                New Template Design
-                                            </td>
-                                            <td>
-                                                <div className="avatar-list-stacked">
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/1.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/3.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/4.jpg" alt="img" />
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>90/100</td>
-                                            <td>
-                                                <div className="flex items-center">
-                                                    <div className="progress progress-animate progress-xs w-full" role="progressbar" aria-valuenow={0} aria-valuemin={0} aria-valuemax={100}>
-                                                        <div className="progress-bar progress-bar-striped progress-bar-animated bg-primary w-0"></div>
-                                                    </div>
-                                                    <div className="ms-2">0%</div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span className="badge bg-warning/10 text-warning">Pending</span>
-                                            </td>
-                                            <td>
-                                                29-05-2024
-                                            </td>
-                                        </tr>
-                                        <tr className="border border-inherit border-solid hover:bg-gray-100 dark:hover:bg-light dark:border-defaultborder/10">
-                                            <th scope="row" className="!text-start">
-                                                4
-                                            </th>
-                                            <td>
-                                                HR Management Template Design
-                                            </td>
-                                            <td>
-                                                <div className="avatar-list-stacked">
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/10.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/11.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/4.jpg" alt="img" />
-                                                    </span>
-                                                    <Link className="avatar avatar-xs bg-primary avatar-rounded text-white text-[0.65rem] font-normal" href="#!" scroll={false}>
-                                                        +5
-                                                    </Link>
-                                                </div>
-                                            </td>
-                                            <td>26/71</td>
-                                            <td>
-                                                <div className="flex items-center">
-                                                    <div className="progress progress-animate progress-xs w-full" role="progressbar" aria-valuenow={35} aria-valuemin={0} aria-valuemax={100}>
-                                                        <div className="progress-bar progress-bar-striped progress-bar-animated bg-primary w-[35%]"></div>
-                                                    </div>
-                                                    <div className="ms-2">35%</div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span className="badge bg-primary/10 text-primary">In Progress</span>
-                                            </td>
-                                            <td>
-                                                18-04-2024
-                                            </td>
-                                        </tr>
-                                        <tr className="border border-inherit border-solid hover:bg-gray-100 dark:hover:bg-light dark:border-defaultborder/10">
-                                            <th scope="row" className="!text-start">
-                                                5
-                                            </th>
-                                            <td>
-                                                Designing New Template
-                                            </td>
-                                            <td>
-                                                <div className="avatar-list-stacked">
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/2.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/9.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/16.jpg" alt="img" />
-                                                    </span>
-                                                    <Link className="avatar avatar-xs bg-primary avatar-rounded text-white text-[0.65rem] font-normal" href="#!" scroll={false}>
-                                                        +3
-                                                    </Link>
-                                                </div>
-                                            </td>
-                                            <td>26/71</td>
-                                            <td>
-                                                <div className="flex items-center">
-                                                    <div className="progress progress-animate progress-xs w-full" role="progressbar" aria-valuenow={100} aria-valuemin={0} aria-valuemax={100}>
-                                                        <div className="progress-bar progress-bar-striped progress-bar-animated bg-primary w-full"></div>
-                                                    </div>
-                                                    <div className="ms-2">100%</div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span className="badge bg-success/10 text-success">Completed</span>
-                                            </td>
-                                            <td>
-                                                11-04-2024
-                                            </td>
-                                        </tr>
-                                        <tr className="border border-inherit border-solid hover:bg-gray-100 dark:hover:bg-light dark:border-defaultborder/10">
-                                            <th scope="row" className="!text-start">
-                                                6
-                                            </th>
-                                            <td>
-                                                Documentation Project
-                                            </td>
-                                            <td>
-                                                <div className="avatar-list-stacked">
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/4.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/7.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/12.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/13.jpg" alt="img" />
-                                                    </span>
-                                                    <span className="avatar avatar-xs avatar-rounded">
-                                                        <img src="../../assets/images/faces/15.jpg" alt="img" />
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>45/90</td>
-                                            <td>
-                                                <div className="flex items-center">
-                                                    <div className="progress progress-animate progress-xs w-full" role="progressbar" aria-valuenow={50} aria-valuemin={0} aria-valuemax={100}>
-                                                        <div className="progress-bar progress-bar-striped progress-bar-animated bg-primary w-1/2"></div>
-                                                    </div>
-                                                    <div className="ms-2">50%</div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span className="badge bg-primary/10 text-primary">In Progress</span>
-                                            </td>
-                                            <td>
-                                                18-04-2024
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div className="box-footer">
-                            <div className="sm:flex items-center">
-                                <div className="dark:text-defaulttextcolor/70">
-                                    Showing 5 Entries <i className="bi bi-arrow-right ms-2 font-semibold"></i>
-                                </div>
-                                <div className="ms-auto">
-                                    <nav aria-label="Page navigation" className="pagination-style-4">
-                                        <ul className="ti-pagination mb-0">
-                                            <li className="page-item disabled">
-                                                <Link className="page-link" href="#!" scroll={false}>
-                                                    Prev
-                                                </Link>
-                                            </li>
-                                            <li className="page-item"><Link className="page-link active" href="#!" scroll={false}>1</Link></li>
-                                            <li className="page-item"><Link className="page-link" href="#!" scroll={false}>2</Link></li>
-                                            <li className="page-item">
-                                                <Link className="page-link !text-primary" href="#!" scroll={false}>
-                                                    next
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </Fragment>
-    )
-}
+const Crm = () => {
 
-export default Projects
+
+
+  const { auth } = store.getState();
+  const config = useConfig();
+
+  const getAnnouncement = config?.ANNOUNCEMENT_SETTINGS;
+  const [data, setData] = useState<any>({
+    caseStatusStatistics: []
+  })
+
+  const fetchDashboardData = async () => {
+    const res = await userPrivateRequest.get(`api/dashboard`)
+    setData(res.data?.data ?? {})
+  }
+
+  useEffect(() => {
+    fetchDashboardData()
+
+  }, []);
+
+
+
+  console.log("Crmdata.Sourcedata.series", auth?.user)
+  return (
+    <Fragment>
+      <Seo title={"Crm"} />
+      <div className="md:flex block items-center justify-between my-[1.5rem] page-header-breadcrumb">
+        <div>
+          <p className="font-semibold text-[1.125rem] text-defaulttextcolor dark:text-defaulttextcolor/70 !mb-0 ">
+            Welcome back, {auth?.user?.firstName} {auth?.user?.lastName}!
+          </p>
+          <p className="font-normal text-[#8c9097] dark:text-white/50 text-[0.813rem]">
+            {auth?.user?.roleType === "superAdmin"
+              ? "Super Admin"
+              : auth?.user?.role?.name ?? ""}
+          </p>
+        </div>
+        <div className="btn-list md:mt-0 mt-2">
+          <button
+            type="button"
+            className="ti-btn bg-primary text-white btn-wave !font-medium !me-[0.45rem] !ms-0 !text-[0.85rem] !rounded-[0.35rem] !py-[0.51rem] !px-[0.86rem] shadow-none"
+          >
+            <i className="ri-filter-3-fill  inline-block"></i>Filters
+          </button>
+          <button
+            type="button"
+            className="ti-btn ti-btn-outline-secondary btn-wave !font-medium  !me-[0.45rem]  !ms-0 !text-[0.85rem] !rounded-[0.35rem] !py-[0.51rem] !px-[0.86rem] shadow-none"
+          >
+            <i className="ri-upload-cloud-line  inline-block"></i>Export
+          </button>
+        </div>
+      </div>
+      <div className="grid grid-cols-12 gap-x-6">
+        <div className="xxl:col-span-9 xl:col-span-12  col-span-12">
+          <div className="grid grid-cols-12 gap-x-6">
+            <div className="xxl:col-span-4 xl:col-span-4  col-span-12">
+              {getAnnouncement &&
+                <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
+                  <div className="box crm-highlight-card">
+                    <div className="box-body">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-semibold text-[1.125rem] text-white mb-2">
+                            Announcement
+                          </div>
+                          <span className="block text-[0.75rem] text-white">
+                            <span className="opacity-[0.7]  me-1 rtl:ms-1">
+                              {getAnnouncement}
+                            </span>
+                          </span>
+                        </div>
+                        {/* <div>
+                          <div id="crm-main">
+                            <ReactApexChart
+                              options={Crmdata.Target.options}
+                              series={Crmdata.Target.series}
+                              type="radialBar"
+                              width={100}
+                              height={127}
+                            />
+                          </div>
+                        </div> */}
+                      </div>
+                    </div>
+                  </div>
+                </div>}
+              <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
+                <div className="box">
+                  <div className="box-header flex justify-between">
+                    <div className="box-title">Top Clients</div>
+                    <div className="hs-dropdown ti-dropdown">
+                      <Link
+                        aria-label="anchor"
+                        href="#!"
+                        scroll={false}
+                        className="flex items-center justify-center w-[1.75rem] h-[1.75rem]  !text-[0.8rem] !py-1 !px-2 rounded-sm bg-light border-light shadow-none !font-medium"
+                        aria-expanded="false"
+                      >
+                        <i className="fe fe-more-vertical text-[0.8rem]"></i>
+                      </Link>
+                      <ul className="hs-dropdown-menu ti-dropdown-menu hidden">
+                        <li>
+                          <Link
+                            className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                            href="#!"
+                            scroll={false}
+                          >
+                            Week
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                            href="#!"
+                            scroll={false}
+                          >
+                            Month
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                            href="#!"
+                            scroll={false}
+                          >
+                            Year
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="box-body">
+                    <ul className="list-none crm-top-deals mb-0">
+
+                      {data?.topClients?.map((item: any, index: number) => (
+                        <li className="mb-[0.9rem]">
+                          <div className="flex items-start flex-wrap">
+                            <div className="me-2">
+                              <span className=" inline-flex items-center justify-center">
+
+                                <span className="avatar avatar-rounded avatar-sm">
+                                  {getImageUrl(item?.clientInfo?.logo) ? (
+                                    <img
+                                      src={`  ${getImageUrl(item?.clientInfo?.logo) ||
+                                        "../../assets/images/user-circle.png"
+                                        }`}
+                                      alt=""
+                                      style={{ objectFit: "cover" }}
+                                    />
+                                  ) : (
+                                    <i className="ri-account-circle-line me-1 align-middle text-3xl  text-[#8c9097]"></i>
+                                  )}
+                                </span>
+                              </span>
+                            </div>
+                            <div className="flex-grow w-[50%]">
+                              <p className="font-semibold mb-[1.4px]  text-[0.813rem]">
+                                {item?.clientInfo?.companyName ?? ""}
+                              </p>
+                              <p className="text-[#8c9097] dark:text-white/50 text-[0.75rem]">
+                                {item?.clientInfo?.emails?.length > 0 ? item?.clientInfo?.emails?.[0]?.value : ""}
+                              </p>
+                            </div>
+                            <div className="font-semibold text-[0.9375rem] ">
+                              {item?.totalContractPrice ?? 0}
+                            </div>
+                          </div>
+                        </li>))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
+                <div className="box">
+                  <div className="box-header justify-between">
+                    <div className="box-title">Profit Earned</div>
+                    <div className="hs-dropdown ti-dropdown">
+                      <Link
+                        href="#!"
+                        scroll={false}
+                        className="px-2 font-normal text-[0.75rem] text-[#8c9097] dark:text-white/50"
+                        aria-expanded="false"
+                      >
+                        View All
+                        <i className="ri-arrow-down-s-line align-middle ms-1 inline-block"></i>
+                      </Link>
+                      <ul
+                        className="hs-dropdown-menu ti-dropdown-menu hidden"
+                        role="menu"
+                      >
+                        <li>
+                          <Link
+                            className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                            href="#!"
+                            scroll={false}
+                          >
+                            Today
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                            href="#!"
+                            scroll={false}
+                          >
+                            This Week
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                            href="#!"
+                            scroll={false}
+                          >
+                            Last Week
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="box-body !py-0 !ps-0">
+                    <div id="crm-profits-earned">
+                      <ReactApexChart
+                        options={Crmdata.Earned.options}
+                        series={Crmdata.Earned.series}
+                        type="bar"
+                        width={"100%"}
+                        height={180}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="xxl:col-span-8  xl:col-span-8  col-span-12">
+              <div className="grid grid-cols-12 gap-x-6">
+                <div className="xxl:col-span-6 xl:col-span-6 col-span-12">
+                  <div className="box overflow-hidden">
+                    <div className="box-body">
+                      <div className="flex items-top justify-between">
+                        <div>
+                          <span className="!text-[0.8rem]  !w-[2.5rem] !h-[2.5rem] !leading-[2.5rem] !rounded-full inline-flex items-center justify-center bg-primary">
+                            <i className="ti ti-users text-[1rem] text-white"></i>
+                          </span>
+                        </div>
+                        <div className="flex-grow ms-4">
+                          <div className="flex items-center justify-between flex-wrap">
+                            <div>
+                              <p className="text-[#8c9097] dark:text-white/50 text-[0.813rem] mb-0">
+                                Total Client
+                              </p>
+                              <h4 className="font-semibold  text-[1.5rem] !mb-2 ">
+                                {data?.clientStatusStatistics?.find((item: any) => item?._id === "active")?.count ?? 0}
+                              </h4>
+                            </div>
+                            <div id="crm-total-customers">
+                              <ReactApexChart
+                                options={Crmdata.Customers.options}
+                                // series={Crmdata.Customers.series}
+
+                                series={[{
+                                  name: "Value",
+                                  data: data?.clientMonthlyStatistics?.filter((item: any) => item?.year && item?.year >= 2017)?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
+                                },]}
+                                type="line"
+                                height={40}
+                                width={100}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between !mt-1">
+                            <div>
+                              <Link
+                                className="text-primary text-[0.813rem]"
+                                href="/client-management/"
+                                scroll={false}
+                              >
+                                View All
+                                <i className="ti ti-arrow-narrow-right ms-2 font-semibold inline-block"></i>
+                              </Link>
+                            </div>
+                            <div className="text-end">
+                              <p className="mb-0 text-success text-[0.813rem] font-semibold">
+                                {data?.clientMonthlyStatistics?.[data?.clientMonthlyStatistics?.length - 1]?.growthPercentage ?? 0} %
+                              </p>
+                              <p className="text-[#8c9097] dark:text-white/50 opacity-[0.7] text-[0.6875rem]">
+                                this month
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="xxl:col-span-6 xl:col-span-6 col-span-12">
+                  <div className="box overflow-hidden">
+                    <div className="box-body">
+                      <div className="flex items-top justify-between">
+                        <div>
+                          <span className="!text-[0.8rem]  !w-[2.5rem] !h-[2.5rem] !leading-[2.5rem] !rounded-full inline-flex items-center justify-center bg-secondary">
+                            <i className="ti ti-wallet text-[1rem] text-white"></i>
+                          </span>
+                        </div>
+                        <div className="flex-grow ms-4">
+                          <div className="flex items-center justify-between flex-wrap">
+                            <div>
+                              <p className="text-[#8c9097] dark:text-white/50 text-[0.813rem] mb-0">
+                                Total Cases
+                              </p>
+                              <h4 className="font-semibold text-[1.5rem] !mb-2 ">
+                                {data?.caseMonthlyData?.find((item: any) => item?._id === "active")?.totalCount ?? 0}
+                              </h4>
+                            </div>
+                            <div id="crm-total-revenue">
+                              <ReactApexChart
+                                options={Crmdata.Revenue.options}
+                                series={[{
+                                  name: "Value",
+                                  data: data?.caseMonthlyData?.find((item: any) => item?._id === "active")?.monthlyData?.reverse()?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
+                                },]}
+                                type="line"
+                                height={40}
+                                width={100}
+                              />
+
+                              {/* <ReactApexChart
+                                options={Crmdata.Revenue.options}
+                                series={data?.caseMonthlyData?.find((item: any) => item?._id === "active")?.monthlyData?.map((item: any) => { return item?.growthPercentage })}
+                                type="line"
+                                height={40}
+                                width={100}
+                              /> */}
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between mt-1">
+                            <div>
+                              <Link
+                                className="text-secondary text-[0.813rem]"
+                                href="/cases/list/"
+                                scroll={false}
+                              >
+                                View All
+                                <i className="ti ti-arrow-narrow-right ms-2 font-semibold inline-block"></i>
+                              </Link>
+                            </div>
+                            <div className="text-end">
+                              <p className="mb-0 text-success text-[0.813rem] font-semibold">
+                                {/* +25% */}
+                                {data?.caseMonthlyData
+                                  ?.find((item: any) => item?._id === "active")
+                                  ?.monthlyData?.[data?.caseMonthlyData
+                                    ?.find((item: any) => item?._id === "active")
+                                    ?.monthlyData?.length - 1]?.growthPercentage ?? 0}
+                                %
+                              </p>
+                              <p className="text-[#8c9097] dark:text-white/50 opacity-[0.7] text-[0.6875rem]">
+                                this month
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="xxl:col-span-6 xl:col-span-6 col-span-12">
+                  <div className="box overflow-hidden">
+                    <div className="box-body">
+                      <div className="flex items-top justify-between">
+                        <div>
+                          <span className="!text-[0.8rem]  !w-[2.5rem] !h-[2.5rem] !leading-[2.5rem] !rounded-full inline-flex items-center justify-center bg-success">
+                            <i className="ti ti-wave-square text-[1rem] text-white"></i>
+                          </span>
+                        </div>
+                        <div className="flex-grow ms-4">
+                          <div className="flex items-center justify-between flex-wrap">
+                            <div>
+                              <p className="text-[#8c9097] dark:text-white/50 text-[0.813rem] mb-0">
+                                Inactive Clients
+                              </p>
+                              <h4 className="font-semibold text-[1.5rem] !mb-2 ">
+                                {data?.clientStatusStatistics?.find((item: any) => item?._id === "inactive")?.count ?? 0}
+                              </h4>
+                            </div>
+                            <div id="crm-conversion-ratio">
+                              <ReactApexChart
+                                options={Crmdata.Ratio.options}
+                                series={[{
+                                  name: "Value",
+                                  data: data?.clientMonthlyStatistics?.filter((item: any) => item?.year && item?.year >= 2017)?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
+                                },]}
+                                type="line"
+                                height={40}
+                                width={100}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between mt-1">
+                            <div>
+                              <Link
+                                className="text-success text-[0.813rem]"
+                                href="#!"
+                                scroll={false}
+                              >
+                                View All
+                                <i className="ti ti-arrow-narrow-right ms-2 font-semibold inline-block"></i>
+                              </Link>
+                            </div>
+                            <div className="text-end">
+                              <p className="mb-0 text-danger text-[0.813rem] font-semibold">
+
+                                {data?.clientMonthlyStatistics?.[data?.clientMonthlyStatistics?.length - 1]?.growthPercentage ?? 0}%
+                              </p>
+                              <p className="text-[#8c9097] dark:text-white/50 opacity-[0.7] text-[0.6875rem]">
+                                this month
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="xxl:col-span-6 xl:col-span-6 col-span-12">
+                  <div className="box overflow-hidden">
+                    <div className="box-body">
+                      <div className="flex items-top justify-between">
+                        <div>
+                          <span className="!text-[0.8rem]  !w-[2.5rem] !h-[2.5rem] !leading-[2.5rem] !rounded-full inline-flex items-center justify-center bg-warning">
+                            <i className="ti ti-briefcase text-[1rem] text-white"></i>
+                          </span>
+                        </div>
+                        <div className="flex-grow ms-4">
+                          <div className="flex items-center justify-between flex-wrap">
+                            <div>
+                              <p className="text-[#8c9097] dark:text-white/50 text-[0.813rem] mb-0">
+                                Total Deals
+                              </p>
+                              <h4 className="font-semibold text-[1.5rem] !mb-2 ">
+                                2,543
+                              </h4>
+                            </div>
+                            <div id="crm-total-deals">
+                              <ReactApexChart
+                                options={Crmdata.Deals.options}
+                                series={Crmdata.Deals.series}
+                                type="line"
+                                height={40}
+                                width={100}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between mt-1">
+                            <div>
+                              <Link
+                                className="text-warning text-[0.813rem]"
+                                href="#!"
+                                scroll={false}
+                              >
+                                View All
+                                <i className="ti ti-arrow-narrow-right ms-2 font-semibold inline-block"></i>
+                              </Link>
+                            </div>
+                            <div className="text-end">
+                              <p className="mb-0 text-success text-[0.813rem] font-semibold">
+                                +19%
+                              </p>
+                              <p className="text-[#8c9097] dark:text-white/50  opacity-[0.7] text-[0.6875rem]">
+                                this month
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
+                  <div className="box">
+                    <div className="box-header !gap-0 !m-0 justify-between">
+                      <div className="box-title">Contacts per Month</div>
+                      <div className="hs-dropdown ti-dropdown">
+                        <Link
+                          href="#!"
+                          scroll={false}
+                          className="text-[0.75rem] px-2 font-normal text-[#8c9097] dark:text-white/50"
+                          aria-expanded="false"
+                        >
+                          View All
+                          <i className="ri-arrow-down-s-line align-middle ms-1 inline-block"></i>
+                        </Link>
+                        <ul
+                          className="hs-dropdown-menu ti-dropdown-menu hidden"
+                          role="menu"
+                        >
+                          <li>
+                            <Link
+                              className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                              href="#!"
+                              scroll={false}
+                            >
+                              Today
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                              href="#!"
+                              scroll={false}
+                            >
+                              This Week
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                              href="#!"
+                              scroll={false}
+                            >
+                              Last Week
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="box-body !py-5">
+                      <div id="crm-revenue-analytics">
+                        <ReactApexChart
+                          options={Crmdata.Revenueanalytics.options}
+                          series={[{
+                            group: "apexcharts-axis-0",
+                            name: "Contract Price",
+                            type: "line",
+                            data: data?.contractPriceMonthlyStats?.map((item: any, index: number) => {
+                              return {
+                                x: item?._id,
+                                y: item?.totalContractPrice
+                              }
+                            })
+                          }]}
+                          type="line"
+                          width={"100%"}
+                          height={350}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
+              <div className="box custom-card">
+                <div className="box-header justify-between">
+                  <div className="box-title">Deals Statistics</div>
+                  <div className="flex flex-wrap gap-2">
+                    <div>
+                      <input
+                        className="ti-form-control form-control-sm"
+                        type="text"
+                        placeholder="Search Here"
+                        aria-label=".form-control-sm example"
+                      />
+                    </div>
+                    <div className="hs-dropdown ti-dropdown">
+                      <Link
+                        href="#!"
+                        scroll={false}
+                        className="ti-btn ti-btn-primary !bg-primary !text-white !py-1 !px-2 !text-[0.75rem] !m-0 !gap-0 !font-medium"
+                        aria-expanded="false"
+                      >
+                        Sort By
+                        <i className="ri-arrow-down-s-line align-middle ms-1 inline-block"></i>
+                      </Link>
+                      <ul
+                        className="hs-dropdown-menu ti-dropdown-menu !-mt-2 hidden"
+                        role="menu"
+                      >
+                        <li>
+                          <Link
+                            className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                            href="#!"
+                            scroll={false}
+                          >
+                            New
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                            href="#!"
+                            scroll={false}
+                          >
+                            Popular
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                            href="#!"
+                            scroll={false}
+                          >
+                            Relevant
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div className="box-body">
+                  <div className="overflow-x-auto">
+                    <table className="table min-w-full whitespace-nowrap table-hover border table-bordered">
+                      <thead>
+                        <tr className="border border-inherit border-solid dark:border-defaultborder/10">
+                          <th scope="row" className="!ps-4 !pe-5">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              id="checkboxNoLabel1"
+                              defaultValue=""
+                              aria-label="..."
+                            />
+                          </th>
+                          <th
+                            scope="col"
+                            className="!text-start !text-[0.85rem] min-w-[200px]"
+                          >
+                            Sales Rep
+                          </th>
+                          <th
+                            scope="col"
+                            className="!text-start !text-[0.85rem]"
+                          >
+                            Category
+                          </th>
+                          <th
+                            scope="col"
+                            className="!text-start !text-[0.85rem]"
+                          >
+                            Mail
+                          </th>
+                          <th
+                            scope="col"
+                            className="!text-start !text-[0.85rem]"
+                          >
+                            Location
+                          </th>
+                          <th
+                            scope="col"
+                            className="!text-start !text-[0.85rem]"
+                          >
+                            Date
+                          </th>
+                          <th
+                            scope="col"
+                            className="!text-start !text-[0.85rem]"
+                          >
+                            Action
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {Dealsstatistics.map((idx) => (
+                          <tr
+                            className="border border-inherit border-solid hover:bg-gray-100 dark:border-defaultborder/10 dark:hover:bg-light"
+                            key={Math.random()}
+                          >
+                            <th scope="row" className="!ps-4 !pe-5">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                defaultChecked={
+                                  idx.checked === "defaultChecked"
+                                }
+                                defaultValue=""
+                                aria-label="..."
+                              />
+                            </th>
+                            <td>
+                              <div className="flex items-center font-semibold">
+                                <span className="!me-2 inline-flex justify-center items-center">
+                                  <img
+                                    src={idx.src}
+                                    alt="img"
+                                    className="w-[1.75rem] h-[1.75rem] leading-[1.75rem] text-[0.65rem]  rounded-full"
+                                  />
+                                </span>
+                                {idx.name}
+                              </div>
+                            </td>
+                            <td>{idx.role}</td>
+                            <td>{idx.mail}</td>
+                            <td>
+                              <span
+                                className={`inline-flex text-${idx.color} !py-[0.15rem] !px-[0.45rem] rounded-sm !font-semibold !text-[0.75em] bg-${idx.color}/10`}
+                              >
+                                {idx.location}
+                              </span>
+                            </td>
+                            <td>{idx.date}</td>
+                            <td>
+                              <div className="flex flex-row items-center !gap-2 text-[0.9375rem]">
+                                <Link
+                                  aria-label="anchor"
+                                  href="#!"
+                                  scroll={false}
+                                  className="ti-btn ti-btn-icon ti-btn-wave !gap-0 !m-0 !h-[1.75rem] !w-[1.75rem] text-[0.8rem] bg-success/10 text-success hover:bg-success hover:text-white hover:border-success"
+                                >
+                                  <i className="ri-download-2-line"></i>
+                                </Link>
+                                <Link
+                                  aria-label="anchor"
+                                  href="#!"
+                                  scroll={false}
+                                  className="ti-btn ti-btn-icon ti-btn-wave !gap-0 !m-0 !h-[1.75rem] !w-[1.75rem] text-[0.8rem] bg-primary/10 text-primary hover:bg-primary hover:text-white hover:border-primary"
+                                >
+                                  <i className="ri-edit-line"></i>
+                                </Link>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div className="box-footer">
+                  <div className="sm:flex items-center">
+                    <div className="text-defaulttextcolor dark:text-defaulttextcolor/70">
+                      Showing 5 Entries{" "}
+                      <i className="bi bi-arrow-right ms-2 font-semibold"></i>
+                    </div>
+                    <div className="ms-auto">
+                      <nav
+                        aria-label="Page navigation"
+                        className="pagination-style-4"
+                      >
+                        <ul className="ti-pagination mb-0">
+                          <li className="page-item disabled">
+                            <Link
+                              className="page-link"
+                              href="#!"
+                              scroll={false}
+                            >
+                              Prev
+                            </Link>
+                          </li>
+                          <li className="page-item">
+                            <Link
+                              className="page-link active"
+                              href="#!"
+                              scroll={false}
+                            >
+                              1
+                            </Link>
+                          </li>
+                          <li className="page-item">
+                            <Link
+                              className="page-link"
+                              href="#!"
+                              scroll={false}
+                            >
+                              2
+                            </Link>
+                          </li>
+                          <li className="page-item">
+                            <Link
+                              className="page-link !text-primary"
+                              href="#!"
+                              scroll={false}
+                            >
+                              next
+                            </Link>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="xxl:col-span-3 xl:col-span-12 col-span-12">
+          <div className="grid grid-cols-12 gap-x-6">
+            <div className="xxl:col-span-12 xl:col-span-12  col-span-12">
+              <div className="box">
+                <div className="box-header justify-between">
+                  <div className="box-title">Case by Status</div>
+                  <div className="hs-dropdown ti-dropdown">
+                    <Link
+                      aria-label="anchor"
+                      href="#!"
+                      scroll={false}
+                      className="flex items-center justify-center w-[1.75rem] h-[1.75rem] ! !text-[0.8rem] !py-1 !px-2 rounded-sm bg-light border-light shadow-none !font-medium"
+                      aria-expanded="false"
+                    >
+                      <i className="fe fe-more-vertical text-[0.8rem]"></i>
+                    </Link>
+                    <ul className="hs-dropdown-menu ti-dropdown-menu hidden">
+                      <li>
+                        <Link
+                          className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                          href="#!"
+                          scroll={false}
+                        >
+                          Week
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                          href="#!"
+                          scroll={false}
+                        >
+                          Month
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                          href="#!"
+                          scroll={false}
+                        >
+                          Year
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="box-body overflow-hidden">
+                  <div className="leads-source-chart flex items-center justify-center">
+                    <ReactApexChart
+                      // options={{ ...Crmdata.Sourcedata.options, labels: data?.caseStatusStatistics?.filter((item: any) => item?._id).map((item: any, index: number) => item?._id) }}
+                      options={{ ...Crmdata.Sourcedata.options, labels: data?.caseStatusStatistics?.filter((item: any) => item?._id).map((item: any, index: number) => { return item?._id }) }}
+                      series={data?.caseStatusStatistics?.filter((item: any) => item?._id).map((item: any, index: number) => item?.count)}
+                      type="donut"
+                      width={"100%"}
+                      height={250}
+                    />
+                    <div className="lead-source-value ">
+                      <span className="block text-[0.875rem] ">Total</span>
+                      <span className="block text-[1.5625rem] font-bold">
+                        {data?.caseStatusStatistics?.reduce((acc: number, curr: any) => acc + curr?.count, 0)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-4 border-t border-dashed dark:border-defaultborder/10">
+                  {data?.caseStatusStatistics?.filter((item: any) => item?._id).map((item: any, index: number) => (
+
+                    <div className="col !p-0">
+                      <div className="!ps-4 p-[0.95rem] text-center border-e border-dashed dark:border-defaultborder/10">
+                        <span className="text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend mobile inline-block">
+                          {item?._id}
+                        </span>
+                        <div>
+                          <span className="text-[1rem]  font-semibold">
+                            {item?.count}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                </div>
+              </div>
+            </div>
+            <div className="xxl:col-span-12 xl:col-span-6  col-span-12">
+              <div className="box">
+                <div className="box-header justify-between">
+                  <div className="box-title">Top Cases</div>
+                  <div className="hs-dropdown ti-dropdown">
+                    <Link
+                      href="#!"
+                      scroll={false}
+                      className="text-[0.75rem] px-2 font-normal text-[#8c9097] dark:text-white/50"
+                      aria-expanded="false"
+                    >
+                      View All
+                      <i className="ri-arrow-down-s-line align-middle ms-1 inline-block"></i>
+                    </Link>
+                    <ul
+                      className="hs-dropdown-menu ti-dropdown-menu hidden"
+                      role="menu"
+                    >
+                      <li>
+                        <Link
+                          className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                          href="#!"
+                          scroll={false}
+                        >
+                          Today
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                          href="#!"
+                          scroll={false}
+                        >
+                          This Week
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                          href="#!"
+                          scroll={false}
+                        >
+                          Last Week
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="box-body">
+                  <div className="flex items-center mb-[0.8rem]">
+                    <h4 className="font-bold mb-0 text-[1.5rem] ">4,289</h4>
+                    <div className="ms-2">
+                      <span className="py-[0.18rem] px-[0.45rem] rounded-sm text-success !font-medium !text-[0.75em] bg-success/10">
+                        1.02
+                        <i className="ri-arrow-up-s-fill align-mmiddle ms-1"></i>
+                      </span>
+                      <span className="text-[#8c9097] dark:text-white/50 text-[0.813rem] ms-1">
+                        compared to last week
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex w-full h-[0.3125rem] mb-6 rounded-full overflow-hidden">
+                    <div
+                      className="flex flex-col justify-center rounded-s-[0.625rem] overflow-hidden bg-primary w-[21%]"
+                      aria-valuenow={21}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    ></div>
+                    <div
+                      className="flex flex-col justify-center rounded-none overflow-hidden bg-info w-[26%]"
+                      aria-valuenow={26}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    ></div>
+                    <div
+                      className="flex flex-col justify-center rounded-none overflow-hidden bg-warning w-[35%]"
+                      aria-valuenow={35}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    ></div>
+                    <div
+                      className="flex flex-col justify-center rounded-e-[0.625rem] overflow-hidden bg-success w-[18%]"
+                      aria-valuenow={18}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    ></div>
+                  </div>
+                  <ul className="list-none mb-0 pt-2 crm-deals-status">
+                    <li className="primary">
+                      <div className="flex items-center text-[0.813rem]  justify-between">
+                        <div>Case Title</div>
+                        <div className="text-[0.75rem] text-[#8c9097] dark:text-white/50">
+                          Contact Price
+                        </div>
+                      </div>
+                    </li>
+                    {data?.topCases?.map((item: any, index: number) => (
+                      <li className={`${item?._id}`}>
+                        <div className="flex items-center text-[0.813rem]  justify-between">
+                          <div>{item?.title}</div>
+                          <div className="text-[0.75rem] text-[#8c9097] dark:text-white/50">
+                            {item?.contractPrice}
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="xxl:col-span-12 xl:col-span-6  col-span-12">
+              <div className="box">
+                <div className="box-header justify-between">
+                  <div className="box-title">Recent Activity</div>
+                  <div className="hs-dropdown ti-dropdown">
+                    <Link
+                      href="#!"
+                      scroll={false}
+                      className="text-[0.75rem] px-2 font-normal text-[#8c9097] dark:text-white/50"
+                      aria-expanded="false"
+                    >
+                      View All
+                      <i className="ri-arrow-down-s-line align-middle ms-1 inline-block"></i>
+                    </Link>
+                    <ul
+                      className="hs-dropdown-menu ti-dropdown-menu hidden"
+                      role="menu"
+                    >
+                      <li>
+                        <Link
+                          className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                          href="#!"
+                          scroll={false}
+                        >
+                          Today
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                          href="#!"
+                          scroll={false}
+                        >
+                          This Week
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                          href="#!"
+                          scroll={false}
+                        >
+                          Last Week
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="box-body">
+                  <div>
+                    <ul className="list-none mb-0 crm-recent-activity">
+                      {data?.recentActivities?.map((item: any, index: number) => (
+                        <li className="crm-recent-activity-content">
+                          <div className="flex items-start">
+                            <div className="me-4">
+                              <span className="w-[1.25rem] h-[1.25rem] inline-flex items-center justify-center font-medium leading-[1.25rem] text-[0.65rem] text-primary bg-primary/10 rounded-full">
+                                <i className="bi bi-circle-fill text-[0.5rem]"></i>
+                              </span>
+                            </div>
+
+                            <div className="crm-timeline-content text-defaultsize">
+                              <span>
+                                {item?.title}
+                              </span>
+                              <span className="block text-[0.75rem] text-[#8c9097] dark:text-white/50">
+                                {item?.user?.firstName} {item?.user?.lastName}
+                              </span>
+                            </div>
+                            <div className="flex-grow text-end">
+                              <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem] opacity-[0.7]">
+                                {moment(item?.createdAt).format("DD MMM YYYY, HH:mm")}
+                              </span>
+                            </div>
+                          </div>
+                        </li>))}
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Fragment>
+  );
+};
+export default Crm;

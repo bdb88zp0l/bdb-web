@@ -158,6 +158,7 @@ const CreateModal = ({
               >
                 Create Contact
               </h6>
+
               <button
                 type="button"
                 className="hs-dropdown-toggle !text-[1rem] !font-semibold !text-defaulttextcolor"
@@ -323,7 +324,6 @@ const CreateModal = ({
                       }
                     />
                   </div>
-                  
                 </div>
                 <div className="xl:col-span-6 col-span-12">
                   <div className="xl:col-span-12 col-span-12">

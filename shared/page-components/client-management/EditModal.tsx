@@ -13,25 +13,35 @@ import PhoneForm from "../contacts/components/PhoneForm";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
-const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOpen, setIsEditModalOpen }: any) => {
+const UpdateModal = ({
+  row,
+  fetchClients,
+  pageData,
+  fetchPageData,
+  isEditModalOpen,
+  setIsEditModalOpen,
+}: any) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [data, setData] = useState<any>(row);
 
   useEffect(() => {
     setData(row);
-    setAddresses(row?.addresses ?? [{
-      houseNumber: "",
-      building: "",
-      street: "",
-      city: "",
-      barangay: "",
-      zip: "",
-      region: "",
-      country: "",
-      label: "",
-    },
-    ]);
+    setAddresses(
+      row?.addresses ?? [
+        {
+          houseNumber: "",
+          building: "",
+          street: "",
+          city: "",
+          barangay: "",
+          zip: "",
+          region: "",
+          country: "",
+          label: "",
+        },
+      ]
+    );
     setEmails(row?.emails ?? [{ value: "" }]);
     setPhones(row?.phones ?? [{ dialCode: "", phoneNumber: "", label: "" }]);
   }, [row]);
@@ -136,7 +146,6 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
 
   return (
     <>
-
       <Modal isOpen={isEditModalOpen} close={closeModal}>
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center  min-w-[calc(100%-3.5rem)]">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">
@@ -146,9 +155,10 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
                   className="modal-title text-[1rem] font-semibold text-defaulttextcolor"
                   id="mail-ComposeLabel"
                 >
-                  {isDisabled ? 'Client Details' : 'Update Client'}
+                  {isDisabled ? "Client Details" : "Update Client"}
                 </h6>
               </div>
+
               <button
                 type="button"
                 className="hs-dropdown-toggle !text-[1rem] !font-semibold !text-defaulttextcolor"
@@ -250,8 +260,9 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
                           disabled
                           type="text"
                           className="form-control"
-                          value={`${row?.supervisingPartner?.firstName ?? ""} ${row?.supervisingPartner?.lastName ?? ""
-                            }`}
+                          value={`${row?.supervisingPartner?.firstName ?? ""} ${
+                            row?.supervisingPartner?.lastName ?? ""
+                          }`}
                         />
                       </div>
 
@@ -264,8 +275,9 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
                           disabled
                           type="text"
                           className="form-control"
-                          value={`${row?.referredBy?.firstName ?? ""} ${row?.referredBy?.lastName ?? ""
-                            }`}
+                          value={`${row?.referredBy?.firstName ?? ""} ${
+                            row?.referredBy?.lastName ?? ""
+                          }`}
                         />
                       </div>
                     </div>
@@ -416,10 +428,7 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
                         }
                       />
                     </div>
-
-
                   </div>
-
                 </div>
 
                 <div className="xl:col-span-6 col-span-12">
@@ -431,8 +440,9 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
                       <input
                         type="text"
                         className="form-control"
-                        placeholder={`${row?.contact?.firstName ?? ""} ${row?.contact?.lastName ?? ""
-                          }`}
+                        placeholder={`${row?.contact?.firstName ?? ""} ${
+                          row?.contact?.lastName ?? ""
+                        }`}
                         disabled
                       />
                     </div>
@@ -444,7 +454,6 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
                     Contact Information
                   </label>
                 </div>
-
 
                 <div className="col-span-6">
                   <label htmlFor="emails" className="form-label">
@@ -489,7 +498,6 @@ const UpdateModal = ({ row, fetchClients, pageData, fetchPageData, isEditModalOp
                     </button>
                   )}
                 </div>
-
 
                 {/* Phone Information */}
                 <PhoneForm

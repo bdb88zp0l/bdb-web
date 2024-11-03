@@ -144,6 +144,14 @@ export const MenuItems: any = [
         dirchange: false,
         title: "Team Management",
         permission: "team.read",
+      }, {
+        path: "/admin/dashboard-setting",
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Dashboard Setting",
+        permission: "dashboard.setting",
       },
       {
         path: "/admin/client-setting",
@@ -163,6 +171,7 @@ export const MenuItems: any = [
         title: "Case Setting",
         permission: "case.setting",
       },
+
     ],
   },
 ];

@@ -1,7 +1,7 @@
 /**
- * The `CaseSetting` component is the main entry point for the case setting page in the admin section of the application.
- * It renders the page header, SEO metadata, and the `CurrencySetting` component, which handles the currency-related settings.
- * This component is used within the `app/(components)/(contentlayout)/admin/case-setting/page.tsx` file.
+ * The CaseSetting component is the main entry point for the case setting page in the admin section of the application.
+ * It renders the page header, SEO metadata, and the CurrencySetting component, which handles the currency-related settings.
+ * This component is used within the app/(components)/(contentlayout)/admin/case-setting/page.tsx file.
  */
 "use client";
 import Pageheader from "@/shared/layout-components/page-header/pageheader";

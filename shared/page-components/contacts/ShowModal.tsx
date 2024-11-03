@@ -141,6 +141,7 @@ const ShowModal = ({ contact, isShowModalOpen, closeShowModal }: any) => {
                   >
                     Profile Information
                   </label>
+
                   <div className="grid grid-cols-12 gap-4 mb-6">
                     <div className="col-span-6 space-y-2">
                       <p>

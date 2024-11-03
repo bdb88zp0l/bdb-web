@@ -1,46 +1,44 @@
-'use client';
-import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { ThemeChanger } from '@/shared/redux/action';
-import Themeprimarycolor, * as switcherdata from '../../data/switcherdata/switcherdata';
+"use client";
+import React, { Fragment } from "react";
+import { connect } from "react-redux";
+import { ThemeChanger } from "@/shared/redux/action";
+import Themeprimarycolor, * as switcherdata from "../../data/switcherdata/switcherdata";
 
 const Switcher = ({ local_varaiable, ThemeChanger }: any) => {
-    return (
-        <Fragment>
-            <div
-                id="hs-overlay-switcher"
-                className="hs-overlay hidden ti-offcanvas ti-offcanvas-right"
+  return (
+    <Fragment>
+      <div
+        id="hs-overlay-switcher"
+        className="hs-overlay hidden ti-offcanvas ti-offcanvas-right"
+      >
+        <div className="ti-offcanvas-header z-10 relative">
+          <h5 className="ti-offcanvas-title !text-[1.25rem]">Accessibility</h5>
+          <button
+            type="button"
+            className="ti-btn flex-shrink-0 p-0  transition-none text-defaulttextcolor dark:text-defaulttextcolor/70 hover:text-gray-700 focus:ring-gray-400 focus:ring-offset-white  dark:hover:text-white/80 dark:focus:ring-white/10 dark:focus:ring-offset-white/10"
+            data-hs-overlay="#hs-overlay-switcher"
+          >
+            <span className="sr-only">Close modal</span>
+            <i className="ri-close-circle-line leading-none text-lg"></i>
+          </button>
+        </div>
+        <div className="ti-offcanvas-body !p-0 !border-b dark:border-white/10 z-10 relative !h-auto">
+          <div
+            className="flex rtl:space-x-reverse"
+            aria-label="Tabs"
+            role="tablist"
+          >
+            <button
+              type="button"
+              className="hs-tab-active:bg-success/20 w-full !py-2 !px-4 hs-tab-active:border-b-transparent text-defaultsize border-0 hs-tab-active:text-success dark:hs-tab-active:bg-success/20 dark:hs-tab-active:border-b-white/10 dark:hs-tab-active:text-success -mb-px bg-white font-semibold text-center  text-defaulttextcolor dark:text-defaulttextcolor/70 rounded-none hover:text-gray-700 dark:bg-bodybg dark:border-white/10  active"
+              id="switcher-item-1"
+              data-hs-tab="#switcher-1"
+              aria-controls="switcher-1"
+              role="tab"
             >
-                <div className="ti-offcanvas-header z-10 relative">
-                    <h5 className="ti-offcanvas-title !text-[1.25rem]">
-                        Accessibility
-                    </h5>
-                    <button
-                        type="button"
-                        className="ti-btn flex-shrink-0 p-0  transition-none text-defaulttextcolor dark:text-defaulttextcolor/70 hover:text-gray-700 focus:ring-gray-400 focus:ring-offset-white  dark:hover:text-white/80 dark:focus:ring-white/10 dark:focus:ring-offset-white/10"
-                        data-hs-overlay="#hs-overlay-switcher"
-                    >
-                        <span className="sr-only">Close modal</span>
-                        <i className="ri-close-circle-line leading-none text-lg"></i>
-                    </button>
-                </div>
-                <div className="ti-offcanvas-body !p-0 !border-b dark:border-white/10 z-10 relative !h-auto">
-                    <div
-                        className="flex rtl:space-x-reverse"
-                        aria-label="Tabs"
-                        role="tablist"
-                    >
-                        <button
-                            type="button"
-                            className="hs-tab-active:bg-success/20 w-full !py-2 !px-4 hs-tab-active:border-b-transparent text-defaultsize border-0 hs-tab-active:text-success dark:hs-tab-active:bg-success/20 dark:hs-tab-active:border-b-white/10 dark:hs-tab-active:text-success -mb-px bg-white font-semibold text-center  text-defaulttextcolor dark:text-defaulttextcolor/70 rounded-none hover:text-gray-700 dark:bg-bodybg dark:border-white/10  active"
-                            id="switcher-item-1"
-                            data-hs-tab="#switcher-1"
-                            aria-controls="switcher-1"
-                            role="tab"
-                        >
-                            Display
-                        </button>
-                        {/* <button
+              Display
+            </button>
+            {/* <button
                             type="button"
                             className="hs-tab-active:bg-success/20 w-full !py-2 !px-4 hs-tab-active:border-b-transparent text-defaultsize border-0 hs-tab-active:text-success dark:hs-tab-active:bg-success/20 dark:hs-tab-active:border-b-white/10 dark:hs-tab-active:text-success -mb-px  bg-white font-semibold text-center  text-defaulttextcolor dark:text-defaulttextcolor/70 rounded-none hover:text-gray-700 dark:bg-bodybg dark:border-white/10  dark:hover:text-gray-300"
                             id="switcher-item-2"
@@ -50,16 +48,16 @@ const Switcher = ({ local_varaiable, ThemeChanger }: any) => {
                         >
                             Color
                         </button> */}
-                    </div>
-                </div>
-                <div className="ti-offcanvas-body !px-0" id="switcher-body">
-                    <div
-                        id="switcher-1"
-                        role="tabpanel"
-                        aria-labelledby="switcher-item-1"
-                        className=""
-                    >
-                        {/* <div className="">
+          </div>
+        </div>
+        <div className="ti-offcanvas-body !px-0" id="switcher-body">
+          <div
+            id="switcher-1"
+            role="tabpanel"
+            aria-labelledby="switcher-item-1"
+            className=""
+          >
+            {/* <div className="">
                             <p className="switcher-style-head">Mode:</p>
                             <div className="grid grid-cols-3 switcher-style">
                                 <div className="flex items-center">
@@ -107,7 +105,7 @@ const Switcher = ({ local_varaiable, ThemeChanger }: any) => {
                             </div>
                         </div> */}
 
-                        {/* 
+            {/* 
               <div>
                 <p className="switcher-style-head">Directions:</p>
                 <div className="grid grid-cols-3  switcher-style">
@@ -129,7 +127,7 @@ const Switcher = ({ local_varaiable, ThemeChanger }: any) => {
               </div> 
 */}
 
-                        {/* 
+            {/* 
               <div>
                 <p className="switcher-style-head">Navigation Styles:</p>
                 <div className="grid grid-cols-3  switcher-style">
@@ -237,80 +235,65 @@ const Switcher = ({ local_varaiable, ThemeChanger }: any) => {
 
 */}
 
-                        <div>
-                            <p className="switcher-style-head">Style:</p>
-                            <div className="grid grid-cols-3  switcher-style">
-                                <div className="flex">
-                                    <input
-                                        type="radio"
-                                        name="data-page-styles"
-                                        className="ti-form-radio"
-                                        id="switcher-regular"
-                                        checked={
-                                            local_varaiable.dataPageStyle ==
-                                            'regular'
-                                        }
-                                        onChange={(_e) => {}}
-                                        onClick={() =>
-                                            switcherdata.Regular(ThemeChanger)
-                                        }
-                                    />
-                                    <label
-                                        htmlFor="switcher-regular"
-                                        className="text-defaultsize text-defaulttextcolor dark:text-defaulttextcolor/70 ms-2  font-semibold"
-                                    >
-                                        Regular
-                                    </label>
-                                </div>
-                                <div className="flex">
-                                    <input
-                                        type="radio"
-                                        name="data-page-styles"
-                                        className="ti-form-radio"
-                                        id="switcher-classic"
-                                        checked={
-                                            local_varaiable.dataPageStyle ==
-                                            'classic'
-                                        }
-                                        onChange={(_e) => {}}
-                                        onClick={() =>
-                                            switcherdata.Classic(ThemeChanger)
-                                        }
-                                    />
-                                    <label
-                                        htmlFor="switcher-classic"
-                                        className="text-defaultsize text-defaulttextcolor dark:text-defaulttextcolor/70 ms-2  font-semibold"
-                                    >
-                                        Classic
-                                    </label>
-                                </div>
-                                <div className="flex">
-                                    <input
-                                        type="radio"
-                                        name="data-page-styles"
-                                        className="ti-form-radio"
-                                        id="switcher-modern"
-                                        checked={
-                                            local_varaiable.dataPageStyle ==
-                                            'modern'
-                                        }
-                                        onChange={(_e) => {}}
-                                        onClick={() =>
-                                            switcherdata.Modern(ThemeChanger)
-                                        }
-                                    />
-                                    <label
-                                        htmlFor="switcher-modern"
-                                        className="text-defaultsize text-defaulttextcolor dark:text-defaulttextcolor/70 ms-2  font-semibold"
-                                    >
-                                        {' '}
-                                        Modern
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+            <div>
+              <p className="switcher-style-head">Style:</p>
+              <div className="grid grid-cols-3  switcher-style">
+                <div className="flex">
+                  <input
+                    type="radio"
+                    name="data-page-styles"
+                    className="ti-form-radio"
+                    id="switcher-regular"
+                    checked={local_varaiable.dataPageStyle == "regular"}
+                    onChange={(_e) => {}}
+                    onClick={() => switcherdata.Regular(ThemeChanger)}
+                  />
+                  <label
+                    htmlFor="switcher-regular"
+                    className="text-defaultsize text-defaulttextcolor dark:text-defaulttextcolor/70 ms-2  font-semibold"
+                  >
+                    Regular
+                  </label>
+                </div>
+                <div className="flex">
+                  <input
+                    type="radio"
+                    name="data-page-styles"
+                    className="ti-form-radio"
+                    id="switcher-classic"
+                    checked={local_varaiable.dataPageStyle == "classic"}
+                    onChange={(_e) => {}}
+                    onClick={() => switcherdata.Classic(ThemeChanger)}
+                  />
+                  <label
+                    htmlFor="switcher-classic"
+                    className="text-defaultsize text-defaulttextcolor dark:text-defaulttextcolor/70 ms-2  font-semibold"
+                  >
+                    Classic
+                  </label>
+                </div>
+                <div className="flex">
+                  <input
+                    type="radio"
+                    name="data-page-styles"
+                    className="ti-form-radio"
+                    id="switcher-modern"
+                    checked={local_varaiable.dataPageStyle == "modern"}
+                    onChange={(_e) => {}}
+                    onClick={() => switcherdata.Modern(ThemeChanger)}
+                  />
+                  <label
+                    htmlFor="switcher-modern"
+                    className="text-defaultsize text-defaulttextcolor dark:text-defaulttextcolor/70 ms-2  font-semibold"
+                  >
+                    {" "}
+                    Modern
+                  </label>
+                </div>
+              </div>
+            </div>
 
-                        {/* 
+            {/* 
 
               <div>
                 <p className="switcher-style-head">Layout Width Styles:</p>
@@ -364,627 +347,438 @@ const Switcher = ({ local_varaiable, ThemeChanger }: any) => {
                 </div>
               </div>
 */}
-                    </div>
+          </div>
 
-                    <div
-                        id="switcher-2"
-                        className="hidden"
-                        role="tabpanel"
-                        aria-labelledby="switcher-item-2"
-                    >
-                        <div className="theme-colors">
-                            <p className="switcher-style-head">Menu Colors:</p>
-                            <div className="flex switcher-style space-x-3 rtl:space-x-reverse">
-                                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
-                                    <input
-                                        className="hs-tooltip-toggle ti-form-radio color-input color-white"
-                                        type="radio"
-                                        name="menu-colors"
-                                        checked={
-                                            local_varaiable.dataMenuStyles ==
-                                            'light'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-menu-light"
-                                        onClick={() =>
-                                            switcherdata.lightMenu(ThemeChanger)
-                                        }
-                                    />
-                                    <span
-                                        className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
-                                        role="tooltip"
-                                    >
-                                        Light Menu
-                                    </span>
-                                </div>
-                                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
-                                    <input
-                                        className="hs-tooltip-toggle ti-form-radio color-input color-dark"
-                                        type="radio"
-                                        name="menu-colors"
-                                        checked={
-                                            local_varaiable.dataMenuStyles ==
-                                            'dark'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-menu-dark"
-                                        onClick={() =>
-                                            switcherdata.darkMenu(ThemeChanger)
-                                        }
-                                    />
-                                    <span
-                                        className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
-                                        role="tooltip"
-                                    >
-                                        Dark Menu
-                                    </span>
-                                </div>
-                                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
-                                    <input
-                                        className="hs-tooltip-toggle ti-form-radio color-input color-primary"
-                                        type="radio"
-                                        name="menu-colors"
-                                        checked={
-                                            local_varaiable.dataMenuStyles ==
-                                            'color'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-menu-primary"
-                                        onClick={() =>
-                                            switcherdata.colorMenu(ThemeChanger)
-                                        }
-                                    />
-                                    <span
-                                        className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
-                                        role="tooltip"
-                                    >
-                                        Color Menu
-                                    </span>
-                                </div>
-                                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
-                                    <input
-                                        className="hs-tooltip-toggle ti-form-radio color-input color-gradient"
-                                        type="radio"
-                                        name="menu-colors"
-                                        checked={
-                                            local_varaiable.dataMenuStyles ==
-                                            'gradient'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-menu-gradient"
-                                        onClick={() =>
-                                            switcherdata.gradientMenu(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                    <span
-                                        className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
-                                        role="tooltip"
-                                    >
-                                        Gradient Menu
-                                    </span>
-                                </div>
-                                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
-                                    <input
-                                        className="hs-tooltip-toggle ti-form-radio color-input color-transparent"
-                                        type="radio"
-                                        name="menu-colors"
-                                        checked={
-                                            local_varaiable.dataMenuStyles ==
-                                            'transparent'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-menu-transparent"
-                                        onClick={() =>
-                                            switcherdata.transparentMenu(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                    <span
-                                        className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
-                                        role="tooltip"
-                                    >
-                                        Transparent Menu
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="px-4 text-[#8c9097] dark:text-white/50 text-[.6875rem]">
-                                <b className="me-2">Note:</b>If you want to
-                                change color Menu dynamically change from below
-                                Theme Primary color picker.
-                            </div>
-                        </div>
-                        <div className="theme-colors">
-                            <p className="switcher-style-head">
-                                Header Colors:
-                            </p>
-                            <div className="flex switcher-style space-x-3 rtl:space-x-reverse">
-                                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
-                                    <input
-                                        className="hs-tooltip-toggle ti-form-radio color-input color-white !border"
-                                        type="radio"
-                                        name="header-colors"
-                                        checked={
-                                            local_varaiable.dataHeaderStyles ==
-                                            'light'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-header-light"
-                                        onClick={() =>
-                                            switcherdata.lightHeader(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                    <span
-                                        className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
-                                        role="tooltip"
-                                    >
-                                        Light Header
-                                    </span>
-                                </div>
-                                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
-                                    <input
-                                        className="hs-tooltip-toggle ti-form-radio color-input color-dark"
-                                        type="radio"
-                                        name="header-colors"
-                                        checked={
-                                            local_varaiable.dataHeaderStyles ==
-                                            'dark'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-header-dark"
-                                        onClick={() =>
-                                            switcherdata.darkHeader(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                    <span
-                                        className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
-                                        role="tooltip"
-                                    >
-                                        Dark Header
-                                    </span>
-                                </div>
-                                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
-                                    <input
-                                        className="hs-tooltip-toggle ti-form-radio color-input color-primary"
-                                        type="radio"
-                                        name="header-colors"
-                                        checked={
-                                            local_varaiable.dataHeaderStyles ==
-                                            'color'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-header-primary"
-                                        onClick={() =>
-                                            switcherdata.colorHeader(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                    <span
-                                        className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
-                                        role="tooltip"
-                                    >
-                                        Color Header
-                                    </span>
-                                </div>
-                                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
-                                    <input
-                                        className="hs-tooltip-toggle ti-form-radio color-input color-gradient"
-                                        type="radio"
-                                        name="header-colors"
-                                        checked={
-                                            local_varaiable.dataHeaderStyles ==
-                                            'gradient'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-header-gradient"
-                                        onClick={() =>
-                                            switcherdata.gradientHeader(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                    <span
-                                        className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
-                                        role="tooltip"
-                                    >
-                                        Gradient Header
-                                    </span>
-                                </div>
-                                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
-                                    <input
-                                        className="hs-tooltip-toggle ti-form-radio color-input color-transparent"
-                                        type="radio"
-                                        name="header-colors"
-                                        id="switcher-header-transparent"
-                                        checked={
-                                            local_varaiable.dataHeaderStyles ==
-                                            'transparent'
-                                        }
-                                        onChange={(_e) => {}}
-                                        onClick={() =>
-                                            switcherdata.transparentHeader(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                    <span
-                                        className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
-                                        role="tooltip"
-                                    >
-                                        Transparent Header
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="px-4 text-[#8c9097] dark:text-white/50 text-[.6875rem]">
-                                <b className="me-2">Note:</b>If you want to
-                                change color Header dynamically change from
-                                below Theme Primary color picker.
-                            </div>
-                        </div>
-                        <div className="theme-colors">
-                            <p className="switcher-style-head">
-                                Theme Primary:
-                            </p>
-                            <div className="flex flex-wrap switcher-style gap-y-2 gap-x-5 rtl:gap-x-reverse">
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio color-input color-primary-1"
-                                        type="radio"
-                                        name="theme-primary"
-                                        checked={
-                                            local_varaiable.colorPrimaryRgb ==
-                                            '58, 88, 146'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-primary"
-                                        onClick={() =>
-                                            switcherdata.primaryColor1(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio color-input color-primary-2"
-                                        type="radio"
-                                        name="theme-primary"
-                                        checked={
-                                            local_varaiable.colorPrimaryRgb ==
-                                            '92, 144 ,163'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-primary1"
-                                        onClick={() =>
-                                            switcherdata.primaryColor2(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio color-input color-primary-3"
-                                        type="radio"
-                                        name="theme-primary"
-                                        checked={
-                                            local_varaiable.colorPrimaryRgb ==
-                                            '161, 90 ,223'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-primary2"
-                                        onClick={() =>
-                                            switcherdata.primaryColor3(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio color-input color-primary-4"
-                                        type="radio"
-                                        name="theme-primary"
-                                        checked={
-                                            local_varaiable.colorPrimaryRgb ==
-                                            '78, 172, 76'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-primary3"
-                                        onClick={() =>
-                                            switcherdata.primaryColor4(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio color-input color-primary-5"
-                                        type="radio"
-                                        name="theme-primary"
-                                        checked={
-                                            local_varaiable.colorPrimaryRgb ==
-                                            '223, 90, 90'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-primary4"
-                                        onClick={() =>
-                                            switcherdata.primaryColor5(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select ps-0 mt-1 color-primary-light">
-                                    <div className="theme-container-primary">
-                                        <button className="">nano</button>
-                                    </div>
-                                    <div className="pickr-container-primary">
-                                        <div className="pickr">
-                                            <button
-                                                className="pcr-button"
-                                                onClick={(ele: any) => {
-                                                    if (
-                                                        ele.target.querySelector(
-                                                            'input'
-                                                        )
-                                                    ) {
-                                                        ele.target
-                                                            .querySelector(
-                                                                'input'
-                                                            )
-                                                            .click();
-                                                    }
-                                                }}
-                                            >
-                                                <Themeprimarycolor
-                                                    theme={local_varaiable}
-                                                    actionfunction={
-                                                        ThemeChanger
-                                                    }
-                                                />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="theme-colors">
-                            <p className="switcher-style-head">
-                                Theme Background:
-                            </p>
-                            <div className="flex flex-wrap switcher-style gap-y-2 gap-x-5 rtl:gap-x-reverse">
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio color-input color-bg-1"
-                                        type="radio"
-                                        name="theme-background"
-                                        checked={
-                                            local_varaiable.bodyBg ==
-                                            '34 44 110'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-background"
-                                        onClick={() =>
-                                            switcherdata.backgroundColor1(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio color-input color-bg-2"
-                                        type="radio"
-                                        name="theme-background"
-                                        checked={
-                                            local_varaiable.bodyBg ==
-                                            '22 92 129'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-background1"
-                                        onClick={() =>
-                                            switcherdata.backgroundColor2(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio color-input color-bg-3"
-                                        type="radio"
-                                        name="theme-background"
-                                        checked={
-                                            local_varaiable.bodyBg ==
-                                            '104 51 149'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-background2"
-                                        onClick={() =>
-                                            switcherdata.backgroundColor3(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio color-input color-bg-4"
-                                        type="radio"
-                                        name="theme-background"
-                                        checked={
-                                            local_varaiable.bodyBg ==
-                                            '29 106 56'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-background3"
-                                        onClick={() =>
-                                            switcherdata.backgroundColor4(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio color-input color-bg-5"
-                                        type="radio"
-                                        name="theme-background"
-                                        checked={
-                                            local_varaiable.bodyBg ==
-                                            '134 80 34'
-                                        }
-                                        onChange={(_e) => {}}
-                                        id="switcher-background4"
-                                        onClick={() =>
-                                            switcherdata.backgroundColor5(
-                                                ThemeChanger
-                                            )
-                                        }
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select ps-0 mt-1 color-bg-transparent">
-                                    <div className="theme-container-background">
-                                        <button className="">nano</button>
-                                    </div>
-                                    <div className="pickr-container-background">
-                                        <div className="pickr">
-                                            <button
-                                                className="pcr-button"
-                                                onClick={(ele: any) => {
-                                                    if (
-                                                        ele.target.querySelector(
-                                                            'input'
-                                                        )
-                                                    ) {
-                                                        ele.target
-                                                            .querySelector(
-                                                                'input'
-                                                            )
-                                                            .click();
-                                                    }
-                                                }}
-                                            >
-                                                <switcherdata.Themebackgroundcolor
-                                                    theme={local_varaiable}
-                                                    actionfunction={
-                                                        ThemeChanger
-                                                    }
-                                                />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="menu-image theme-colors">
-                            <p className="switcher-style-head">
-                                Menu With Background Image:
-                            </p>
-                            <div className="flex switcher-style space-x-3 rtl:space-x-reverse flex-wrap gap-3">
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio bgimage-input bg-img1"
-                                        type="radio"
-                                        name="theme-images"
-                                        id="switcher-bg-img"
-                                        onClick={() =>
-                                            switcherdata.bgImage1(ThemeChanger)
-                                        }
-                                        checked={
-                                            local_varaiable.colorPrimaryRgb ==
-                                            'bg-img'
-                                        }
-                                        onChange={(_e) => {}}
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio bgimage-input bg-img2"
-                                        type="radio"
-                                        name="theme-images"
-                                        id="switcher-bg-img1"
-                                        onClick={() =>
-                                            switcherdata.bgImage2(ThemeChanger)
-                                        }
-                                        checked={
-                                            local_varaiable.colorPrimaryRgb ==
-                                            'bg-img1'
-                                        }
-                                        onChange={(_e) => {}}
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio bgimage-input bg-img3"
-                                        type="radio"
-                                        name="theme-images"
-                                        id="switcher-bg-img2"
-                                        onClick={() =>
-                                            switcherdata.bgImage3(ThemeChanger)
-                                        }
-                                        checked={
-                                            local_varaiable.colorPrimaryRgb ==
-                                            'bg-img2'
-                                        }
-                                        onChange={(_e) => {}}
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio bgimage-input bg-img4"
-                                        type="radio"
-                                        name="theme-images"
-                                        id="switcher-bg-img3"
-                                        onClick={() =>
-                                            switcherdata.bgImage4(ThemeChanger)
-                                        }
-                                        checked={
-                                            local_varaiable.colorPrimaryRgb ==
-                                            'bg-img3'
-                                        }
-                                        onChange={(_e) => {}}
-                                    />
-                                </div>
-                                <div className="ti-form-radio switch-select">
-                                    <input
-                                        className="ti-form-radio bgimage-input bg-img5"
-                                        type="radio"
-                                        name="theme-images"
-                                        id="switcher-bg-img4"
-                                        onClick={() =>
-                                            switcherdata.bgImage5(ThemeChanger)
-                                        }
-                                        checked={
-                                            local_varaiable.colorPrimaryRgb ==
-                                            'bg-img4'
-                                        }
-                                        onChange={(_e) => {}}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+          <div
+            id="switcher-2"
+            className="hidden"
+            role="tabpanel"
+            aria-labelledby="switcher-item-2"
+          >
+            <div className="theme-colors">
+              <p className="switcher-style-head">Menu Colors:</p>
+              <div className="flex switcher-style space-x-3 rtl:space-x-reverse">
+                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
+                  <input
+                    className="hs-tooltip-toggle ti-form-radio color-input color-white"
+                    type="radio"
+                    name="menu-colors"
+                    checked={local_varaiable.dataMenuStyles == "light"}
+                    onChange={(_e) => {}}
+                    id="switcher-menu-light"
+                    onClick={() => switcherdata.lightMenu(ThemeChanger)}
+                  />
+                  <span
+                    className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
+                    role="tooltip"
+                  >
+                    Light Menu
+                  </span>
                 </div>
-                {/* 
+                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
+                  <input
+                    className="hs-tooltip-toggle ti-form-radio color-input color-dark"
+                    type="radio"
+                    name="menu-colors"
+                    checked={local_varaiable.dataMenuStyles == "dark"}
+                    onChange={(_e) => {}}
+                    id="switcher-menu-dark"
+                    onClick={() => switcherdata.darkMenu(ThemeChanger)}
+                  />
+                  <span
+                    className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
+                    role="tooltip"
+                  >
+                    Dark Menu
+                  </span>
+                </div>
+                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
+                  <input
+                    className="hs-tooltip-toggle ti-form-radio color-input color-primary"
+                    type="radio"
+                    name="menu-colors"
+                    checked={local_varaiable.dataMenuStyles == "color"}
+                    onChange={(_e) => {}}
+                    id="switcher-menu-primary"
+                    onClick={() => switcherdata.colorMenu(ThemeChanger)}
+                  />
+                  <span
+                    className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
+                    role="tooltip"
+                  >
+                    Color Menu
+                  </span>
+                </div>
+                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
+                  <input
+                    className="hs-tooltip-toggle ti-form-radio color-input color-gradient"
+                    type="radio"
+                    name="menu-colors"
+                    checked={local_varaiable.dataMenuStyles == "gradient"}
+                    onChange={(_e) => {}}
+                    id="switcher-menu-gradient"
+                    onClick={() => switcherdata.gradientMenu(ThemeChanger)}
+                  />
+                  <span
+                    className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
+                    role="tooltip"
+                  >
+                    Gradient Menu
+                  </span>
+                </div>
+                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
+                  <input
+                    className="hs-tooltip-toggle ti-form-radio color-input color-transparent"
+                    type="radio"
+                    name="menu-colors"
+                    checked={local_varaiable.dataMenuStyles == "transparent"}
+                    onChange={(_e) => {}}
+                    id="switcher-menu-transparent"
+                    onClick={() => switcherdata.transparentMenu(ThemeChanger)}
+                  />
+                  <span
+                    className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
+                    role="tooltip"
+                  >
+                    Transparent Menu
+                  </span>
+                </div>
+              </div>
+              <div className="px-4 text-[#8c9097] dark:text-white/50 text-[.6875rem]">
+                <b className="me-2">Note:</b>If you want to change color Menu
+                dynamically change from below Theme Primary color picker.
+              </div>
+            </div>
+            <div className="theme-colors">
+              <p className="switcher-style-head">Header Colors:</p>
+              <div className="flex switcher-style space-x-3 rtl:space-x-reverse">
+                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
+                  <input
+                    className="hs-tooltip-toggle ti-form-radio color-input color-white !border"
+                    type="radio"
+                    name="header-colors"
+                    checked={local_varaiable.dataHeaderStyles == "light"}
+                    onChange={(_e) => {}}
+                    id="switcher-header-light"
+                    onClick={() => switcherdata.lightHeader(ThemeChanger)}
+                  />
+                  <span
+                    className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
+                    role="tooltip"
+                  >
+                    Light Header
+                  </span>
+                </div>
+                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
+                  <input
+                    className="hs-tooltip-toggle ti-form-radio color-input color-dark"
+                    type="radio"
+                    name="header-colors"
+                    checked={local_varaiable.dataHeaderStyles == "dark"}
+                    onChange={(_e) => {}}
+                    id="switcher-header-dark"
+                    onClick={() => switcherdata.darkHeader(ThemeChanger)}
+                  />
+                  <span
+                    className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
+                    role="tooltip"
+                  >
+                    Dark Header
+                  </span>
+                </div>
+                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
+                  <input
+                    className="hs-tooltip-toggle ti-form-radio color-input color-primary"
+                    type="radio"
+                    name="header-colors"
+                    checked={local_varaiable.dataHeaderStyles == "color"}
+                    onChange={(_e) => {}}
+                    id="switcher-header-primary"
+                    onClick={() => switcherdata.colorHeader(ThemeChanger)}
+                  />
+                  <span
+                    className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
+                    role="tooltip"
+                  >
+                    Color Header
+                  </span>
+                </div>
+                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
+                  <input
+                    className="hs-tooltip-toggle ti-form-radio color-input color-gradient"
+                    type="radio"
+                    name="header-colors"
+                    checked={local_varaiable.dataHeaderStyles == "gradient"}
+                    onChange={(_e) => {}}
+                    id="switcher-header-gradient"
+                    onClick={() => switcherdata.gradientHeader(ThemeChanger)}
+                  />
+                  <span
+                    className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
+                    role="tooltip"
+                  >
+                    Gradient Header
+                  </span>
+                </div>
+                <div className="hs-tooltip ti-main-tooltip ti-form-radio switch-select ">
+                  <input
+                    className="hs-tooltip-toggle ti-form-radio color-input color-transparent"
+                    type="radio"
+                    name="header-colors"
+                    id="switcher-header-transparent"
+                    checked={local_varaiable.dataHeaderStyles == "transparent"}
+                    onChange={(_e) => {}}
+                    onClick={() => switcherdata.transparentHeader(ThemeChanger)}
+                  />
+                  <span
+                    className="hs-tooltip-content ti-main-tooltip-content !py-1 !px-2 !bg-black text-xs font-medium !text-white shadow-sm dark:!bg-black"
+                    role="tooltip"
+                  >
+                    Transparent Header
+                  </span>
+                </div>
+              </div>
+              <div className="px-4 text-[#8c9097] dark:text-white/50 text-[.6875rem]">
+                <b className="me-2">Note:</b>If you want to change color Header
+                dynamically change from below Theme Primary color picker.
+              </div>
+            </div>
+            <div className="theme-colors">
+              <p className="switcher-style-head">Theme Primary:</p>
+              <div className="flex flex-wrap switcher-style gap-y-2 gap-x-5 rtl:gap-x-reverse">
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio color-input color-primary-1"
+                    type="radio"
+                    name="theme-primary"
+                    checked={local_varaiable.colorPrimaryRgb == "58, 88, 146"}
+                    onChange={(_e) => {}}
+                    id="switcher-primary"
+                    onClick={() => switcherdata.primaryColor1(ThemeChanger)}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio color-input color-primary-2"
+                    type="radio"
+                    name="theme-primary"
+                    checked={local_varaiable.colorPrimaryRgb == "92, 144 ,163"}
+                    onChange={(_e) => {}}
+                    id="switcher-primary1"
+                    onClick={() => switcherdata.primaryColor2(ThemeChanger)}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio color-input color-primary-3"
+                    type="radio"
+                    name="theme-primary"
+                    checked={local_varaiable.colorPrimaryRgb == "161, 90 ,223"}
+                    onChange={(_e) => {}}
+                    id="switcher-primary2"
+                    onClick={() => switcherdata.primaryColor3(ThemeChanger)}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio color-input color-primary-4"
+                    type="radio"
+                    name="theme-primary"
+                    checked={local_varaiable.colorPrimaryRgb == "78, 172, 76"}
+                    onChange={(_e) => {}}
+                    id="switcher-primary3"
+                    onClick={() => switcherdata.primaryColor4(ThemeChanger)}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio color-input color-primary-5"
+                    type="radio"
+                    name="theme-primary"
+                    checked={local_varaiable.colorPrimaryRgb == "223, 90, 90"}
+                    onChange={(_e) => {}}
+                    id="switcher-primary4"
+                    onClick={() => switcherdata.primaryColor5(ThemeChanger)}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select ps-0 mt-1 color-primary-light">
+                  <div className="theme-container-primary">
+                    <button className="">nano</button>
+                  </div>
+                  <div className="pickr-container-primary">
+                    <div className="pickr">
+                      <button
+                        className="pcr-button"
+                        onClick={(ele: any) => {
+                          if (ele.target.querySelector("input")) {
+                            ele.target.querySelector("input").click();
+                          }
+                        }}
+                      >
+                        <Themeprimarycolor
+                          theme={local_varaiable}
+                          actionfunction={ThemeChanger}
+                        />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="theme-colors">
+              <p className="switcher-style-head">Theme Background:</p>
+              <div className="flex flex-wrap switcher-style gap-y-2 gap-x-5 rtl:gap-x-reverse">
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio color-input color-bg-1"
+                    type="radio"
+                    name="theme-background"
+                    checked={local_varaiable.bodyBg == "34 44 110"}
+                    onChange={(_e) => {}}
+                    id="switcher-background"
+                    onClick={() => switcherdata.backgroundColor1(ThemeChanger)}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio color-input color-bg-2"
+                    type="radio"
+                    name="theme-background"
+                    checked={local_varaiable.bodyBg == "22 92 129"}
+                    onChange={(_e) => {}}
+                    id="switcher-background1"
+                    onClick={() => switcherdata.backgroundColor2(ThemeChanger)}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio color-input color-bg-3"
+                    type="radio"
+                    name="theme-background"
+                    checked={local_varaiable.bodyBg == "104 51 149"}
+                    onChange={(_e) => {}}
+                    id="switcher-background2"
+                    onClick={() => switcherdata.backgroundColor3(ThemeChanger)}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio color-input color-bg-4"
+                    type="radio"
+                    name="theme-background"
+                    checked={local_varaiable.bodyBg == "29 106 56"}
+                    onChange={(_e) => {}}
+                    id="switcher-background3"
+                    onClick={() => switcherdata.backgroundColor4(ThemeChanger)}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio color-input color-bg-5"
+                    type="radio"
+                    name="theme-background"
+                    checked={local_varaiable.bodyBg == "134 80 34"}
+                    onChange={(_e) => {}}
+                    id="switcher-background4"
+                    onClick={() => switcherdata.backgroundColor5(ThemeChanger)}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select ps-0 mt-1 color-bg-transparent">
+                  <div className="theme-container-background">
+                    <button className="">nano</button>
+                  </div>
+                  <div className="pickr-container-background">
+                    <div className="pickr">
+                      <button
+                        className="pcr-button"
+                        onClick={(ele: any) => {
+                          if (ele.target.querySelector("input")) {
+                            ele.target.querySelector("input").click();
+                          }
+                        }}
+                      >
+                        <switcherdata.Themebackgroundcolor
+                          theme={local_varaiable}
+                          actionfunction={ThemeChanger}
+                        />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="menu-image theme-colors">
+              <p className="switcher-style-head">Menu With Background Image:</p>
+              <div className="flex switcher-style space-x-3 rtl:space-x-reverse flex-wrap gap-3">
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio bgimage-input bg-img1"
+                    type="radio"
+                    name="theme-images"
+                    id="switcher-bg-img"
+                    onClick={() => switcherdata.bgImage1(ThemeChanger)}
+                    checked={local_varaiable.colorPrimaryRgb == "bg-img"}
+                    onChange={(_e) => {}}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio bgimage-input bg-img2"
+                    type="radio"
+                    name="theme-images"
+                    id="switcher-bg-img1"
+                    onClick={() => switcherdata.bgImage2(ThemeChanger)}
+                    checked={local_varaiable.colorPrimaryRgb == "bg-img1"}
+                    onChange={(_e) => {}}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio bgimage-input bg-img3"
+                    type="radio"
+                    name="theme-images"
+                    id="switcher-bg-img2"
+                    onClick={() => switcherdata.bgImage3(ThemeChanger)}
+                    checked={local_varaiable.colorPrimaryRgb == "bg-img2"}
+                    onChange={(_e) => {}}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio bgimage-input bg-img4"
+                    type="radio"
+                    name="theme-images"
+                    id="switcher-bg-img3"
+                    onClick={() => switcherdata.bgImage4(ThemeChanger)}
+                    checked={local_varaiable.colorPrimaryRgb == "bg-img3"}
+                    onChange={(_e) => {}}
+                  />
+                </div>
+                <div className="ti-form-radio switch-select">
+                  <input
+                    className="ti-form-radio bgimage-input bg-img5"
+                    type="radio"
+                    name="theme-images"
+                    id="switcher-bg-img4"
+                    onClick={() => switcherdata.bgImage5(ThemeChanger)}
+                    checked={local_varaiable.colorPrimaryRgb == "bg-img4"}
+                    onChange={(_e) => {}}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* 
           <div className="ti-offcanvas-footer sm:flex justify-between">
             <a href="#!" onClick={() => switcherdata.Reset(ThemeChanger)} id="reset-all" className="w-full ti-btn ti-btn-danger-full m-1">Reset</a> </div> */}
-            </div>
-        </Fragment>
-    );
+      </div>
+    </Fragment>
+  );
 };
 
 const mapStateToProps = (state: any) => ({
-    local_varaiable: state,
+  local_varaiable: state,
 });
 
 export default connect(mapStateToProps, { ThemeChanger })(Switcher);
