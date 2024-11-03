@@ -254,15 +254,15 @@ export const Revenueanalytics: spark3 = {
       customLegendItems: ["Contact Price "],
       inverseOrder: true,
     },
-    title: {
-      text: "Revenue Analytics with sales & profit (USD)",
-      align: "left",
-      style: {
-        fontSize: ".8125rem",
-        fontWeight: "semibold",
-        color: "#8c9097",
-      },
-    },
+    // title: {
+    //   // text: "Revenue Analytics with sales & profit (USD)",
+    //   align: "left",
+    //   style: {
+    //     fontSize: ".8125rem",
+    //     fontWeight: "semibold",
+    //     color: "#8c9097",
+    //   },
+    // },
     markers: {
       hover: {
         sizeOffset: 5,
