@@ -29,6 +29,8 @@ const Crm = () => {
       setTotalCases(res.data?.data?.totalDocs ?? 0);
     } catch (err) {
       console.error("Error fetching total cases:", err);
+    }
+  };
 
   const fetchTotalAnnouncement = async () => {
     try {
