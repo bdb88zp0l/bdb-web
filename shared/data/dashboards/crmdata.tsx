@@ -224,7 +224,7 @@ export const Revenueanalytics: spark3 = {
     yaxis: {
       labels: {
         formatter: function (value) {
-          return "$" + value;
+          return value;
         },
       },
     },
@@ -232,12 +232,12 @@ export const Revenueanalytics: spark3 = {
       y: [
         {
           formatter: function (e) {
-            return void 0 !== e ? "$" + e.toFixed(0) : e;
+            return void 0 !== e ? e.toFixed(0) : e;
           },
         },
         {
           formatter: function (e) {
-            return void 0 !== e ? "$" + e.toFixed(0) : e;
+            return void 0 !== e ? e.toFixed(0) : e;
           },
         },
         {
@@ -249,7 +249,7 @@ export const Revenueanalytics: spark3 = {
     },
     legend: {
       show: true,
-      customLegendItems: ["Contact Price ", "Revenue", "Sales"],
+      customLegendItems: ["Contact Price "],
       inverseOrder: true,
     },
     title: {

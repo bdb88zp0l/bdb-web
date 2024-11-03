@@ -7,20 +7,28 @@ import * as Crmdata from "@/shared/data/dashboards/crmdata";
 import dynamic from "next/dynamic";
 import { userPrivateRequest } from "@/config/axios.config";
 import { useConfig } from "@/shared/providers/ConfigProvider";
+import moment from "moment";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
+import store from "@/shared/redux/store";
+import { getImageUrl } from "@/utils/utils";
 
 const Crm = () => {
 
+
+
+  const { auth } = store.getState();
   const config = useConfig();
 
   const getAnnouncement = config?.ANNOUNCEMENT_SETTINGS;
-  const [data, setData] = useState({})
+  const [data, setData] = useState<any>({
+    caseStatusStatistics: []
+  })
 
   const fetchDashboardData = async () => {
     const res = await userPrivateRequest.get(`api/dashboard`)
-    setData(res.data)
+    setData(res.data?.data ?? {})
   }
 
   useEffect(() => {
@@ -30,17 +38,19 @@ const Crm = () => {
 
 
 
-  console.log(data)
+  console.log("Crmdata.Sourcedata.series", auth?.user)
   return (
     <Fragment>
       <Seo title={"Crm"} />
       <div className="md:flex block items-center justify-between my-[1.5rem] page-header-breadcrumb">
         <div>
           <p className="font-semibold text-[1.125rem] text-defaulttextcolor dark:text-defaulttextcolor/70 !mb-0 ">
-            Welcome back, Prefix First Name Last Name Suffix!
+            Welcome back, {auth?.user?.firstName} {auth?.user?.lastName}!
           </p>
           <p className="font-normal text-[#8c9097] dark:text-white/50 text-[0.813rem]">
-            Designation
+            {auth?.user?.roleType === "superAdmin"
+              ? "Super Admin"
+              : auth?.user?.role?.name ?? ""}
           </p>
         </div>
         <div className="btn-list md:mt-0 mt-2">
@@ -72,21 +82,12 @@ const Crm = () => {
                             Announcement
                           </div>
                           <span className="block text-[0.75rem] text-white">
-                            <span className="opacity-[0.7] text-nowrap me-1 rtl:ms-1">
+                            <span className="opacity-[0.7]  me-1 rtl:ms-1">
                               {getAnnouncement}
                             </span>
                           </span>
-                          {/* <span className="block font-semibold mt-[0.125rem]">
-                          <Link
-                            className="text-white text-[0.813rem]"
-                            href="#!"
-                            scroll={false}
-                          >
-                            <u>Click here</u>
-                          </Link>
-                        </span> */}
                         </div>
-                        <div>
+                        {/* <div>
                           <div id="crm-main">
                             <ReactApexChart
                               options={Crmdata.Target.options}
@@ -96,7 +97,7 @@ const Crm = () => {
                               height={127}
                             />
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -104,7 +105,7 @@ const Crm = () => {
               <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
                 <div className="box">
                   <div className="box-header flex justify-between">
-                    <div className="box-title">Top Deals</div>
+                    <div className="box-title">Top Clients</div>
                     <div className="hs-dropdown ti-dropdown">
                       <Link
                         aria-label="anchor"
@@ -148,114 +149,41 @@ const Crm = () => {
                   </div>
                   <div className="box-body">
                     <ul className="list-none crm-top-deals mb-0">
-                      <li className="mb-[0.9rem]">
-                        <div className="flex items-start flex-wrap">
-                          <div className="me-2">
-                            <span className=" inline-flex items-center justify-center">
-                              <img
-                                src="../../assets/images/faces/10.jpg"
-                                alt=""
-                                className="w-[1.75rem] h-[1.75rem] leading-[1.75rem] text-[0.65rem]  rounded-full"
-                              />
-                            </span>
+
+                      {data?.topClients?.map((item: any, index: number) => (
+                        <li className="mb-[0.9rem]">
+                          <div className="flex items-start flex-wrap">
+                            <div className="me-2">
+                              <span className=" inline-flex items-center justify-center">
+
+                                <span className="avatar avatar-rounded avatar-sm">
+                                  {getImageUrl(item?.clientInfo?.logo) ? (
+                                    <img
+                                      src={`  ${getImageUrl(item?.clientInfo?.logo) ||
+                                        "../../assets/images/user-circle.png"
+                                        }`}
+                                      alt=""
+                                      style={{ objectFit: "cover" }}
+                                    />
+                                  ) : (
+                                    <i className="ri-account-circle-line me-1 align-middle text-3xl  text-[#8c9097]"></i>
+                                  )}
+                                </span>
+                              </span>
+                            </div>
+                            <div className="flex-grow w-[50%]">
+                              <p className="font-semibold mb-[1.4px]  text-[0.813rem]">
+                                {item?.clientInfo?.companyName ?? ""}
+                              </p>
+                              <p className="text-[#8c9097] dark:text-white/50 text-[0.75rem]">
+                                {item?.clientInfo?.emails?.length > 0 ? item?.clientInfo?.emails?.[0]?.value : ""}
+                              </p>
+                            </div>
+                            <div className="font-semibold text-[0.9375rem] ">
+                              {item?.totalContractPrice ?? 0}
+                            </div>
                           </div>
-                          <div className="flex-grow">
-                            <p className="font-semibold mb-[1.4px]  text-[0.813rem]">
-                              Michael Jordan
-                            </p>
-                            <p className="text-[#8c9097] dark:text-white/50 text-[0.75rem]">
-                              michael.jordan@example.com
-                            </p>
-                          </div>
-                          <div className="font-semibold text-[0.9375rem] ">
-                            $2,893
-                          </div>
-                        </div>
-                      </li>
-                      <li className="mb-[0.9rem]">
-                        <div className="flex items-start flex-wrap">
-                          <div className="me-2">
-                            <span className="inline-flex items-center justify-center !w-[1.75rem] !h-[1.75rem] leading-[1.75rem] text-[0.65rem]  rounded-full text-warning  bg-warning/10 font-semibold">
-                              EK
-                            </span>
-                          </div>
-                          <div className="flex-grow">
-                            <p className="font-semibold mb-[1.4px]  text-[0.813rem]">
-                              Emigo Kiaren
-                            </p>
-                            <p className="text-[#8c9097] dark:text-white/50 text-[0.75rem]">
-                              emigo.kiaren@gmail.com
-                            </p>
-                          </div>
-                          <div className="font-semibold text-[0.9375rem] ">
-                            $4,289
-                          </div>
-                        </div>
-                      </li>
-                      <li className="mb-[0.9rem]">
-                        <div className="flex items-top flex-wrap">
-                          <div className="me-2">
-                            <span className="inline-flex items-center justify-center">
-                              <img
-                                src="../../assets/images/faces/12.jpg"
-                                alt=""
-                                className="!w-[1.75rem] !h-[1.75rem] leading-[1.75rem] text-[0.65rem]  rounded-full"
-                              />
-                            </span>
-                          </div>
-                          <div className="flex-grow">
-                            <p className="font-semibold mb-[1.4px]  text-[0.813rem]">
-                              Randy Origoan
-                            </p>
-                            <p className="text-[#8c9097] dark:text-white/50 text-[0.75rem]">
-                              randy.origoan@gmail.com
-                            </p>
-                          </div>
-                          <div className="font-semibold text-[0.9375rem] ">
-                            $6,347
-                          </div>
-                        </div>
-                      </li>
-                      <li className="mb-[0.9rem]">
-                        <div className="flex items-top flex-wrap">
-                          <div className="me-2">
-                            <span className="inline-flex items-center justify-center !w-[1.75rem] !h-[1.75rem] leading-[1.75rem] text-[0.65rem]  rounded-full text-success bg-success/10 font-semibold">
-                              GP
-                            </span>
-                          </div>
-                          <div className="flex-grow">
-                            <p className="font-semibold mb-[1.4px]  text-[0.813rem]">
-                              George Pieterson
-                            </p>
-                            <p className="text-[#8c9097] dark:text-white/50 text-[0.75rem]">
-                              george.pieterson@gmail.com
-                            </p>
-                          </div>
-                          <div className="font-semibold text-[0.9375rem] ">
-                            $3,894
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="flex items-top flex-wrap">
-                          <div className="me-2">
-                            <span className="inline-flex items-center justify-center !w-[1.75rem] !h-[1.75rem] leading-[1.75rem] text-[0.65rem]  rounded-full text-primary bg-primary/10 font-semibold">
-                              KA
-                            </span>
-                          </div>
-                          <div className="flex-grow">
-                            <p className="font-semibold mb-[1.4px]  text-[0.813rem]">
-                              Kiara Advain
-                            </p>
-                            <p className="text-[#8c9097] dark:text-white/50 text-[0.75rem]">
-                              kiaraadvain214@gmail.com
-                            </p>
-                          </div>
-                          <div className="font-semibold text-[0.9375rem] ">
-                            $2,679
-                          </div>
-                        </div>
-                      </li>
+                        </li>))}
                     </ul>
                   </div>
                 </div>
@@ -340,13 +268,18 @@ const Crm = () => {
                                 Total Client
                               </p>
                               <h4 className="font-semibold  text-[1.5rem] !mb-2 ">
-                                {"totalClients"}
+                                {data?.clientStatusStatistics?.find((item: any) => item?._id === "active")?.count ?? 0}
                               </h4>
                             </div>
                             <div id="crm-total-customers">
                               <ReactApexChart
                                 options={Crmdata.Customers.options}
-                                series={Crmdata.Customers.series}
+                                // series={Crmdata.Customers.series}
+
+                                series={[{
+                                  name: "Value",
+                                  data: data?.clientMonthlyStatistics?.filter((item: any) => item?.year && item?.year >= 2017)?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
+                                },]}
                                 type="line"
                                 height={40}
                                 width={100}
@@ -366,7 +299,7 @@ const Crm = () => {
                             </div>
                             <div className="text-end">
                               <p className="mb-0 text-success text-[0.813rem] font-semibold">
-                                +40%
+                                {data?.clientMonthlyStatistics?.[data?.clientMonthlyStatistics?.length - 1]?.growthPercentage ?? 0} %
                               </p>
                               <p className="text-[#8c9097] dark:text-white/50 opacity-[0.7] text-[0.6875rem]">
                                 this month
@@ -394,17 +327,28 @@ const Crm = () => {
                                 Total Cases
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                {"totalCases"}
+                                {data?.caseMonthlyData?.find((item: any) => item?._id === "active")?.totalCount ?? 0}
                               </h4>
                             </div>
                             <div id="crm-total-revenue">
                               <ReactApexChart
                                 options={Crmdata.Revenue.options}
-                                series={Crmdata.Revenue.series}
+                                series={[{
+                                  name: "Value",
+                                  data: data?.caseMonthlyData?.find((item: any) => item?._id === "active")?.monthlyData?.reverse()?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
+                                },]}
                                 type="line"
                                 height={40}
                                 width={100}
                               />
+
+                              {/* <ReactApexChart
+                                options={Crmdata.Revenue.options}
+                                series={data?.caseMonthlyData?.find((item: any) => item?._id === "active")?.monthlyData?.map((item: any) => { return item?.growthPercentage })}
+                                type="line"
+                                height={40}
+                                width={100}
+                              /> */}
                             </div>
                           </div>
                           <div className="flex items-center justify-between mt-1">
@@ -420,7 +364,13 @@ const Crm = () => {
                             </div>
                             <div className="text-end">
                               <p className="mb-0 text-success text-[0.813rem] font-semibold">
-                                +25%
+                                {/* +25% */}
+                                {data?.caseMonthlyData
+                                  ?.find((item: any) => item?._id === "active")
+                                  ?.monthlyData?.[data?.caseMonthlyData
+                                    ?.find((item: any) => item?._id === "active")
+                                    ?.monthlyData?.length - 1]?.growthPercentage ?? 0}
+                                %
                               </p>
                               <p className="text-[#8c9097] dark:text-white/50 opacity-[0.7] text-[0.6875rem]">
                                 this month
@@ -448,13 +398,16 @@ const Crm = () => {
                                 Inactive Clients
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                12.08%
+                                {data?.clientStatusStatistics?.find((item: any) => item?._id === "inactive")?.count ?? 0}
                               </h4>
                             </div>
                             <div id="crm-conversion-ratio">
                               <ReactApexChart
                                 options={Crmdata.Ratio.options}
-                                series={Crmdata.Ratio.series}
+                                series={[{
+                                  name: "Value",
+                                  data: data?.clientMonthlyStatistics?.filter((item: any) => item?.year && item?.year >= 2017)?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
+                                },]}
                                 type="line"
                                 height={40}
                                 width={100}
@@ -474,7 +427,8 @@ const Crm = () => {
                             </div>
                             <div className="text-end">
                               <p className="mb-0 text-danger text-[0.813rem] font-semibold">
-                                -12%
+
+                                {data?.clientMonthlyStatistics?.[data?.clientMonthlyStatistics?.length - 1]?.growthPercentage ?? 0}%
                               </p>
                               <p className="text-[#8c9097] dark:text-white/50 opacity-[0.7] text-[0.6875rem]">
                                 this month
@@ -592,7 +546,17 @@ const Crm = () => {
                       <div id="crm-revenue-analytics">
                         <ReactApexChart
                           options={Crmdata.Revenueanalytics.options}
-                          series={Crmdata.Revenueanalytics.series}
+                          series={[{
+                            group: "apexcharts-axis-0",
+                            name: "Contract Price",
+                            type: "line",
+                            data: data?.contractPriceMonthlyStats?.map((item: any, index: number) => {
+                              return {
+                                x: item?._id,
+                                y: item?.totalContractPrice
+                              }
+                            })
+                          }]}
                           type="line"
                           width={"100%"}
                           height={350}
@@ -885,8 +849,9 @@ const Crm = () => {
                 <div className="box-body overflow-hidden">
                   <div className="leads-source-chart flex items-center justify-center">
                     <ReactApexChart
-                      options={Crmdata.Sourcedata.options}
-                      series={Crmdata.Sourcedata.series}
+                      // options={{ ...Crmdata.Sourcedata.options, labels: data?.caseStatusStatistics?.filter((item: any) => item?._id).map((item: any, index: number) => item?._id) }}
+                      options={{ ...Crmdata.Sourcedata.options, labels: data?.caseStatusStatistics?.filter((item: any) => item?._id).map((item: any, index: number) => { return item?._id }) }}
+                      series={data?.caseStatusStatistics?.filter((item: any) => item?._id).map((item: any, index: number) => item?.count)}
                       type="donut"
                       width={"100%"}
                       height={250}
@@ -894,58 +859,28 @@ const Crm = () => {
                     <div className="lead-source-value ">
                       <span className="block text-[0.875rem] ">Total</span>
                       <span className="block text-[1.5625rem] font-bold">
-                        4,145
+                        {data?.caseStatusStatistics?.reduce((acc: number, curr: any) => acc + curr?.count, 0)}
                       </span>
                     </div>
                   </div>
                 </div>
                 <div className="grid grid-cols-4 border-t border-dashed dark:border-defaultborder/10">
-                  <div className="col !p-0">
-                    <div className="!ps-4 p-[0.95rem] text-center border-e border-dashed dark:border-defaultborder/10">
-                      <span className="text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend mobile inline-block">
-                        AC
-                      </span>
-                      <div>
-                        <span className="text-[1rem]  font-semibold">
-                          1,624
+                  {data?.caseStatusStatistics?.filter((item: any) => item?._id).map((item: any, index: number) => (
+
+                    <div className="col !p-0">
+                      <div className="!ps-4 p-[0.95rem] text-center border-e border-dashed dark:border-defaultborder/10">
+                        <span className="text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend mobile inline-block">
+                          {item?._id}
                         </span>
+                        <div>
+                          <span className="text-[1rem]  font-semibold">
+                            {item?.count}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="col !p-0">
-                    <div className="p-[0.95rem] text-center border-e border-dashed dark:border-defaultborder/10">
-                      <span className="text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend desktop inline-block">
-                        AR
-                      </span>
-                      <div>
-                        <span className="text-[1rem]  font-semibold">
-                          1,267
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col !p-0">
-                    <div className="p-[0.95rem] text-center border-e border-dashed dark:border-defaultborder/10">
-                      <span className="text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend laptop inline-block">
-                        C
-                      </span>
-                      <div>
-                        <span className="text-[1rem]  font-semibold">
-                          1,153
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col !p-0">
-                    <div className="!pe-4 p-[0.95rem] text-center">
-                      <span className="text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend tablet inline-block">
-                        D
-                      </span>
-                      <div>
-                        <span className="text-[1rem]  font-semibold">679</span>
-                      </div>
-                    </div>
-                  </div>
+                  ))}
+
                 </div>
               </div>
             </div>
@@ -1046,30 +981,17 @@ const Crm = () => {
                         </div>
                       </div>
                     </li>
-                    <li className="info">
-                      <div className="flex items-center text-[0.813rem]  justify-between">
-                        <div>Pending Deals</div>
-                        <div className="text-[0.75rem] text-[#8c9097] dark:text-white/50">
-                          1,073 deals
+                    {data?.topCases?.map((item: any, index: number) => (
+                      <li className={`${item?._id}`}>
+                        <div className="flex items-center text-[0.813rem]  justify-between">
+                          <div>{item?.title}</div>
+                          <div className="text-[0.75rem] text-[#8c9097] dark:text-white/50">
+                            {item?.contractPrice}
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                    <li className="warning">
-                      <div className="flex items-center text-[0.813rem]  justify-between">
-                        <div>Rejected Deals</div>
-                        <div className="text-[0.75rem] text-[#8c9097] dark:text-white/50">
-                          1,674 deals
-                        </div>
-                      </div>
-                    </li>
-                    <li className="success">
-                      <div className="flex items-center text-[0.813rem]  justify-between">
-                        <div>Upcoming Deals</div>
-                        <div className="text-[0.75rem] text-[#8c9097] dark:text-white/50">
-                          921 deals
-                        </div>
-                      </div>
-                    </li>
+                      </li>
+                    ))}
+
                   </ul>
                 </div>
               </div>
@@ -1125,195 +1047,31 @@ const Crm = () => {
                 <div className="box-body">
                   <div>
                     <ul className="list-none mb-0 crm-recent-activity">
-                      <li className="crm-recent-activity-content">
-                        <div className="flex items-start">
-                          <div className="me-4">
-                            <span className="w-[1.25rem] h-[1.25rem] inline-flex items-center justify-center font-medium leading-[1.25rem] text-[0.65rem] text-primary bg-primary/10 rounded-full">
-                              <i className="bi bi-circle-fill text-[0.5rem]"></i>
-                            </span>
-                          </div>
-                          <div className="crm-timeline-content text-defaultsize">
-                            <span className="font-semibold rtl:ms-1">
-                              Update of calendar events &amp;
-                            </span>
-                            <span>
-                              <Link
-                                href="#!"
-                                scroll={false}
-                                className="text-primary font-semibold ms-1"
-                              >
-                                Added new events in next week.
-                              </Link>
-                            </span>
-                          </div>
-                          <div className="flex-grow text-end">
-                            <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem] opacity-[0.7]">
-                              4:45PM
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="crm-recent-activity-content">
-                        <div className="flex items-start  text-defaultsize">
-                          <div className="me-4">
-                            <span className="w-[1.25rem] h-[1.25rem] leading-[1.25rem] inline-flex items-center justify-center font-medium text-[0.65rem] text-secondary bg-secondary/10 rounded-full">
-                              <i className="bi bi-circle-fill text-[0.5rem]"></i>
-                            </span>
-                          </div>
-                          <div className="crm-timeline-content">
-                            <span>
-                              New theme for{" "}
-                              <span className="font-semibold">
-                                Spruko Website
-                              </span>{" "}
-                              completed
-                            </span>
-                            <span className="block text-[0.75rem] text-[#8c9097] dark:text-white/50">
-                              Lorem ipsum, dolor sit amet.
-                            </span>
-                          </div>
-                          <div className="flex-grow text-end">
-                            <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem] opacity-[0.7]">
-                              3 hrs
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="crm-recent-activity-content  text-defaultsize">
-                        <div className="flex items-start">
-                          <div className="me-4">
-                            <span className="w-[1.25rem] h-[1.25rem] leading-[1.25rem] inline-flex items-center justify-center font-medium text-[0.65rem] text-success bg-success/10 rounded-full">
-                              <i className="bi bi-circle-fill  text-[0.5rem]"></i>
-                            </span>
-                          </div>
-                          <div className="crm-timeline-content">
-                            <span>
-                              Created a{" "}
-                              <span className="text-success font-semibold">
-                                New Task
-                              </span>{" "}
-                              today{" "}
-                              <span className="w-[1.25rem] h-[1.25rem] leading-[1.25rem] text-[0.65rem] inline-flex items-center justify-center font-medium bg-purplemain/10 rounded-full ms-1">
-                                <i className="ri-add-fill text-purple text-[0.75rem]"></i>
+                      {data?.recentActivities?.map((item: any, index: number) => (
+                        <li className="crm-recent-activity-content">
+                          <div className="flex items-start">
+                            <div className="me-4">
+                              <span className="w-[1.25rem] h-[1.25rem] inline-flex items-center justify-center font-medium leading-[1.25rem] text-[0.65rem] text-primary bg-primary/10 rounded-full">
+                                <i className="bi bi-circle-fill text-[0.5rem]"></i>
                               </span>
-                            </span>
+                            </div>
+
+                            <div className="crm-timeline-content text-defaultsize">
+                              <span>
+                                {item?.title}
+                              </span>
+                              <span className="block text-[0.75rem] text-[#8c9097] dark:text-white/50">
+                                {item?.user?.firstName} {item?.user?.lastName}
+                              </span>
+                            </div>
+                            <div className="flex-grow text-end">
+                              <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem] opacity-[0.7]">
+                                {moment(item?.createdAt).format("DD MMM YYYY, HH:mm")}
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex-grow text-end">
-                            <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem] opacity-[0.7]">
-                              22 hrs
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="crm-recent-activity-content  text-defaultsize">
-                        <div className="flex items-start">
-                          <div className="me-4">
-                            <span className="w-[1.25rem] h-[1.25rem] leading-[1.25rem] inline-flex items-center justify-center font-medium text-[0.65rem] text-pinkmain bg-pinkmain/10 rounded-full">
-                              <i className="bi bi-circle-fill text-[0.5rem]"></i>
-                            </span>
-                          </div>
-                          <div className="crm-timeline-content">
-                            <span>
-                              New member{" "}
-                              <span className="py-[0.2rem] px-[0.45rem] font-semibold rounded-sm text-pinkmain text-[0.75em] bg-pinkmain/10">
-                                @andreas gurrero
-                              </span>{" "}
-                              added today to AI Summit.
-                            </span>
-                          </div>
-                          <div className="flex-grow text-end">
-                            <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem] opacity-[0.7]">
-                              Today
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="crm-recent-activity-content  text-defaultsize">
-                        <div className="flex items-start">
-                          <div className="me-4">
-                            <span className="w-[1.25rem] h-[1.25rem] leading-[1.25rem] inline-flex items-center justify-center font-medium text-[0.65rem] text-warning bg-warning/10 rounded-full">
-                              <i className="bi bi-circle-fill text-[0.5rem]"></i>
-                            </span>
-                          </div>
-                          <div className="crm-timeline-content">
-                            <span>32 New people joined summit.</span>
-                          </div>
-                          <div className="flex-grow text-end">
-                            <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem] opacity-[0.7]">
-                              22 hrs
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="crm-recent-activity-content  text-defaultsize">
-                        <div className="flex items-start">
-                          <div className="me-4">
-                            <span className="w-[1.25rem] h-[1.25rem] leading-[1.25rem] inline-flex items-center justify-center font-medium text-[0.65rem] text-info bg-info/10 rounded-full">
-                              <i className="bi bi-circle-fill text-[0.5rem]"></i>
-                            </span>
-                          </div>
-                          <div className="crm-timeline-content">
-                            <span>
-                              Neon Tarly added{" "}
-                              <span className="text-info font-semibold">
-                                Robert Bright
-                              </span>{" "}
-                              to AI summit project.
-                            </span>
-                          </div>
-                          <div className="flex-grow text-end">
-                            <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem] opacity-[0.7]">
-                              12 hrs
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="crm-recent-activity-content  text-defaultsize">
-                        <div className="flex items-start">
-                          <div className="me-4">
-                            <span className="w-[1.25rem] h-[1.25rem] leading-[1.25rem] inline-flex items-center justify-center font-medium text-[0.65rem] text-[#232323] dark:text-white bg-[#232323]/10 dark:bg-white/20 rounded-full">
-                              <i className="bi bi-circle-fill text-[0.5rem]"></i>
-                            </span>
-                          </div>
-                          <div className="crm-timeline-content">
-                            <span>
-                              Replied to new support request{" "}
-                              <i className="ri-checkbox-circle-line text-success text-[1rem] align-middle"></i>
-                            </span>
-                          </div>
-                          <div className="flex-grow text-end">
-                            <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem] opacity-[0.7]">
-                              4 hrs
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="crm-recent-activity-content  text-defaultsize">
-                        <div className="flex items-start">
-                          <div className="me-4">
-                            <span className="w-[1.25rem] h-[1.25rem] leading-[1.25rem] inline-flex items-center justify-center font-medium text-[0.65rem] text-purplemain bg-purplemain/10 rounded-full">
-                              <i className="bi bi-circle-fill text-[0.5rem]"></i>
-                            </span>
-                          </div>
-                          <div className="crm-timeline-content">
-                            <span>
-                              Completed documentation of{" "}
-                              <Link
-                                href="#!"
-                                scroll={false}
-                                className="text-purplemain underline font-semibold"
-                              >
-                                AI Summit.
-                              </Link>
-                            </span>
-                          </div>
-                          <div className="flex-grow text-end">
-                            <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem] opacity-[0.7]">
-                              4 hrs
-                            </span>
-                          </div>
-                        </div>
-                      </li>
+                        </li>))}
+
                     </ul>
                   </div>
                 </div>
