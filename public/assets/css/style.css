@@ -258,6 +258,33 @@ Toast
   @apply bg-success;
 }
 
+.crm-lead-legend.AR:before {
+  @apply bg-primary;
+}
+
+.crm-lead-legend.AC:before {
+  @apply bg-secondary;
+}
+
+
+.crm-lead-legend.C:before {
+  @apply bg-success;
+}
+
+.crm-lead-legend.FC:before {
+  @apply bg-warning;
+}
+
+.crm-lead-legend.D:before {
+  @apply bg-[#e4e7ed];
+}
+
+.crm-lead-legend.T:before {
+  @apply bg-[#e4e7ed];
+}
+
+
+
 .crm-leadsinprogress {
   @apply mb-0;
 }

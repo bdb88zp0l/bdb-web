@@ -12,7 +12,7 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 import store from "@/shared/redux/store";
-import { getImageUrl } from "@/utils/utils";
+import { formatAmount, formatMonth, getImageUrl } from "@/utils/utils";
 
 const Crm = () => {
 
@@ -83,7 +83,12 @@ const Crm = () => {
                           </div>
                           <span className="block text-[0.75rem] text-white">
                             <span className="opacity-[0.7]  me-1 rtl:ms-1">
-                              {getAnnouncement}
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: getAnnouncement,
+                                }}
+                              />
+                              {/* {getAnnouncement} */}
                             </span>
                           </span>
                         </div>
@@ -180,7 +185,7 @@ const Crm = () => {
                               </p>
                             </div>
                             <div className="font-semibold text-[0.9375rem] ">
-                              {item?.totalContractPrice ?? 0}
+                              {formatAmount(item?.totalContractPrice ?? 0)}
                             </div>
                           </div>
                         </li>))}
@@ -188,7 +193,7 @@ const Crm = () => {
                   </div>
                 </div>
               </div>
-              <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
+              {/* <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
                 <div className="box">
                   <div className="box-header justify-between">
                     <div className="box-title">Profit Earned</div>
@@ -248,7 +253,7 @@ const Crm = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className="xxl:col-span-8  xl:col-span-8  col-span-12">
               <div className="grid grid-cols-12 gap-x-6">
@@ -453,16 +458,19 @@ const Crm = () => {
                           <div className="flex items-center justify-between flex-wrap">
                             <div>
                               <p className="text-[#8c9097] dark:text-white/50 text-[0.813rem] mb-0">
-                                Total Deals
+                                Inactive Cases
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                2,543
+                                {data?.caseMonthlyData?.find((item: any) => item?._id === "inactive")?.totalCount ?? 0}
                               </h4>
                             </div>
                             <div id="crm-total-deals">
                               <ReactApexChart
                                 options={Crmdata.Deals.options}
-                                series={Crmdata.Deals.series}
+                                series={[{
+                                  name: "Value",
+                                  data: data?.caseMonthlyData?.find((item: any) => item?._id === "inactive")?.monthlyData?.reverse()?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
+                                },]}
                                 type="line"
                                 height={40}
                                 width={100}
@@ -497,7 +505,7 @@ const Crm = () => {
                 <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
                   <div className="box">
                     <div className="box-header !gap-0 !m-0 justify-between">
-                      <div className="box-title">Contacts per Month</div>
+                      <div className="box-title">Contracts per Month</div>
                       <div className="hs-dropdown ti-dropdown">
                         <Link
                           href="#!"
@@ -552,7 +560,7 @@ const Crm = () => {
                             type: "line",
                             data: data?.contractPriceMonthlyStats?.map((item: any, index: number) => {
                               return {
-                                x: item?._id,
+                                x: formatMonth(item?._id),
                                 y: item?.totalContractPrice
                               }
                             })
@@ -567,7 +575,88 @@ const Crm = () => {
                 </div>
               </div>
             </div>
-            <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
+            <div className="xxl:col-span-12 xl:col-span-6  col-span-12">
+              <div className="box">
+                <div className="box-header justify-between">
+                  <div className="box-title">Recent Activity</div>
+                  <div className="hs-dropdown ti-dropdown">
+                    <Link
+                      href="#!"
+                      scroll={false}
+                      className="text-[0.75rem] px-2 font-normal text-[#8c9097] dark:text-white/50"
+                      aria-expanded="false"
+                    >
+                      View All
+                      <i className="ri-arrow-down-s-line align-middle ms-1 inline-block"></i>
+                    </Link>
+                    <ul
+                      className="hs-dropdown-menu ti-dropdown-menu hidden"
+                      role="menu"
+                    >
+                      <li>
+                        <Link
+                          className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                          href="#!"
+                          scroll={false}
+                        >
+                          Today
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                          href="#!"
+                          scroll={false}
+                        >
+                          This Week
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium block"
+                          href="#!"
+                          scroll={false}
+                        >
+                          Last Week
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="box-body">
+                  <div>
+                    <ul className="list-none mb-0 crm-recent-activity">
+                      {data?.recentActivities?.map((item: any, index: number) => (
+                        <li className="crm-recent-activity-content">
+                          <div className="flex items-start">
+                            <div className="me-4">
+                              <span className="w-[1.25rem] h-[1.25rem] inline-flex items-center justify-center font-medium leading-[1.25rem] text-[0.65rem] text-primary bg-primary/10 rounded-full">
+                                <i className="bi bi-circle-fill text-[0.5rem]"></i>
+                              </span>
+                            </div>
+
+                            <div className="crm-timeline-content text-defaultsize">
+                              <span>
+                                {item?.title}
+                              </span>
+                              <span className="block text-[0.75rem] text-[#8c9097] dark:text-white/50">
+                                {item?.user?.firstName} {item?.user?.lastName}
+                              </span>
+                            </div>
+                            <div className="flex-grow text-end">
+                              <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem] opacity-[0.7]">
+                                {moment(item?.createdAt).format("DD MMM YYYY, HH:mm")}
+                              </span>
+                            </div>
+                          </div>
+                        </li>))}
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
               <div className="box custom-card">
                 <div className="box-header justify-between">
                   <div className="box-title">Deals Statistics</div>
@@ -796,7 +885,7 @@ const Crm = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="xxl:col-span-3 xl:col-span-12 col-span-12">
@@ -869,7 +958,7 @@ const Crm = () => {
 
                     <div className="col !p-0">
                       <div className="!ps-4 p-[0.95rem] text-center border-e border-dashed dark:border-defaultborder/10">
-                        <span className="text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend mobile inline-block">
+                        <span className={"text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend inline-block " + ` ${item?._id}`}>
                           {item?._id}
                         </span>
                         <div>
@@ -933,7 +1022,7 @@ const Crm = () => {
                   </div>
                 </div>
                 <div className="box-body">
-                  <div className="flex items-center mb-[0.8rem]">
+                  {/* <div className="flex items-center mb-[0.8rem]">
                     <h4 className="font-bold mb-0 text-[1.5rem] ">4,289</h4>
                     <div className="ms-2">
                       <span className="py-[0.18rem] px-[0.45rem] rounded-sm text-success !font-medium !text-[0.75em] bg-success/10">
@@ -971,22 +1060,29 @@ const Crm = () => {
                       aria-valuemin={0}
                       aria-valuemax={100}
                     ></div>
-                  </div>
+                  </div> */}
                   <ul className="list-none mb-0 pt-2 crm-deals-status">
-                    <li className="primary">
+                    {/* <li className="primary">
                       <div className="flex items-center text-[0.813rem]  justify-between">
                         <div>Case Title</div>
                         <div className="text-[0.75rem] text-[#8c9097] dark:text-white/50">
                           Contact Price
                         </div>
                       </div>
-                    </li>
+                    </li> */}
                     {data?.topCases?.map((item: any, index: number) => (
                       <li className={`${item?._id}`}>
                         <div className="flex items-center text-[0.813rem]  justify-between">
-                          <div>{item?.title}</div>
+                          <div>
+                            <span>
+                              {item?.caseNumber}
+                            </span>
+                            <span className="block text-[0.75rem] text-[#8c9097] dark:text-white/50">
+                              {item?.client?.companyName}
+                            </span>
+                          </div>
                           <div className="text-[0.75rem] text-[#8c9097] dark:text-white/50">
-                            {item?.contractPrice}
+                            {formatAmount(item?.contractPrice)}
                           </div>
                         </div>
                       </li>
@@ -996,7 +1092,7 @@ const Crm = () => {
                 </div>
               </div>
             </div>
-            <div className="xxl:col-span-12 xl:col-span-6  col-span-12">
+            {/* <div className="xxl:col-span-12 xl:col-span-6  col-span-12">
               <div className="box">
                 <div className="box-header justify-between">
                   <div className="box-title">Recent Activity</div>
@@ -1076,7 +1172,7 @@ const Crm = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

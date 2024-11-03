@@ -1,4 +1,5 @@
 "use client";
+import { chartColors, formatAmount } from "@/utils/utils";
 import { ApexOptions } from "apexcharts";
 interface spark3 {
   options?: ApexOptions;
@@ -200,6 +201,7 @@ export const Revenueanalytics: spark3 = {
       },
     },
     colors: [
+      "rgb(204, 0, 51)",
       "rgb(132, 90, 223)",
       "rgba(35, 183, 229, 0.85)",
       "rgba(119, 119, 142, 0.05)",
@@ -224,7 +226,7 @@ export const Revenueanalytics: spark3 = {
     yaxis: {
       labels: {
         formatter: function (value) {
-          return value;
+          return formatAmount(value);
         },
       },
     },
@@ -232,17 +234,17 @@ export const Revenueanalytics: spark3 = {
       y: [
         {
           formatter: function (e) {
-            return void 0 !== e ? e.toFixed(0) : e;
+            return formatAmount(e);
           },
         },
         {
           formatter: function (e) {
-            return void 0 !== e ? e.toFixed(0) : e;
+            return e.toFixed(0);
           },
         },
         {
           formatter: function (e) {
-            return void 0 !== e ? e.toFixed(0) : e;
+            return e.toFixed(0);
           },
         },
       ],
@@ -326,7 +328,7 @@ export const Customers: spark3 = {
     },
   ],
   options: {
-    colors: ["rgb(132, 90, 223)"],
+    colors: ["rgb(204, 0, 51)"],
     chart: {
       type: "line",
       height: 40,
@@ -707,12 +709,7 @@ export const Sourcedata: spark3 = {
         },
       },
     },
-    colors: [
-      "rgb(132, 90, 223)",
-      "rgb(35, 183, 229)",
-      "rgb(245, 184, 73)",
-      "rgb(38, 191, 148)",
-    ],
+    colors: chartColors,
   },
 };
 
