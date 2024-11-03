@@ -273,7 +273,7 @@ const Crm = () => {
                                 Total Client
                               </p>
                               <h4 className="font-semibold  text-[1.5rem] !mb-2 ">
-                                {data?.clientStatusStatistics?.find((item: any) => item?._id === "active")?.count ?? 0}
+                                {data?.clientMonthlyData?.active?.totalCount ?? 0}
                               </h4>
                             </div>
                             <div id="crm-total-customers">
@@ -283,7 +283,7 @@ const Crm = () => {
 
                                 series={[{
                                   name: "Value",
-                                  data: data?.clientMonthlyStatistics?.filter((item: any) => item?.year && item?.year >= 2017)?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
+                                  data: data?.clientMonthlyData?.active?.monthlyData?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
                                 },]}
                                 type="line"
                                 height={40}
@@ -303,8 +303,9 @@ const Crm = () => {
                               </Link>
                             </div>
                             <div className="text-end">
-                              <p className="mb-0 text-success text-[0.813rem] font-semibold">
-                                {data?.clientMonthlyStatistics?.[data?.clientMonthlyStatistics?.length - 1]?.growthPercentage ?? 0} %
+                              <p className={`mb-0 text-[0.813rem] font-semibold ${data?.clientMonthlyData?.active?.latestGrowth > 0 ? "text-success" : "text-danger"}`}>
+                                {data?.clientMonthlyData?.active?.latestGrowth > 0 ? "+" : "-"}
+                                {(data?.clientMonthlyData?.active?.latestGrowth ?? 0).toFixed(2)}%
                               </p>
                               <p className="text-[#8c9097] dark:text-white/50 opacity-[0.7] text-[0.6875rem]">
                                 this month
@@ -332,7 +333,7 @@ const Crm = () => {
                                 Total Cases
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                {data?.caseMonthlyData?.find((item: any) => item?._id === "active")?.totalCount ?? 0}
+                                {data?.caseMonthlyData?.active?.totalCount ?? 0}
                               </h4>
                             </div>
                             <div id="crm-total-revenue">
@@ -340,20 +341,12 @@ const Crm = () => {
                                 options={Crmdata.Revenue.options}
                                 series={[{
                                   name: "Value",
-                                  data: data?.caseMonthlyData?.find((item: any) => item?._id === "active")?.monthlyData?.reverse()?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
+                                  data: data?.caseMonthlyData?.active?.monthlyData?.reverse()?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
                                 },]}
                                 type="line"
                                 height={40}
                                 width={100}
                               />
-
-                              {/* <ReactApexChart
-                                options={Crmdata.Revenue.options}
-                                series={data?.caseMonthlyData?.find((item: any) => item?._id === "active")?.monthlyData?.map((item: any) => { return item?.growthPercentage })}
-                                type="line"
-                                height={40}
-                                width={100}
-                              /> */}
                             </div>
                           </div>
                           <div className="flex items-center justify-between mt-1">
@@ -368,13 +361,11 @@ const Crm = () => {
                               </Link>
                             </div>
                             <div className="text-end">
-                              <p className="mb-0 text-success text-[0.813rem] font-semibold">
+                              <p className={`mb-0 text-[0.813rem] font-semibold ${data?.caseMonthlyData?.active?.latestGrowth > 0 ? "text-success" : "text-danger"}`}>
                                 {/* +25% */}
-                                {data?.caseMonthlyData
-                                  ?.find((item: any) => item?._id === "active")
-                                  ?.monthlyData?.[data?.caseMonthlyData
-                                    ?.find((item: any) => item?._id === "active")
-                                    ?.monthlyData?.length - 1]?.growthPercentage ?? 0}
+
+                                {data?.caseMonthlyData?.active?.latestGrowth > 0 ? "+" : "-"}
+                                {(data?.caseMonthlyData?.active?.latestGrowth ?? 0).toFixed(2)}
                                 %
                               </p>
                               <p className="text-[#8c9097] dark:text-white/50 opacity-[0.7] text-[0.6875rem]">
@@ -403,7 +394,7 @@ const Crm = () => {
                                 Inactive Clients
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                {data?.clientStatusStatistics?.find((item: any) => item?._id === "inactive")?.count ?? 0}
+                                {data?.clientMonthlyData?.inactive?.totalCount ?? 0}
                               </h4>
                             </div>
                             <div id="crm-conversion-ratio">
@@ -411,7 +402,7 @@ const Crm = () => {
                                 options={Crmdata.Ratio.options}
                                 series={[{
                                   name: "Value",
-                                  data: data?.clientMonthlyStatistics?.filter((item: any) => item?.year && item?.year >= 2017)?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
+                                  data: data?.clientMonthlyData?.inactive?.monthlyData?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
                                 },]}
                                 type="line"
                                 height={40}
@@ -431,9 +422,9 @@ const Crm = () => {
                               </Link>
                             </div>
                             <div className="text-end">
-                              <p className="mb-0 text-danger text-[0.813rem] font-semibold">
-
-                                {data?.clientMonthlyStatistics?.[data?.clientMonthlyStatistics?.length - 1]?.growthPercentage ?? 0}%
+                              <p className={`mb-0 text-[0.813rem] font-semibold ${data?.caseMonthlyData?.inactive?.latestGrowth > 0 ? "text-success" : "text-danger"}`}>
+                                {data?.clientMonthlyData?.inactive?.latestGrowth > 0 ? "+" : "-"}
+                                {(data?.clientMonthlyData?.inactive?.latestGrowth ?? 0).toFixed(2)}%
                               </p>
                               <p className="text-[#8c9097] dark:text-white/50 opacity-[0.7] text-[0.6875rem]">
                                 this month
@@ -461,7 +452,7 @@ const Crm = () => {
                                 Inactive Cases
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                {data?.caseMonthlyData?.find((item: any) => item?._id === "inactive")?.totalCount ?? 0}
+                                {data?.caseMonthlyData?.inactive?.totalCount ?? 0}
                               </h4>
                             </div>
                             <div id="crm-total-deals">
@@ -469,7 +460,7 @@ const Crm = () => {
                                 options={Crmdata.Deals.options}
                                 series={[{
                                   name: "Value",
-                                  data: data?.caseMonthlyData?.find((item: any) => item?._id === "inactive")?.monthlyData?.reverse()?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
+                                  data: data?.caseMonthlyData?.inactive?.monthlyData?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
                                 },]}
                                 type="line"
                                 height={40}
@@ -489,8 +480,10 @@ const Crm = () => {
                               </Link>
                             </div>
                             <div className="text-end">
-                              <p className="mb-0 text-success text-[0.813rem] font-semibold">
-                                +19%
+                              <p className={`mb-0 text-[0.813rem] font-semibold ${data?.caseMonthlyData?.inactive?.latestGrowth > 0 ? "text-success" : "text-danger"}`}>
+
+                                {data?.caseMonthlyData?.inactive?.latestGrowth > 0 ? "+" : "-"}
+                                {(data?.caseMonthlyData?.inactive?.latestGrowth ?? 0).toFixed(2)}%
                               </p>
                               <p className="text-[#8c9097] dark:text-white/50  opacity-[0.7] text-[0.6875rem]">
                                 this month

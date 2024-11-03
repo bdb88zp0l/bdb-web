@@ -258,29 +258,36 @@ Toast
   @apply bg-success;
 }
 
+
+/* "#ff6666",
+  "#ffcc99",
+  "#99cc00",
+  "#3366cc",
+  "#cccc00",
+  "#660066", */
 .crm-lead-legend.AR:before {
-  @apply bg-primary;
+  @apply bg-[#ff6666];
 }
 
 .crm-lead-legend.AC:before {
-  @apply bg-secondary;
+  @apply bg-[#ffcc99];
 }
 
 
 .crm-lead-legend.C:before {
-  @apply bg-success;
+  @apply bg-[#99cc00];
 }
 
 .crm-lead-legend.FC:before {
-  @apply bg-warning;
+  @apply bg-[#3366cc];
 }
 
 .crm-lead-legend.D:before {
-  @apply bg-[#845adf];
+  @apply bg-[#cccc00];
 }
 
 .crm-lead-legend.T:before {
-  @apply bg-[#8699a3];
+  @apply bg-[#660066];
 }
 
 
