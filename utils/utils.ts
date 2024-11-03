@@ -72,3 +72,41 @@ export const hasPermission = (permissionOrPermissions: string | string[]) => {
 
   return false;
 };
+
+
+export const formatAmount = (amount: number) => {
+  if (amount % 1 === 0) {
+    return new Intl.NumberFormat('en-US', {
+      style: "currency",
+      currency: "PHP", currencyDisplay: "narrowSymbol",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  }
+  return new Intl.NumberFormat('en-US', {
+    style: "currency",
+    currency: "PHP", currencyDisplay: "narrowSymbol",
+    // minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+};
+export const formatMonth = (yearMonth: string) => {
+  const date = new Date(`${yearMonth}-01`);
+
+  // Get the month abbreviation
+  const month = date.toLocaleString('en-US', { month: 'short' });
+
+  // Get the last two digits of the year
+  const year = date.getFullYear().toString().slice(-2);
+
+  return `${month}, ${year}`;
+};
+
+export const chartColors = [
+  "rgb(204, 0, 51)",
+  "rgb(35, 183, 229)",
+  "rgb(38, 191, 148)",
+  "rgb(245, 184, 73)",
+  "rgb(132, 90, 223)",
+  "rgb(134,153,163)",
+]
