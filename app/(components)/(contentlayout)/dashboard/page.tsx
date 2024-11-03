@@ -1,15 +1,40 @@
 "use client";
+import { userPrivateRequest } from "@/config/axios.config";
+import * as Crmdata from "@/shared/data/dashboards/crmdata";
 import { Dealsstatistics } from "@/shared/data/dashboards/crmdata";
 import Seo from "@/shared/layout-components/seo/seo";
-import Link from "next/link";
-import React, { Fragment } from "react";
-import * as Crmdata from "@/shared/data/dashboards/crmdata";
 import dynamic from "next/dynamic";
+import Link from "next/link";
+import { Fragment, useEffect, useState } from "react";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 const Crm = () => {
+  const [totalCases, setTotalCases] = useState<number>(0);
+  const [totalClients, setTotalClients] = useState<number>(0);
+  const fetchTotalClients = async () => {
+    try {
+      const res = await userPrivateRequest.get(`/api/clients`);
+      setTotalClients(res.data?.data?.totalDocs ?? 0);
+    } catch (err) {
+      console.error("Error fetching total cases:", err);
+    }
+  };
+  const fetchTotalCases = async () => {
+    try {
+      const res = await userPrivateRequest.get(`/api/cases`);
+      setTotalCases(res.data?.data?.totalDocs ?? 0);
+    } catch (err) {
+      console.error("Error fetching total cases:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchTotalCases();
+    fetchTotalClients();
+  }, []);
+
   return (
     <Fragment>
       <Seo title={"Crm"} />
@@ -325,7 +350,7 @@ const Crm = () => {
                                 Total Client
                               </p>
                               <h4 className="font-semibold  text-[1.5rem] !mb-2 ">
-                                1,02,890
+                                {totalClients}
                               </h4>
                             </div>
                             <div id="crm-total-customers">
@@ -342,7 +367,7 @@ const Crm = () => {
                             <div>
                               <Link
                                 className="text-primary text-[0.813rem]"
-                                href="#!"
+                                href="/client-management/"
                                 scroll={false}
                               >
                                 View All
@@ -379,7 +404,7 @@ const Crm = () => {
                                 Total Cases
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                56,562
+                                {totalCases}
                               </h4>
                             </div>
                             <div id="crm-total-revenue">
@@ -396,7 +421,7 @@ const Crm = () => {
                             <div>
                               <Link
                                 className="text-secondary text-[0.813rem]"
-                                href="#!"
+                                href="/cases/list/"
                                 scroll={false}
                               >
                                 View All
