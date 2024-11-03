@@ -90,6 +90,11 @@ export const formatAmount = (amount: number) => {
     maximumFractionDigits: 2,
   }).format(amount);
 };
+export const formatNumber = (amount: number) => {
+  return new Intl.NumberFormat('en-US', {
+
+  }).format(amount);
+};
 export const formatMonth = (yearMonth: string) => {
   const date = new Date(`${yearMonth}-01`);
 
@@ -99,7 +104,11 @@ export const formatMonth = (yearMonth: string) => {
   // Get the last two digits of the year
   const year = date.getFullYear().toString().slice(-2);
 
-  return `${month}, ${year}`;
+  if (new Date().getFullYear() == date.getFullYear()) {
+    return month;
+  }
+
+  return `${month} '${year}`;
 };
 
 export const chartColors = [
