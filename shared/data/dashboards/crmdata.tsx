@@ -1,5 +1,5 @@
 "use client";
-import { chartColors, formatAmount } from "@/utils/utils";
+import { chartColors, formatAmount, formatNumber } from "@/utils/utils";
 import { ApexOptions } from "apexcharts";
 interface spark3 {
   options?: ApexOptions;
@@ -201,10 +201,8 @@ export const Revenueanalytics: spark3 = {
       },
     },
     colors: [
-      "rgb(204, 0, 51)",
-      "rgb(132, 90, 223)",
-      "rgba(35, 183, 229, 0.85)",
-      "rgba(119, 119, 142, 0.05)",
+      "#ff6666",
+      "#3366cc",
     ],
     dataLabels: {
       enabled: false,
@@ -216,7 +214,7 @@ export const Revenueanalytics: spark3 = {
     stroke: {
       curve: "smooth",
       width: [2, 2, 0],
-      dashArray: [0, 5, 0],
+      dashArray: [0, 0, 0],
     },
     xaxis: {
       axisTicks: {
@@ -226,7 +224,7 @@ export const Revenueanalytics: spark3 = {
     yaxis: {
       labels: {
         formatter: function (value) {
-          return formatAmount(value);
+          return formatNumber(value);
         },
       },
     },
@@ -234,7 +232,7 @@ export const Revenueanalytics: spark3 = {
       y: [
         {
           formatter: function (e) {
-            return formatAmount(e);
+            return formatNumber(e);
           },
         },
         {
