@@ -249,7 +249,7 @@ export const Revenueanalytics: spark3 = {
     },
     legend: {
       show: true,
-      customLegendItems: ["Contact Price "],
+      customLegendItems: ["Clients", "Cases"],
       inverseOrder: true,
     },
     // title: {

@@ -458,7 +458,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
           </div>
           <div className="box custom-box">
             <div className="box-header">
-              <div className="box-title">Case Discussions</div>
+              <div className="box-title">Case History</div>
             </div>
             <div className="box-body">
               <ul className="list-unstyled profile-timeline">
@@ -575,7 +575,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
 
           <div className="box custom-box">
             <div className="box-header">
-              <div className="box-title">Billing Information pp</div>
+              <div className="box-title">Billing Information</div>
             </div>
             <div className="box-body">
               {!isEdit ? (
