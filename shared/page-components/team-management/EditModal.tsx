@@ -20,7 +20,6 @@ const EditModal = ({ team, fetchTeams, pageData }: any) => {
         team?.users?.map((user: any) => ({
           user: user.user?._id,
           designation: user.designation._id,
-          rate: user.rate,
           _id: user._id,
         }))
       );
@@ -115,20 +114,19 @@ const EditModal = ({ team, fetchTeams, pageData }: any) => {
                 </div>
 
                 {pageData.designations?.map((item: any) => {
-                  // Find the existing user and rate for each designation
                   const selectedUser = users.find(
                     (teamMember: any) => teamMember.designation === item._id
                   );
 
                   return (
                     <>
-                      <div className="col-span-4 content-center">
+                      <div className="col-span-6 content-center">
                         <label htmlFor="input-label2" className="form-label">
                           {item.name}:
                         </label>
                       </div>
 
-                      <div className="col-span-4">
+                      <div className="col-span-6">
                         <label htmlFor="input-label2" className="form-label">
                           User
                         </label>
@@ -168,38 +166,6 @@ const EditModal = ({ team, fetchTeams, pageData }: any) => {
                               });
                             } else {
                               tempTeams[userIndex].user = e.value;
-                            }
-                            setUsers(tempTeams);
-                          }}
-                        />
-                      </div>
-
-                      <div className="col-span-4">
-                        <label
-                          htmlFor="company-lead-score"
-                          className="form-label"
-                        >
-                          Rate{" "}
-                          {data.defaultBillingType &&
-                            `(${data.defaultBillingType})`}
-                        </label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          placeholder="Rate"
-                          value={selectedUser?.rate || ""}
-                          onChange={(e: any) => {
-                            const rateIndex = users.findIndex(
-                              (obj: any) => obj.designation === item._id
-                            );
-                            const tempTeams = [...users];
-                            if (rateIndex === -1) {
-                              tempTeams.push({
-                                designation: item._id,
-                                rate: e.target.value,
-                              });
-                            } else {
-                              tempTeams[rateIndex].rate = e.target.value;
                             }
                             setUsers(tempTeams);
                           }}

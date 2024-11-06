@@ -45,6 +45,9 @@ const CreateModal = ({ user, roles, fetchUsers }: any) => {
     formData.append("phone", data?.phone);
     formData.append("password", data?.password);
     formData.append("role", data?.role);
+    if (data?.hourlyRate) {
+      formData.append("hourlyRate", data?.hourlyRate);
+    }
 
     if (selectedImage) {
       formData.append("photo", selectedImage); // Append the photo
@@ -214,6 +217,21 @@ const CreateModal = ({ user, roles, fetchUsers }: any) => {
                   />
                 </div>
 
+                <div className="xl:col-span-6 col-span-12">
+                  <label htmlFor="contact-phone" className="form-label">
+                    Hourly Rate
+                  </label>
+                  <input
+                    type="tel"
+                    className="form-control"
+                    id="contact-phone"
+                    placeholder="Enter Hourly Rate"
+                    value={data?.hourlyRate || ""}
+                    onChange={(e) =>
+                      setData({ ...data, hourlyRate: e.target.value })
+                    }
+                  />
+                </div>
                 <div className="xl:col-span-6 col-span-12">
                   <label className="form-label">Role</label>
                   <Select

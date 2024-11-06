@@ -55,6 +55,9 @@ const EditUserModal = ({ user, roles, fetchUsers }: any) => {
       formData.append("lastName", data.lastName);
       formData.append("email", data.email);
       formData.append("phone", data.phone);
+      if (data?.hourlyRate) {
+        formData.append("hourlyRate", data?.hourlyRate);
+      }
       formData.append(
         "role",
         typeof data.role === "object" ? data.role._id : data.role
@@ -214,6 +217,21 @@ const EditUserModal = ({ user, roles, fetchUsers }: any) => {
                     value={data?.phone || ""}
                     onChange={(e) =>
                       setData({ ...data, phone: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="xl:col-span-6 col-span-12">
+                  <label htmlFor="contact-phone" className="form-label">
+                    Hourly Rate
+                  </label>
+                  <input
+                    type="tel"
+                    className="form-control"
+                    id="contact-phone"
+                    placeholder="Enter Hourly Rate"
+                    value={data?.hourlyRate || ""}
+                    onChange={(e) =>
+                      setData({ ...data, hourlyRate: e.target.value })
                     }
                   />
                 </div>
