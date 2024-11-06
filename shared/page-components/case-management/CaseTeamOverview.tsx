@@ -353,9 +353,15 @@ const CaseTeamOverview = ({
                     classNamePrefix="Select2"
                     placeholder="Select User"
                     onChange={(e: any) => {
+                      let selectedUserInfo = pageData?.users?.find(
+                        (option: any) => option._id === e.value
+                      );
+
+                      console.log("selectedUserInfo", selectedUserInfo);
                       setAddMemberData({
                         ...addMemberData,
                         user: e.value,
+                        rate: selectedUserInfo?.hourlyRate ?? 0,
                       });
                     }}
                   />
