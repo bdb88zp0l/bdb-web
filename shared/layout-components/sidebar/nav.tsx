@@ -20,6 +20,7 @@ const CasIcon = <i className="bx bx-briefcase side-menu__icon"></i>;
 const FolIcon = <i className="bx bx-library side-menu__icon"></i>;
 
 const AdminIcon = <i className="bx bx-group side-menu__icon"></i>;
+const HrIcon = <i className="bx bx-group side-menu__icon"></i>;
 
 export const MenuItems: any = [
   {
@@ -93,6 +94,28 @@ export const MenuItems: any = [
     permission: "file_manager.read",
   },
   {
+    title: "HRM",
+    icon: HrIcon,
+    type: "sub",
+    menusub: true,
+    active: false,
+    selected: false,
+    dirchange: false,
+    permission: ["dsr.read"],
+    children: [
+      {
+        path: "/hrm/dsr",
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "DSR",
+        permission: "dsr.read",
+      },
+    ],
+  },
+
+  {
     title: "Admin",
     icon: AdminIcon,
     type: "sub",
@@ -144,7 +167,8 @@ export const MenuItems: any = [
         dirchange: false,
         title: "Team Management",
         permission: "team.read",
-      }, {
+      },
+      {
         path: "/admin/dashboard-setting",
         type: "link",
         active: false,
@@ -171,7 +195,6 @@ export const MenuItems: any = [
         title: "Case Setting",
         permission: "case.setting",
       },
-
     ],
   },
 ];
