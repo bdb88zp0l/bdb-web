@@ -121,7 +121,7 @@ const CaseTeamOverview = ({
     <>
       <div className="box custom-box">
         <div className="box-header justify-between">
-          <div className="box-title">{data?.team?.title}</div>
+          <div className="box-title">{data?.team?.title ?? "Team Members"}</div>
           <div>
             <button
               type="button"
