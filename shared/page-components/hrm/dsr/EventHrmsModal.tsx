@@ -150,7 +150,6 @@ const EventDetailsModal = ({
           onClose={closeEditModal}
           event={eventData} // Pass the event data to pre-fill in the edit modal
           pageData={pageData}
-          // calendars={calendars}
           onUpdate={() => {
             fetchDsrRecords();
             onClose();

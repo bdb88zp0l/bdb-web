@@ -90,7 +90,7 @@ const CreateEventModal = ({
                   options={casesOptions}
                   className="basic-multi-select"
                   classNamePrefix="Select2"
-                  placeholder="Select Calendar"
+                  placeholder="Select Case"
                   onChange={(selectedOption: any) =>
                     setFormData({
                       ...formData,
@@ -105,7 +105,7 @@ const CreateEventModal = ({
                   type="text"
                   name="title"
                   className="form-control"
-                  placeholder="Event Title"
+                  placeholder="Title"
                   value={formData.title}
                   onChange={handleInputChange}
                   required
@@ -117,7 +117,7 @@ const CreateEventModal = ({
                 <textarea
                   name="description"
                   className="form-control"
-                  placeholder="Event Description"
+                  placeholder="Description"
                   value={formData.description}
                   onChange={handleInputChange}
                   required

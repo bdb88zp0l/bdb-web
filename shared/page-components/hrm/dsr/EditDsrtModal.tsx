@@ -77,7 +77,7 @@ const EditEventModal = ({ isOpen, onClose, pageData, onUpdate, event }) => {
                   options={casesOptions}
                   className="basic-multi-select"
                   classNamePrefix="Select2"
-                  placeholder="Select Calendar"
+                  placeholder="Select Case"
                   value={casesOptions?.find((option: any) => {
                     return option.value === formData?.case;
                   })}
@@ -98,7 +98,7 @@ const EditEventModal = ({ isOpen, onClose, pageData, onUpdate, event }) => {
                   type="text"
                   name="title"
                   className="form-control"
-                  placeholder="Event Title"
+                  placeholder="Title"
                   value={formData.title}
                   onChange={handleInputChange}
                   required
@@ -110,7 +110,7 @@ const EditEventModal = ({ isOpen, onClose, pageData, onUpdate, event }) => {
                 <textarea
                   name="description"
                   className="form-control"
-                  placeholder="Event Description"
+                  placeholder="Description"
                   value={formData.description}
                   onChange={handleInputChange}
                   required

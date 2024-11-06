@@ -71,13 +71,9 @@ const Fullcalendar = () => {
     let { start } = selectInfo;
     setIsCreateEventModalOpen(true);
     setSelectedDate(moment(start).format("YYYY-MM-DDTHH:mm:ss"));
-
-    console.log("clicked", start);
   };
 
   function renderEventContent(eventInfo: any) {
-    const hasReminders = eventInfo.event.extendedProps.reminders?.length > 0;
-
     return (
       <div
         className="items-center"
@@ -87,7 +83,7 @@ const Fullcalendar = () => {
         }}
       >
         {/* Event time */}
-        <b className="">{eventInfo.timeText}</b>
+        {/* <b className="">{eventInfo.timeText}</b> */}
 
         {/* Event title */}
         <span className="">{eventInfo.event.title}</span>

@@ -127,12 +127,12 @@ const CreateModal = ({ fetchTeams, pageData }: any) => {
                 {pageData.designations?.map((item: any) => {
                   return (
                     <>
-                      <div className=" col-span-4 content-center">
+                      <div className=" col-span-6 content-center">
                         <label htmlFor="input-label2" className="form-label">
                           {item.name}:
                         </label>
                       </div>
-                      <div className=" col-span-4">
+                      <div className=" col-span-6">
                         <label htmlFor="input-label2" className="form-label">
                           User
                         </label>
@@ -165,41 +165,6 @@ const CreateModal = ({ fetchTeams, pageData }: any) => {
                               ]);
                             } else {
                               temporaryTeams[ss].user = e.value;
-                              setUsers([...temporaryTeams]);
-                            }
-                          }}
-                        />
-                      </div>
-
-                      <div className=" col-span-4">
-                        <label
-                          htmlFor="company-lead-score"
-                          className="form-label"
-                        >
-                          Rate{" "}
-                          {data.defaultBillingType &&
-                            `(${data.defaultBillingType})`}
-                        </label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="company-lead-score"
-                          placeholder="Rate"
-                          onChange={(e: any) => {
-                            let ss = users.findIndex(
-                              (obj: any) => obj.designation === item._id
-                            );
-                            let temporaryTeams = users;
-                            if (ss == -1) {
-                              setUsers([
-                                ...temporaryTeams,
-                                {
-                                  designation: item._id,
-                                  rate: e.target.value,
-                                },
-                              ]);
-                            } else {
-                              temporaryTeams[ss].rate = e.target.value;
                               setUsers([...temporaryTeams]);
                             }
                           }}
