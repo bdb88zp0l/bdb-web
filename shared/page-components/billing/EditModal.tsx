@@ -16,12 +16,13 @@ import { getImageUrl, toWordUpperCase } from "@/utils/utils";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
-const CreateModal = ({
+const EditModal = ({
   caseInfo,
   fetchBillings,
   pageData,
-  modalOpen,
-  setModalOpen,
+  editModalOpen,
+  setEditModalOpen,
+  selectedBilling,
 }: any) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [data, setData] = useState<any>({
@@ -34,6 +35,12 @@ const CreateModal = ({
     date: new Date(),
     dueDate: new Date(),
   });
+  useEffect(() => {
+    if (selectedBilling) {
+      setData(selectedBilling);
+      setItems(selectedBilling?.items);
+    }
+  }, [selectedBilling]);
 
   useEffect(() => {
     if (caseInfo) {
@@ -41,7 +48,7 @@ const CreateModal = ({
     }
   }, [caseInfo]);
 
-  const closeModal = () => setModalOpen(false);
+  const closeModal = () => setEditModalOpen(false);
   const itemSkeleton = {
     particulars: "",
     quantity: 1,
@@ -94,9 +101,9 @@ const CreateModal = ({
     };
 
     await userPrivateRequest
-      .post("/api/billing", payload)
+      .patch(`/api/billing/${selectedBilling?._id}`, payload)
       .then((res) => {
-        toast.success("Billing created successfully");
+        toast.success("Billing updated successfully");
         fetchBillings();
         closeModal();
       })
@@ -111,9 +118,11 @@ const CreateModal = ({
   };
 
   const config = useConfig();
+
+  console.log("selectedBilling", selectedBilling);
   return (
     <>
-      <Modal isOpen={modalOpen} close={closeModal}>
+      <Modal isOpen={editModalOpen} close={closeModal}>
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center  min-w-[calc(100%-3.5rem)]">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">
             <div className="ti-modal-header">
@@ -410,7 +419,7 @@ const CreateModal = ({
                         <td colSpan={6}>
                           <textarea
                             placeholder="Description"
-                            value={data.note}
+                            value={data?.note}
                             onChange={(e) =>
                               setData({ ...data, note: e.target.value })
                             }
@@ -437,7 +446,7 @@ const CreateModal = ({
                 type="button"
                 className="ti-btn bg-primary text-white !font-medium"
                 onClick={handleSubmit}
-                disabled={isSubmitting }
+                disabled={isSubmitting}
               >
                 {isSubmitting ? <ButtonSpinner text="Creating" /> : "Create"}
               </button>
@@ -449,4 +458,4 @@ const CreateModal = ({
   );
 };
 
-export default CreateModal;
+export default EditModal;
