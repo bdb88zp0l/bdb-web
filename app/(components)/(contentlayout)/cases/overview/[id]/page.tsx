@@ -16,6 +16,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import CreateModal from "@/shared/page-components/billing/CreateModal";
 const Select = dynamic(() => import("react-select"), { ssr: false });
 export default function CaseOverview({ params }: { params: { id: string } }) {
   const { auth } = store.getState();
@@ -233,18 +234,16 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           options={pageData?.clients?.map((option: any) => {
                             return {
                               value: option._id,
-                              label: `${option?.companyName ?? ""} - ${
-                                option?.clientNumber ?? ""
-                              }`,
+                              label: `${option?.companyName ?? ""} - ${option?.clientNumber ?? ""
+                                }`,
                             };
                           })}
                           defaultValue={pageData?.clients
                             ?.map((option: any) => {
                               return {
                                 value: option._id,
-                                label: `${option?.companyName ?? ""} - ${
-                                  option?.clientNumber ?? ""
-                                }`,
+                                label: `${option?.companyName ?? ""} - ${option?.clientNumber ?? ""
+                                  }`,
                               };
                             })
                             ?.find((option: any) => {
@@ -254,9 +253,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                             ?.map((option: any) => {
                               return {
                                 value: option._id,
-                                label: `${option?.companyName ?? ""} - ${
-                                  option?.clientNumber ?? ""
-                                }`,
+                                label: `${option?.companyName ?? ""} - ${option?.clientNumber ?? ""
+                                  }`,
                               };
                             })
                             ?.find((option: any) => {
@@ -273,9 +271,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                       ) : (
                         <>
                           <span className="block text-[.875rem] font-semibold">
-                            {`${data?.client?.companyName ?? ""} - ${
-                              data?.client?.clientNumber ?? ""
-                            }`}
+                            {`${data?.client?.companyName ?? ""} - ${data?.client?.clientNumber ?? ""
+                              }`}
                           </span>
                         </>
                       )}
@@ -306,9 +303,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                         <span className="block text-[.875rem] font-semibold">
                           {data?.startDate
                             ? moment
-                                .utc(data.startDate)
-                                .format("DD,MMM YYYY")
-                                ?.toString()
+                              .utc(data.startDate)
+                              .format("DD,MMM YYYY")
+                              ?.toString()
                             : "N/A"}
                         </span>
                       )}
@@ -339,9 +336,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                         <span className="block text-[.875rem] font-semibold">
                           {data?.endDate
                             ? moment
-                                .utc(data.endDate)
-                                .format("DD,MMM YYYY")
-                                ?.toString()
+                              .utc(data.endDate)
+                              .format("DD,MMM YYYY")
+                              ?.toString()
                             : "N/A"}
                         </span>
                       )}
@@ -372,9 +369,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                               {/* Tooltip */}
                               {team.user?.firstName && (
                                 <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                                  {`${team.user?.firstName ?? ""} ${
-                                    team.user?.lastName ?? ""
-                                  }`}
+                                  {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
+                                    }`}
                                 </div>
                               )}
                             </div>
@@ -401,9 +397,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                               {/* Tooltip */}
                               {team.user?.firstName && (
                                 <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                                  {`${team.user?.firstName ?? ""} ${
-                                    team.user?.lastName ?? ""
-                                  }`}
+                                  {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
+                                    }`}
                                 </div>
                               )}
                             </div>
@@ -498,7 +493,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                             <p className="mb-2">
                               <b>
                                 {auth.user?.email?.toString() ==
-                                history?.updatedBy?.email?.toString()
+                                  history?.updatedBy?.email?.toString()
                                   ? "You"
                                   : history?.updatedBy?.firstName}
                               </b>{" "}
@@ -657,9 +652,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                       <p className="text-[#8c9097] dark:text-white/50 op-8">
                         {data?.billingStart
                           ? moment
-                              .utc(data?.billingStart)
-                              .format("DD,MMM YYYY")
-                              ?.toString()
+                            .utc(data?.billingStart)
+                            .format("DD,MMM YYYY")
+                            ?.toString()
                           : "N/A"}
                       </p>
                     </div>
@@ -691,9 +686,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                       <p className="text-[#8c9097] dark:text-white/50 op-8">
                         {data?.billingEnd
                           ? moment
-                              .utc(data?.billingEnd)
-                              .format("DD,MMM YYYY")
-                              ?.toString()
+                            .utc(data?.billingEnd)
+                            .format("DD,MMM YYYY")
+                            ?.toString()
                           : "N/A"}
                       </p>
                     </div>
@@ -754,6 +749,16 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           </button>
                         </div>
                       </div>
+
+                      <CreateModal
+                        modalOpen={isModalOpen}
+                        setModalOpen={setModalOpen}
+                        fetchBillings={() => {
+
+                        }}
+                        pageData={pageData}
+                        caseInfo={data}
+                      />
                       <div className="box-body !p-0">
                         <div className="table-responsive">
                           <table className="table whitespace-nowrap min-w-full">
@@ -823,325 +828,6 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                         </div>
                       </div>
 
-                      {/* <Pagination
-                    limit={limit}
-                    page={page}
-                    totalRow={data?.totalDocs ?? 0}
-                  /> */}
-                      {isModalOpen && (
-                        <div className="fixed inset-0 bg-gray-500 bg-opacity-80 flex items-center justify-center z-50">
-                          <div className="bg-white p-6 g rounded-sm w-3/4">
-                            <h3 className="text-xl font-semibold mb-4">
-                              Create New Bill
-                            </h3>
-                            <div className="border border-defaultborder crm-contact p-6">
-                              <div className="grid grid-cols-12 gap-4">
-                                <div className="col-span-4">
-                                  {/* <div className="col-span-12 inline-flex gap-4">
-                                <label className="mb-2">Bill From:</label>
-                                <input type="radio" />
-                                <br />
-                              </div> */}
-                                  <div className="col-span-12 grid grid-cols-2 gap-x-4">
-                                    <label className="mb-2 font-bold">
-                                      Name:
-                                    </label>
-                                    <span>Company</span>
-
-                                    <label className="mb-2 font-bold">
-                                      Phone Number:
-                                    </label>
-                                    <span>8563256987</span>
-
-                                    <label className="mb-2 font-bold">
-                                      Address:
-                                    </label>
-                                    <span>This is address</span>
-                                  </div>
-                                </div>
-
-                                <div className="col-span-4">
-                                  <div className="col-span-12">
-                                    <label className="mb-2 form-label font-bold">
-                                      Bill To:
-                                    </label>
-                                    <div className="mb-4">
-                                      <label
-                                        htmlFor="billNumber"
-                                        className="form-label"
-                                      >
-                                        Clients
-                                      </label>
-                                      <select
-                                        id="clients"
-                                        name="clients"
-                                        className="form-control w-full p-2 border border-gray-300 rounded-md"
-                                      >
-                                        <option value="">
-                                          Select a client
-                                        </option>
-                                        <option value="fiction">Fiction</option>
-                                        <option value="non-fiction">
-                                          Non-fiction
-                                        </option>
-                                        <option value="sci-fi">Sci-Fi</option>
-                                        <option value="biography">
-                                          Biography
-                                        </option>
-                                      </select>
-                                    </div>
-                                    {/* <div className="mb-2">
-                                  
-                                  
-                                  <div className="col-span-12">
-                                    <label className="mb-2">Name:</label>
-                                    <span>Client</span>
-                                    <br />
-                                    <label className="mb-2">
-                                      Phone Number:
-                                    </label>
-                                    <span> 8563256987</span>
-                                    <br />
-                                    <label className="mb-2">Address:</label>
-                                    <span> This is address</span>
-                                  </div>
-                                </div> */}
-                                  </div>
-                                </div>
-
-                                <div className="col-span-4">
-                                  <div className="mb-4">
-                                    <label
-                                      htmlFor="title"
-                                      className="form-label"
-                                    >
-                                      Title
-                                    </label>
-                                    <input
-                                      type="text"
-                                      id="title"
-                                      name="title"
-                                      className="form-control w-full p-2 border border-gray-300 rounded-md"
-                                    />
-                                  </div>
-                                  <div className="mb-4">
-                                    <label
-                                      htmlFor="billNumber"
-                                      className="form-label"
-                                    >
-                                      Bill Number
-                                    </label>
-                                    <input
-                                      type="text"
-                                      id="billNumber"
-                                      name="billNumber"
-                                      className="form-control w-full p-2 border border-gray-300 rounded-md"
-                                    />
-                                  </div>
-                                  <div className="mb-4">
-                                    <label
-                                      htmlFor="billNumber"
-                                      className="form-label"
-                                    >
-                                      Billing Type
-                                    </label>
-                                    <select
-                                      id="billNumber"
-                                      name="billNumber"
-                                      className="form-control w-full p-2 border border-gray-300 rounded-md"
-                                    >
-                                      <option value="">Select a bill</option>
-                                      <option value="fiction">Fiction</option>
-                                      <option value="non-fiction">
-                                        Non-fiction
-                                      </option>
-                                      <option value="sci-fi">Sci-Fi</option>
-                                      <option value="biography">
-                                        Biography
-                                      </option>
-                                    </select>
-                                  </div>
-                                  <div className="grid grid-cols-12 gap-4 col-span-12">
-                                    <div className="mb-4 col-span-6">
-                                      <label
-                                        htmlFor="date"
-                                        className="form-label"
-                                      >
-                                        Date
-                                      </label>
-                                      <input
-                                        type="date"
-                                        id="date"
-                                        name="date"
-                                        className="w-full p-2 border border-gray-300 rounded-md"
-                                      />
-                                    </div>
-                                    <div className="mb-4 col-span-6">
-                                      <label
-                                        htmlFor="dueDate"
-                                        className="form-label"
-                                      >
-                                        Due Date
-                                      </label>
-                                      <input
-                                        type="date"
-                                        id="dueDate"
-                                        name="dueDate"
-                                        className="w-full p-2 border border-gray-300 rounded-md"
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="co-span-12 border border-defaultborder crm-contact p-2">
-                              <div className="flex justify-end">
-                                <button className="ti-btn ti-btn-primary-full py-2 px-4">
-                                  + Add item
-                                </button>
-                              </div>
-                              <div className="table-responsive">
-                                <table className="table whitespace-nowrap min-w-full">
-                                  <thead>
-                                    <tr>
-                                      <th scope="col" className="text-start">
-                                        Particulars
-                                      </th>
-                                      <th scope="col" className="text-start">
-                                        Number
-                                      </th>
-                                      <th scope="col" className="text-start">
-                                        Price
-                                      </th>
-                                      <th scope="col" className="text-start">
-                                        Discount
-                                      </th>
-                                      <th scope="col" className="text-start">
-                                        Tax
-                                      </th>
-                                      <th scope="col" className="text-start">
-                                        Amount
-                                      </th>
-                                      <th
-                                        scope="col"
-                                        className="text-start"
-                                      ></th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr
-                                      className="border border-defaultborder crm-contact"
-                                      key={Math.random()}
-                                    >
-                                      <td>
-                                        <input
-                                          className="form-control me-2 h-[36.47px]"
-                                          type="text"
-                                          placeholder="Particulars"
-                                          aria-label="Search"
-                                        />
-                                      </td>
-                                      <td>
-                                        <input
-                                          className="form-control me-2 h-[36.47px]"
-                                          type="number"
-                                          placeholder="Quantity"
-                                          aria-label="Search"
-                                        />
-                                      </td>
-                                      <td>
-                                        <input
-                                          className="form-control me-2 h-[36.47px]"
-                                          type="number"
-                                          placeholder="Price"
-                                          aria-label="Search"
-                                        />
-                                      </td>
-                                      <td>
-                                        <input
-                                          className="form-control me-2 h-[36.47px]"
-                                          type="number"
-                                          placeholder="Discount"
-                                          aria-label="Search"
-                                        />
-                                      </td>
-
-                                      <td>
-                                        <input
-                                          className="form-control me-2 h-[36.47px]"
-                                          type="number"
-                                          placeholder="Tax"
-                                          aria-label="Search"
-                                        />
-                                      </td>
-
-                                      <td>0.00</td>
-                                    </tr>
-                                    <tr className="border border-defaultborder crm-contact">
-                                      <td colSpan={5} className="text-right">
-                                        <p className="text-right font-bold">
-                                          Subtotal
-                                        </p>
-                                      </td>
-                                      <td>0.00</td>
-                                    </tr>
-                                    <tr className="border border-defaultborder crm-contact">
-                                      <td colSpan={5} className="text-right">
-                                        <p className="text-right font-bold">
-                                          Discount
-                                        </p>
-                                      </td>
-                                      <td>0.00</td>
-                                    </tr>
-                                    <tr className="border border-defaultborder crm-contact">
-                                      <td colSpan={5} className="text-right">
-                                        <p className="text-right font-bold">
-                                          Tax
-                                        </p>
-                                      </td>
-                                      <td>0.00</td>
-                                    </tr>
-                                    <tr className="border border-defaultborder crm-contact">
-                                      <td colSpan={5} className="text-right">
-                                        <p className="text-right font-bold">
-                                          Total Amount
-                                        </p>
-                                      </td>
-                                      <td>0.00</td>
-                                    </tr>
-
-                                    <tr className="border border-defaultborder crm-contact">
-                                      <td colSpan={6}>
-                                        <textarea
-                                          placeholder="Description"
-                                          name=""
-                                          id=""
-                                          rows={2}
-                                          cols={50}
-                                        ></textarea>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                              <div className="flex justify-end mt-4">
-                                <div className="flex gap-2">
-                                  <button
-                                    onClick={closeModal}
-                                    className="ti-btn ti-btn-light"
-                                  >
-                                    Cancel
-                                  </button>
-                                  <button className="ti-btn ti-btn-primary-full">
-                                    Create
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
