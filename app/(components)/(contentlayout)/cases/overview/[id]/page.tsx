@@ -6,7 +6,7 @@ import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
 import Pageheader from "@/shared/layout-components/page-header/pageheader";
 import Seo from "@/shared/layout-components/seo/seo";
 import CaseTeamOverview from "@/shared/page-components/case-management/CaseTeamOverview";
-import ViweModal from "@/shared/page-components/case-management/ViewModal";
+// import ViweModal from "@/shared/page-components/case-management/ViewModal";
 import FileRow from "@/shared/page-components/case-management/FileRow";
 import { useConfig } from "@/shared/providers/ConfigProvider";
 import store from "@/shared/redux/store";

@@ -27,24 +27,28 @@ const Modal = ({ isOpen, close, children }) => {
   return (
     shouldRender && (
       <div
-        className={`fixed inset-0 ti-modal ${
-          isOpen ? "opacity-100 open opened" : "opacity-0 pointer-events-none"
-        }`}
-        style={{
-          transition: "opacity 300ms",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
+        className="w-[100vw] h-[100vh] top-0 left-0 fixed"
+        style={{ zIndex: 99999 }}
+        onClick={(e) => {
+          console.log("Outside of modal");
+          e.preventDefault();
+          e.stopPropagation();
+          // close();
         }}
-        onTransitionEnd={handleTransitionEnd}
-        // onClick={close}
-        // onClick={(e) => e.stopPropagation()}
       >
-        {/* <div
-          className="w-full max-w-md p-5 bg-white rounded shadow-lg"
-          onClick={(e) => e.stopPropagation()}
+        <div
+          className={` w-full fixed inset-0 ti-modal ${
+            isOpen ? "opacity-100 open opened" : "opacity-0 pointer-events-none"
+          }`}
+          style={{
+            transition: "opacity 300ms",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
+          onTransitionEnd={handleTransitionEnd}
+          onClick={(e) => {}}
         >
-        </div> */}
-
-        {children}
+          {children}
+        </div>
       </div>
     )
   );

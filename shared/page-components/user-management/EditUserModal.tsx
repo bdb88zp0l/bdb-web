@@ -29,12 +29,18 @@ const EditUserModal = ({
   showModal,
   setShowModal,
   mode,
+  setMode,
 }: any) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [data, setData] = useState<any>(user);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [edit, setEdit] = useState(false);
 
+  // const handleEdit = () => {
+  //   setEdit(!edit);
+  // };
+  console.log(mode, "mode");
   useEffect(() => {
     setData(user);
   }, [user]);
@@ -527,17 +533,30 @@ const EditUserModal = ({
               >
                 Cancel
               </button>
-              <button
-                type="button"
-                className="ti-btn bg-primary text-white !font-medium"
-                onClick={handleSubmit}
-              >
-                {isSubmitting ? (
-                  <ButtonSpinner text="Updating User" />
-                ) : (
-                  "Update User"
-                )}
-              </button>
+              {mode == "show" ? (
+                <button
+                  type="button"
+                  className="ti-btn bg-primary text-white !font-medium"
+                  data-hs-overlay="#todo-compose"
+                  onClick={(e) => {
+                    setMode("edit");
+                  }}
+                >
+                  Edit
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="ti-btn bg-primary text-white !font-medium"
+                  onClick={handleSubmit}
+                >
+                  {isSubmitting ? (
+                    <ButtonSpinner text="Updating User" />
+                  ) : (
+                    "Update User"
+                  )}
+                </button>
+              )}
             </div>
           </div>
         </div>

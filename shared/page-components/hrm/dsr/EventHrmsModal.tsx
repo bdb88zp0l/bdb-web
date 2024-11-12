@@ -18,7 +18,7 @@ const EventDetailsModal = ({
   fetchDsrRecords,
 }: any) => {
   if (!isOpen || !eventData) return null;
-  const { title, description, date, id } = eventData;
+  const { title, date, id } = eventData;
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -43,10 +43,12 @@ const EventDetailsModal = ({
       });
   };
 
-  const cleanHtml = DOMPurify.sanitize(description, {
-    ADD_ATTR: ["target"],
-    FORBID_TAGS: ["style"], // Example: if you want to forbid certain tags
-  });
+  // const cleanHtml = DOMPurify.sanitize(description, {
+  //   ADD_ATTR: ["target"],
+  //   FORBID_TAGS: ["style"], // Example: if you want to forbid certain tags
+  // });
+
+  console.log(eventData, "eventData");
 
   return (
     <>
@@ -71,17 +73,17 @@ const EventDetailsModal = ({
                 <p>{eventData?.case?.title || "Not specified"}</p>
               </div>
               <div>
-                <strong>Title:</strong>
+                <strong>Task:</strong>
                 <p>{title}</p>
               </div>
 
-              <div>
+              {/* <div>
                 <strong>Description:</strong>
                 <ReactMarkdown
                   rehypePlugins={[rehypeRaw]}
                   children={cleanHtml} // Updated this line
                 />
-              </div>
+              </div> */}
 
               <div>
                 <strong>Hours:</strong>

@@ -93,19 +93,19 @@ const EditEventModal = ({ isOpen, onClose, pageData, onUpdate, event }) => {
                 />
               </div>
               <div className="xl:col-span-12 col-span-12">
-                <label className="form-label">Title</label>
+                <label className="form-label">Task</label>
                 <input
                   type="text"
-                  name="title"
+                  name="task"
                   className="form-control"
-                  placeholder="Title"
+                  placeholder="Task"
                   value={formData.title}
                   onChange={handleInputChange}
                   required
                 />
               </div>
 
-              <div className="xl:col-span-12 col-span-12">
+              {/* <div className="xl:col-span-12 col-span-12">
                 <label className="form-label">Description</label>
                 <textarea
                   name="description"
@@ -115,7 +115,7 @@ const EditEventModal = ({ isOpen, onClose, pageData, onUpdate, event }) => {
                   onChange={handleInputChange}
                   required
                 ></textarea>
-              </div>
+              </div> */}
 
               <div className="xl:col-span-12 col-span-12">
                 <label className="form-label">Hours</label>

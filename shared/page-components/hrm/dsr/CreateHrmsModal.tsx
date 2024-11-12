@@ -18,8 +18,8 @@ const CreateEventModal = ({
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
+    task: "",
+
     hourCount: 0,
     date: selectedDate,
     case: "",
@@ -39,8 +39,8 @@ const CreateEventModal = ({
         toast.success(response.data.message);
         onCreateEvent();
         setFormData({
-          title: "",
-          description: "",
+          task: "",
+
           hourCount: 0,
           date: new Date(selectedDate),
           case: "",
@@ -100,19 +100,19 @@ const CreateEventModal = ({
                 />
               </div>
               <div className="xl:col-span-12 col-span-12">
-                <label className="form-label">Title</label>
+                <label className="form-label">Task</label>
                 <input
                   type="text"
-                  name="title"
+                  name="task"
                   className="form-control"
-                  placeholder="Title"
-                  value={formData.title}
+                  placeholder="Task"
+                  value={formData.task}
                   onChange={handleInputChange}
                   required
                 />
               </div>
 
-              <div className="xl:col-span-12 col-span-12">
+              {/* <div className="xl:col-span-12 col-span-12">
                 <label className="form-label">Description</label>
                 <textarea
                   name="description"
@@ -122,7 +122,7 @@ const CreateEventModal = ({
                   onChange={handleInputChange}
                   required
                 ></textarea>
-              </div>
+              </div> */}
 
               <div className="xl:col-span-12 col-span-12">
                 <label className="form-label">Hours</label>

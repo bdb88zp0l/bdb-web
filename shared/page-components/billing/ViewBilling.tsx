@@ -41,7 +41,6 @@ const ViewBilling = ({
     }
   };
 
-
   const getStatusBadgeColor = (status: string) => {
     const statusColors: { [key: string]: string } = {
       unpaid: "bg-red-500",
@@ -79,7 +78,7 @@ const ViewBilling = ({
                 <i className="ri-close-line"></i>
               </button>
             </div>
-            <div className="ti-modal-body px-4 overflow-y-auto">
+            <div className="ti-modal-body overflow-y-auto border border-defaultborder crm-contact py-3 px-4">
               <div className="">
                 <div className="flex justify-between items-center mb-8 border-b pb-4">
                   <h1 className="text-3xl font-bold">
@@ -135,6 +134,58 @@ const ViewBilling = ({
                   >
                     {selectedBilling?.status}
                   </span>
+                </div>
+                <div className="summary-section">
+                  <p className="font-bold mt-5">Summary</p>
+                  <table className="w-full border-collapse mt-2">
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="p-3 text-left font-bold">#</th>
+                        <th className="p-3 text-left font-bold">Particulars</th>
+                        <th className="p-3 text-left font-bold">Numbers</th>
+                        <th className="p-3 text-left font-bold">
+                          Rate/Unit Cost (USD)
+                        </th>
+                        <th className="p-3 text-left font-bold">Tax</th>
+                        <th className="p-3 text-left font-bold">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b">
+                        <td className="p-3">1</td>
+                        <td className="p-3">Quo corporis sit nob</td>
+                        <td className="p-3">118</td>
+                        <td className="p-3">96</td>
+                        <td className="p-3">Sales tax (27%)</td>
+                        <td className="p-3">14386.56</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td colSpan={4}></td>
+                        <td className="p-3 font-bold">Sub Total</td>
+                        <td className="p-3">11328.00</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td colSpan={4}></td>
+                        <td className="p-3 font-bold">Total Tax</td>
+                        <td className="p-3">3058.56</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td colSpan={4}></td>
+                        <td className="p-3 font-bold">Total Discount</td>
+                        <td className="p-3">48.00</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td colSpan={4}></td>
+                        <td className="p-3 font-bold">Total Amount</td>
+                        <td className="p-3">14338.56</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td colSpan={4}></td>
+                        <td className="p-3 font-bold">Due Amount</td>
+                        <td className="p-3">14338.56</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
 
                 <div className="border border-defaultborder crm-contact py-3 px-4 mb-6">
