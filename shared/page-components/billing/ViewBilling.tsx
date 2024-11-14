@@ -15,11 +15,13 @@ const ViewBilling = ({
   selectedBilling,
   fetchBillings,
   caseInfo,
+  downloadPDF,
 }: any) => {
   const config = useConfig();
   const [addPaymentModal, setAddPaymentModal] = useState(false);
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(false);
+  console.log(downloadPDF, "download");
 
   useEffect(() => {
     if (showModalOpen && selectedBilling?._id) {
@@ -60,6 +62,7 @@ const ViewBilling = ({
           selectedBilling={selectedBilling}
           fetchBillings={fetchBillings}
         />
+
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center  min-w-[calc(100%-3.5rem)]">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">
             <div className="ti-modal-header">
@@ -136,69 +139,95 @@ const ViewBilling = ({
                   </span>
                 </div>
                 <div className="summary-section">
-                  <p className="font-bold mt-5">Summary</p>
-                  <table className="w-full border-collapse mt-2">
-                    <thead>
-                      <tr className="bg-gray-100">
-                        <th className="p-3 text-left font-bold">#</th>
-                        <th className="p-3 text-left font-bold">Particulars</th>
-                        <th className="p-3 text-left font-bold">Numbers</th>
-                        <th className="p-3 text-left font-bold">
-                          Rate/Unit Cost (USD)
-                        </th>
-                        <th className="p-3 text-left font-bold">Tax</th>
-                        <th className="p-3 text-left font-bold">Amount</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-b">
-                        <td className="p-3">1</td>
-                        <td className="p-3">Quo corporis sit nob</td>
-                        <td className="p-3">118</td>
-                        <td className="p-3">96</td>
-                        <td className="p-3">Sales tax (27%)</td>
-                        <td className="p-3">14386.56</td>
-                      </tr>
-                      <tr className="border-b">
-                        <td colSpan={4}></td>
-                        <td className="p-3 font-bold">Sub Total</td>
-                        <td className="p-3">11328.00</td>
-                      </tr>
-                      <tr className="border-b">
-                        <td colSpan={4}></td>
-                        <td className="p-3 font-bold">Total Tax</td>
-                        <td className="p-3">3058.56</td>
-                      </tr>
-                      <tr className="border-b">
-                        <td colSpan={4}></td>
-                        <td className="p-3 font-bold">Total Discount</td>
-                        <td className="p-3">48.00</td>
-                      </tr>
-                      <tr className="border-b">
-                        <td colSpan={4}></td>
-                        <td className="p-3 font-bold">Total Amount</td>
-                        <td className="p-3">14338.56</td>
-                      </tr>
-                      <tr className="border-b">
-                        <td colSpan={4}></td>
-                        <td className="p-3 font-bold">Due Amount</td>
-                        <td className="p-3">14338.56</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <h1 className="text-lg mt-5 mb-4">Summary</h1>
+                  <div className="overflow-x-auto mb-6">
+                    <table className="min-w-full table-auto border border-defaultborder crm-contact">
+                      <thead>
+                        <tr className="bg-gray-100">
+                          <th className="p-3 text-left font-bold">#</th>
+                          <th className="p-3 text-left font-bold">
+                            Particulars
+                          </th>
+                          <th className="p-3 text-left font-bold">Numbers</th>
+                          <th className="p-3 text-left font-bold">
+                            Rate/Unit Cost (USD)
+                          </th>
+                          <th className="p-3 text-left font-bold">Discount</th>
+                          <th className="p-3 text-left font-bold">Tax</th>
+                          <th className="p-3 text-left font-bold">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedBilling?.items &&
+                        selectedBilling.items.length > 0 ? (
+                          selectedBilling.items.map((billing, index) => (
+                            <tr className="border-b" key={billing._id}>
+                              <td className="p-3">{index + 1}</td>
+                              <td className="p-3">{billing.particulars}</td>
+                              <td className="p-3">{billing.quantity}</td>
+                              <td className="p-3">{billing.price}</td>
+                              <td className="p-3">{billing.discount}</td>
+                              <td className="p-3">{billing.vat}</td>
+                              <td className="p-3">{billing.amount}</td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td col-Span="6" className="p-3 text-center">
+                              No data available
+                            </td>
+                          </tr>
+                        )}
+
+                        <tr className="border-b">
+                          <td colSpan={5}></td>
+                          <td className="p-3 font-bold">Sub Total</td>
+                          <td className="p-3">{selectedBilling?.subTotal}</td>
+                        </tr>
+                        <tr className="border-b">
+                          <td colSpan={5}></td>
+                          <td className="p-3 font-bold">Total Tax</td>
+                          <td className="p-3">
+                            {selectedBilling?.tax.toFixed(2)}
+                          </td>
+                        </tr>
+                        <tr className="border-b">
+                          <td colSpan={5}></td>
+                          <td className="p-3 font-bold">Total Discount</td>
+                          <td className="p-3">
+                            {selectedBilling?.discount.toFixed(2)}
+                          </td>
+                        </tr>
+                        <tr className="border-b">
+                          <td colSpan={5}></td>
+                          <td className="p-3 font-bold">Total Amount</td>
+                          <td className="p-3">
+                            {selectedBilling?.grandTotal.toFixed(2)}
+                          </td>
+                        </tr>
+                        <tr className="border-b">
+                          <td colSpan={5}></td>
+                          <td className="p-3 font-bold">Due Amount</td>
+                          <td className="p-3">
+                            {selectedBilling?.dueAmount.toFixed(2)}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
 
-                <div className="border border-defaultborder crm-contact py-3 px-4 mb-6">
+                <div className="mb-6">
                   <div className="flex justify-between items-center mb-4">
                     <h1 className="text-lg">Payments</h1>
-                    <div>
+                    {/* <div>
                       <p className="text-sm">
                         Total Paid: ${selectedBilling?.totalPaid}
                       </p>
                       <p className="text-sm">
                         Due Amount: ${selectedBilling?.dueAmount}
                       </p>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="table-responsive">
                     <table className="table whitespace-nowrap min-w-full">
@@ -268,22 +297,30 @@ const ViewBilling = ({
                   </div>
                 </div>
               </div>
-              <div className="ti-modal-footer">
-                <button
-                  onClick={() => setAddPaymentModal(true)}
-                  className="ti-btn ti-btn-primary-full py-2 px-4"
-                  disabled={selectedBilling?.status === "paid"}
-                >
-                  Add Payment
-                </button>
-                <button
-                  type="button"
-                  className="hs-dropdown-toggle ti-btn ti-btn-light align-middle"
-                  onClick={() => setShowModalOpen(false)}
-                >
-                  Cancel
-                </button>
-              </div>
+            </div>
+            <div className="ti-modal-footer">
+              <button
+                onClick={() => {
+                  downloadPDF;
+                }}
+                className="ti-btn ti-btn-primary-full py-2 px-4"
+              >
+                Download
+              </button>
+              <button
+                onClick={() => setAddPaymentModal(true)}
+                className="ti-btn ti-btn-primary-full py-2 px-4"
+                disabled={selectedBilling?.status === "paid"}
+              >
+                Add Payment
+              </button>
+              <button
+                type="button"
+                className="hs-dropdown-toggle ti-btn ti-btn-light align-middle"
+                onClick={() => setShowModalOpen(false)}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>

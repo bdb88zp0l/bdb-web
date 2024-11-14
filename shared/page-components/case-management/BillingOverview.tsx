@@ -16,6 +16,7 @@ import {
 import CreateModal from "../billing/CreateModal";
 import ViewBilling from "../billing/ViewBilling";
 import EditModal from "../billing/EditModal";
+import BillingPdfDownload from "../billing/BillingPdfDownload";
 
 // Dynamically import react-select to avoid SSR issues
 const Select = dynamic(() => import("react-select"), { ssr: false });
@@ -25,6 +26,7 @@ const BillingOverview = ({ caseInfo }: any) => {
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [showModalOpen, setShowModalOpen] = useState(false);
+  const [downloadModalOpen, setDownloadModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [pageData, setPageData] = useState<any>({});
 
@@ -140,6 +142,13 @@ const BillingOverview = ({ caseInfo }: any) => {
               fetchBillings={fetchBillings}
               caseInfo={caseInfo}
             />
+
+            <BillingPdfDownload
+              setDownloadModalOpen={setDownloadModalOpen}
+              downloadModalOpen={downloadModalOpen}
+              selectedBilling={selectedBilling}
+            />
+
             <div className="box-body !p-0">
               <div className="table-responsive">
                 <table className="table whitespace-nowrap min-w-full">
@@ -206,9 +215,20 @@ const BillingOverview = ({ caseInfo }: any) => {
                                   }}
                                   aria-label="view button"
                                   type="button"
-                                  className="ti-btn ti-btn-sm ti-btn-danger ti-btn-icon contact-view"
+                                  className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon"
                                 >
                                   <i className="ri-eye-line"></i>
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    setDownloadModalOpen(true);
+                                    setSelectedBilling(item);
+                                  }}
+                                  aria-label="view button"
+                                  type="button"
+                                  className="ti-btn ti-btn-sm ti-btn-danger ti-btn-icon contact-view"
+                                >
+                                  <i className="ri-download-line"></i>
                                 </button>
 
                                 <button
