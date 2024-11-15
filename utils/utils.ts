@@ -119,3 +119,11 @@ export const chartColors = [
   "#cccc00",
   "#660066",
 ]
+
+export const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };

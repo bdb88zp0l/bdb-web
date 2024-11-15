@@ -71,7 +71,9 @@ const Mailsettings = () => {
     const { currentPassword, newPassword, confirmNewPassword } =
       changePasswordData;
     if (newPassword !== confirmNewPassword) {
-      toast.error("The new password and confirmation do not match. Please try again.");
+      toast.error(
+        "The new password and confirmation do not match. Please try again."
+      );
       return;
     }
     userPrivateRequest

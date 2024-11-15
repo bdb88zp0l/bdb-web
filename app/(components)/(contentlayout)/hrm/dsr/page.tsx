@@ -44,9 +44,9 @@ const Fullcalendar = () => {
     const event = records.map((event) => {
       return {
         id: event._id,
-        title: event.title,
+        title: event.task,
         start: event.date,
-        description: event.description,
+        // description: event.description,
         case: event.case,
         hourCount: event.hourCount,
         hourlyRate: event.hourlyRate,
