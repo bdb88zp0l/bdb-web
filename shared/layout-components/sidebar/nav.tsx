@@ -133,6 +133,15 @@ export const MenuItems: any = [
     ],
     children: [
       {
+        path: "/admin/workspace-setting",
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Workspace Setting",
+        permission: "workspace.setting",
+      },
+      {
         path: "/admin/role-management",
         type: "link",
         active: false,

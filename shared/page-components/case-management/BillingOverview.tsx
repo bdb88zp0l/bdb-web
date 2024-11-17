@@ -87,182 +87,193 @@ const BillingOverview = ({ caseInfo }: any) => {
 
   return (
     <>
-      <div className="grid grid-cols-12 gap-6">
-        <div className="xl:col-span-12 col-span-12">
-          <div className="">
-            <div className="box-header flex items-center justify-between flex-wrap gap-4">
-              <div className="flex" role="search">
-                <input
-                  className="form-control me-2 h-[36.47px]"
-                  type="text"
-                  placeholder="Search"
-                  aria-label="Search"
+
+
+
+      <div className="box custom-box">
+        <div className="box-header">
+          <div className="box-title">Billing Information</div>
+
+          <div className="flexflex-wrap gap-2">
+            <button
+              onClick={() => setModalOpen(true)}
+              className="hs-dropdown-toggle ti-btn ti-btn-primary-full !py-1 !px-2 !text-[0.75rem] me-2"
+            >
+              <i className="ri-add-line font-semibold align-middle"></i>
+              New Billing
+            </button>
+          </div>
+        </div>
+        <div className="box-body">
+
+          <div className="grid grid-cols-12 gap-6">
+            <div className="xl:col-span-12 col-span-12">
+              <div className="">
+                <div className="box-header flex items-center justify-between flex-wrap gap-4">
+                  <div className="flex" role="search">
+                    <input
+                      className="form-control me-2 h-[36.47px]"
+                      type="text"
+                      placeholder="Search"
+                      aria-label="Search"
+                    />
+                    <button
+                      className="ti-btn ti-btn-light !mb-0 h-[36.47px]"
+                      type="submit"
+                    >
+                      Search
+                    </button>
+                    <button className="text-info !py-1 !px-4 !text-[0.75rem] !m-0 h-[36.47px] content-center text-nowrap">
+                      Clear Search Results
+                    </button>
+                  </div>
+                </div>
+
+                <CreateModal
+                  modalOpen={isModalOpen}
+                  setModalOpen={setModalOpen}
+                  fetchBillings={fetchBillings}
+                  pageData={pageData}
+                  caseInfo={caseInfo}
                 />
-                <button
-                  className="ti-btn ti-btn-light !mb-0 h-[36.47px]"
-                  type="submit"
-                >
-                  Search
-                </button>
-                <button className="text-info !py-1 !px-4 !text-[0.75rem] !m-0 h-[36.47px] content-center text-nowrap">
-                  Clear Search Results
-                </button>
-              </div>
 
-              <div className="flexflex-wrap gap-2">
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="hs-dropdown-toggle ti-btn ti-btn-primary-full !py-1 !px-2 !text-[0.75rem] me-2"
-                >
-                  <i className="ri-add-line font-semibold align-middle"></i>
-                  New Billing
-                </button>
-              </div>
-            </div>
+                <ViewBilling
+                  showModalOpen={showModalOpen}
+                  setShowModalOpen={setShowModalOpen}
+                  selectedBilling={selectedBilling}
+                  fetchBillings={fetchBillings}
+                  caseInfo={caseInfo}
+                />
+                <EditModal
+                  editModalOpen={editModalOpen}
+                  setEditModalOpen={setEditModalOpen}
+                  selectedBilling={selectedBilling}
+                  fetchBillings={fetchBillings}
+                  caseInfo={caseInfo}
+                />
 
-            <CreateModal
-              modalOpen={isModalOpen}
-              setModalOpen={setModalOpen}
-              fetchBillings={fetchBillings}
-              pageData={pageData}
-              caseInfo={caseInfo}
-            />
+                <BillingPdfDownload
+                  setDownloadModalOpen={setDownloadModalOpen}
+                  downloadModalOpen={downloadModalOpen}
+                  selectedBilling={selectedBilling}
+                />
 
-            <ViewBilling
-              showModalOpen={showModalOpen}
-              setShowModalOpen={setShowModalOpen}
-              selectedBilling={selectedBilling}
-              fetchBillings={fetchBillings}
-              caseInfo={caseInfo}
-            />
-            <EditModal
-              editModalOpen={editModalOpen}
-              setEditModalOpen={setEditModalOpen}
-              selectedBilling={selectedBilling}
-              fetchBillings={fetchBillings}
-              caseInfo={caseInfo}
-            />
-
-            <BillingPdfDownload
-              setDownloadModalOpen={setDownloadModalOpen}
-              downloadModalOpen={downloadModalOpen}
-              selectedBilling={selectedBilling}
-            />
-
-            <div className="box-body !p-0">
-              <div className="table-responsive">
-                <table className="table whitespace-nowrap min-w-full">
-                  <thead>
-                    <tr>
-                      <th scope="col" className="text-start">
-                        Bill Number
-                      </th>
-                      <th scope="col" className="text-start">
-                        Title
-                      </th>
-                      <th scope="col" className="text-start">
-                        Bill Type
-                      </th>
-                      <th scope="col" className="text-start">
-                        Bill From
-                      </th>
-                      <th scope="col" className="text-start">
-                        Date Of Reciept
-                      </th>
-                      <th scope="col" className="text-start">
-                        Total Amount
-                      </th>
-                      <th scope="col" className="text-start">
-                        Status
-                      </th>
-                      <th scope="col" className="text-start">
-                        Action
-                      </th>
-                      <th scope="col" className="text-start"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {isFetching && (
-                      <td colSpan={5}>
-                        <div className="flex justify-center mb-6">
-                          <div className="ti-spinner" role="status">
-                            <span className="sr-only">Loading...</span>
-                          </div>
-                        </div>
-                      </td>
-                    )}
-                    {!isFetching &&
-                      data?.docs?.map((item: any) => {
-                        return (
-                          <tr
-                            className="border border-defaultborder crm-contact"
-                            key={Math.random()}
-                          >
-                            <td>{item?.billNumber}</td>
-                            <td>{item?.title}</td>
-                            <td>{item?.billingType}</td>
-                            <td>{item?.clientData?.companyName ?? ""}</td>
-                            <td>{formatDate(item?.date)}</td>
-                            <td>{formatAmount(item?.grandTotal)}</td>
-                            <td>{toWordUpperCase(item?.status)}</td>
-
-                            <td>
-                              <div className="btn-list flex gap-2">
-                                <button
-                                  onClick={() => {
-                                    setShowModalOpen(true);
-                                    setSelectedBilling(item);
-                                  }}
-                                  aria-label="view button"
-                                  type="button"
-                                  className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon"
-                                >
-                                  <i className="ri-eye-line"></i>
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    setDownloadModalOpen(true);
-                                    setSelectedBilling(item);
-                                  }}
-                                  aria-label="view button"
-                                  type="button"
-                                  className="ti-btn ti-btn-sm ti-btn-danger ti-btn-icon contact-view"
-                                >
-                                  <i className="ri-download-line"></i>
-                                </button>
-
-                                <button
-                                  className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon"
-                                  onClick={() => {
-                                    setSelectedBilling(item);
-                                    setEditModalOpen(true);
-                                  }}
-                                >
-                                  <i className="ri-pencil-line"></i>
-                                </button>
-                                <button
-                                  aria-label="button"
-                                  type="button"
-                                  className="ti-btn ti-btn-sm ti-btn-danger ti-btn-icon contact-delete"
-                                  onClick={() => {
-                                    if (
-                                      window.confirm(
-                                        "Are you sure you want to delete this item?"
-                                      )
-                                    ) {
-                                      handleDelete(item?._id);
-                                    }
-                                  }}
-                                >
-                                  <i className="ri-delete-bin-line"></i>
-                                </button>
+                <div className="box-body !p-0">
+                  <div className="table-responsive">
+                    <table className="table whitespace-nowrap min-w-full">
+                      <thead>
+                        <tr>
+                          <th scope="col" className="text-start">
+                            Bill Number
+                          </th>
+                          <th scope="col" className="text-start">
+                            Title
+                          </th>
+                          <th scope="col" className="text-start">
+                            Bill Type
+                          </th>
+                          <th scope="col" className="text-start">
+                            Bill From
+                          </th>
+                          <th scope="col" className="text-start">
+                            Date Of Reciept
+                          </th>
+                          <th scope="col" className="text-start">
+                            Total Amount
+                          </th>
+                          <th scope="col" className="text-start">
+                            Status
+                          </th>
+                          <th scope="col" className="text-start">
+                            Action
+                          </th>
+                          <th scope="col" className="text-start"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {isFetching && (
+                          <td colSpan={5}>
+                            <div className="flex justify-center mb-6">
+                              <div className="ti-spinner" role="status">
+                                <span className="sr-only">Loading...</span>
                               </div>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
+                            </div>
+                          </td>
+                        )}
+                        {!isFetching &&
+                          data?.docs?.map((item: any) => {
+                            return (
+                              <tr
+                                className="border border-defaultborder crm-contact"
+                                key={Math.random()}
+                              >
+                                <td>{item?.billNumber}</td>
+                                <td>{item?.title}</td>
+                                <td>{item?.billingType}</td>
+                                <td>{item?.clientData?.companyName ?? ""}</td>
+                                <td>{formatDate(item?.billingStart)}</td>
+                                <td>{formatAmount(item?.grandTotal)}</td>
+                                <td>{toWordUpperCase(item?.status)}</td>
+
+                                <td>
+                                  <div className="btn-list flex gap-2">
+                                    <button
+                                      onClick={() => {
+                                        setShowModalOpen(true);
+                                        setSelectedBilling(item);
+                                      }}
+                                      aria-label="view button"
+                                      type="button"
+                                      className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon"
+                                    >
+                                      <i className="ri-eye-line"></i>
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        setDownloadModalOpen(true);
+                                        setSelectedBilling(item);
+                                      }}
+                                      aria-label="view button"
+                                      type="button"
+                                      className="ti-btn ti-btn-sm ti-btn-danger ti-btn-icon contact-view"
+                                    >
+                                      <i className="ri-download-line"></i>
+                                    </button>
+
+                                    <button
+                                      className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon"
+                                      onClick={() => {
+                                        setSelectedBilling(item);
+                                        setEditModalOpen(true);
+                                      }}
+                                    >
+                                      <i className="ri-pencil-line"></i>
+                                    </button>
+                                    <button
+                                      aria-label="button"
+                                      type="button"
+                                      className="ti-btn ti-btn-sm ti-btn-danger ti-btn-icon contact-delete"
+                                      onClick={() => {
+                                        if (
+                                          window.confirm(
+                                            "Are you sure you want to delete this item?"
+                                          )
+                                        ) {
+                                          handleDelete(item?._id);
+                                        }
+                                      }}
+                                    >
+                                      <i className="ri-delete-bin-line"></i>
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -59,40 +59,36 @@ const AddPaymentModal = ({
   };
 
   const handleSubmit = async () => {
-    try {
-      setIsSubmitting(true);
+    setIsSubmitting(true);
 
-      // Validate required fields
-      if (!data.amount || !data.paymentMethod || !data.date) {
-        toast.error("Please fill all required fields");
-        return;
-      }
+    // Validate required fields
+    if (!data.amount || !data.paymentMethod || !data.date) {
+      toast.error("Please fill all required fields");
+      return;
+    }
 
-      // Validate amount
-      if (data.amount > selectedBilling?.dueAmount) {
-        toast.error("Payment amount cannot exceed due amount");
-        return;
-      }
+    const payload = {
+      billingId: selectedBilling?._id,
+      amount: Number(data.amount),
+      date: moment(data.date).format("YYYY-MM-DD"),
+      paymentMethod: data.paymentMethod,
+      note: data.note || "",
+      transactionId: data?.transactionId || "",
+    };
 
-      const payload = {
-        billingId: selectedBilling?._id,
-        amount: Number(data.amount),
-        date: moment(data.date).format("YYYY-MM-DD"),
-        paymentMethod: data.paymentMethod,
-        note: data.note || "",
-        transactionId: data?.transactionId || "",
-      };
+    await userPrivateRequest.post("/api/payments", payload).then(response => {
 
-      await userPrivateRequest.post("/api/payments", payload);
       toast.success("Payment added successfully");
+      setAddPaymentModal(false)
+      closeModal();
       fetchPayments();
       fetchBillings();
-      closeModal();
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Failed to add payment");
-    } finally {
-      setIsSubmitting(false);
-    }
+    }).catch(error => {
+      console.log(error?.message)
+      toast.error(error?.message)
+    }).finally(() => {
+      setIsSubmitting(false)
+    });
   };
 
   return (

@@ -8,6 +8,7 @@ import Modal from "@/shared/modals/Modal";
 import AddPaymentModal from "./AddPaymentModal";
 import { userPrivateRequest } from "@/config/axios.config";
 import { formatAmount, formatDate } from "@/utils/utils";
+import store from "@/shared/redux/store";
 
 const ViewBilling = ({
   showModalOpen,
@@ -21,8 +22,6 @@ const ViewBilling = ({
   const [addPaymentModal, setAddPaymentModal] = useState(false);
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log(downloadPDF, "download");
-
   useEffect(() => {
     if (showModalOpen && selectedBilling?._id) {
       fetchPayments();
@@ -47,11 +46,14 @@ const ViewBilling = ({
     const statusColors: { [key: string]: string } = {
       unpaid: "bg-red-500",
       paid: "bg-green-500",
-      partial: "bg-yellow-500",
+      overPaid: "bg-green-900",
+      partiallyPaid: "bg-yellow-500",
     };
     return statusColors[status] || "bg-gray-500";
   };
 
+
+  const { auth } = store.getState();
   return (
     <>
       <Modal isOpen={showModalOpen} close={() => setShowModalOpen(false)}>
@@ -94,36 +96,108 @@ const ViewBilling = ({
                   </div>
                 </div>
 
-                <div className="flex justify-between mb-6">
-                  <div>
-                    <div className="mb-4">
-                      <img
-                        src={config?.logo || "#"}
-                        alt="Logo"
-                        className="w-32"
-                      />
+
+                <div className="grid grid-cols-12 gap-4">
+                  <div className="col-span-4">
+                    <label className="mb-2 font-bold text-[16px]">
+                      Bill From:
+                    </label>
+                    <div className="col-span-12 grid grid-cols-2 gap-x-4">
+                      <label className="mb-2 font-bold">Name:</label>
+                      <span>{auth?.user?.defaultWorkspace?.name ?? ""}</span>
+
+                      <label className="mb-2 font-bold">Phone Number:</label>
+                      <span>{auth?.user?.defaultWorkspace?.phone ?? ""}</span>
+
+                      <label className="mb-2 font-bold">Email:</label>
+                      <span>{auth?.user?.defaultWorkspace?.email ?? ""}</span>
+
+                      <label className="mb-2 font-bold">Address:</label>
+                      <span>{auth?.user?.defaultWorkspace?.addressLine1 ?? ""}<br />{auth?.user?.defaultWorkspace?.addressLine2 ?? ""}</span>
                     </div>
-                    <p className="font-semibold">Bill From:</p>
-                    <p>{config?.companyName || "Company Name"}</p>
-                    <p>{config?.address || "Company Address"}</p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm font-semibold">Bill To:</p>
-                    <p>{selectedBilling?.clientData?.companyName}</p>
-                    <p>Client #{selectedBilling?.clientData?.clientNumber}</p>
-                  </div>
-                  <div className="">
-                    <div className="mb-2">
-                      <label className="form-label">Date:</label>
-                      <p className="text-sm">
-                        {formatDate(selectedBilling?.date)}
-                      </p>
+
+                  <div className="col-span-4">
+                    <label className="mb-2 font-bold text-[16px]">
+                      Bill To:
+                    </label>
+                    <div className="col-span-12 grid grid-cols-2 gap-x-4">
+                      <label className="mb-2 font-bold">Name:</label>
+                      <span>{caseInfo?.client?.companyName ?? ""}</span>
+
+                      <label className="mb-2 font-bold">Phone Number:</label>
+                      <span>{caseInfo?.client?.phones?.map(item => {
+                        return (
+                          <>
+                            <span>{item?.dialCode} {item?.phoneNumber}</span>
+                            <br />
+
+                          </>
+                        )
+                      })}</span>
+
+                      <label className="mb-2 font-bold">Email:</label>
+                      <span>{caseInfo?.client?.emails?.map(item => {
+                        return (
+                          <>
+                            <span>{item?.value}</span>
+                            <br />
+
+                          </>
+                        )
+                      })}</span>
+
+                      <label className="mb-2 font-bold">Address:</label>
+                      <span>{caseInfo?.client?.addresses?.map(address => {
+                        return (
+                          <div
+                            key={
+                              address?._id
+                            }
+                          >
+                            {`${address.houseNumber ||
+                              'N/A'
+                              }, ${address.street ||
+                              'N/A'
+                              }, ${address.city ||
+                              'N/A'
+                              }, ${address.barangay ||
+                              'N/A'
+                              }, ${address.zip ||
+                              'N/A'
+                              }, ${address.region ||
+                              'N/A'
+                              }, ${address.country ||
+                              'N/A'
+                              }`}{' '}
+                            <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
+                              {
+                                address?.label
+                              }
+                            </span>{' '}
+                          </div>
+                        )
+                      })}</span>
                     </div>
-                    <div>
-                      <label className="form-label">Due Date:</label>
-                      <p className="text-sm">
-                        {formatDate(selectedBilling?.dueDate)}
-                      </p>
+                  </div>
+
+                  <div className="col-span-4">
+
+
+                    <label className="mb-2 font-bold text-[16px]">
+                      Summary:
+                    </label>
+                    <div className="col-span-12 grid grid-cols-2 gap-x-4">
+                      <label className="mb-2 font-bold">Billing Type:</label>
+                      <span>{selectedBilling?.billingType}
+                      </span>
+                      <label className="mb-2 font-bold">Billing Date:</label>
+                      <span>{formatDate(selectedBilling?.billingStart)}
+
+                        {selectedBilling?.billingType == "timeBased" && <span> - {formatDate(selectedBilling?.billingEnd)}  </span>}
+                      </span>
+
+
                     </div>
                   </div>
                 </div>
@@ -139,7 +213,7 @@ const ViewBilling = ({
                   </span>
                 </div>
                 <div className="summary-section">
-                  <h1 className="text-lg mt-5 mb-4">Summary</h1>
+                  <h1 className="text-lg mt-5 mb-4">Items</h1>
                   <div className="overflow-x-auto mb-6">
                     <table className="min-w-full table-auto border border-defaultborder crm-contact">
                       <thead>
@@ -159,7 +233,7 @@ const ViewBilling = ({
                       </thead>
                       <tbody>
                         {selectedBilling?.items &&
-                        selectedBilling.items.length > 0 ? (
+                          selectedBilling.items.length > 0 ? (
                           selectedBilling.items.map((billing, index) => (
                             <tr className="border-b" key={billing._id}>
                               <td className="p-3">{index + 1}</td>
@@ -307,13 +381,15 @@ const ViewBilling = ({
               >
                 Download
               </button>
-              <button
-                onClick={() => setAddPaymentModal(true)}
-                className="ti-btn ti-btn-primary-full py-2 px-4"
-                disabled={selectedBilling?.status === "paid"}
-              >
-                Add Payment
-              </button>
+
+              {selectedBilling?.status !== "paid" &&
+                <button
+                  onClick={() => setAddPaymentModal(true)}
+                  className="ti-btn ti-btn-primary-full py-2 px-4"
+                // disabled={selectedBilling?.status === "paid"}
+                >
+                  Add Payment
+                </button>}
               <button
                 type="button"
                 className="hs-dropdown-toggle ti-btn ti-btn-light align-middle"

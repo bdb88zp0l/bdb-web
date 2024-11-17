@@ -13,6 +13,7 @@ import AddressForm from "../contacts/components/AddressForm";
 import moment from "moment";
 import { useConfig } from "@/shared/providers/ConfigProvider";
 import { getImageUrl, toWordUpperCase } from "@/utils/utils";
+import store from "@/shared/redux/store";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
@@ -110,7 +111,43 @@ const CreateModal = ({
       });
   };
 
+  const handleBillingTypeChange = () => {
+
+    setItems([itemSkeleton])
+
+    if (data?.billingType == "timeBased") {
+      userPrivateRequest.get(`/api/hrm/dsr/getDsrRecordsByCase/${caseInfo?._id}`).then(response => {
+
+        let abc = response?.data?.data ?? []
+        let tempItems = abc?.map(item => {
+          return {
+            particulars: item?.title ?? "",
+            quantity: item?.hourCount ?? 0,
+            price: item?.hourlyRate ?? 0,
+            discount: 0,
+            vat: 0,
+            amount: Number(item?.hourCount ?? 0) * Number(item?.hourlyRate ?? 0),
+          }
+        })
+
+        setItems(tempItems)
+      }).catch(error => {
+        console.log(error?.message)
+      }).finally(() => {
+
+      })
+    }
+
+  }
+
+  useEffect(() => {
+    handleBillingTypeChange()
+  }, [data?.billingType])
+
   const config = useConfig();
+
+
+  const { auth } = store.getState();
   return (
     <>
       <Modal isOpen={modalOpen} close={closeModal}>
@@ -135,30 +172,85 @@ const CreateModal = ({
             <div className="ti-modal-body px-4 overflow-y-auto">
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-4">
+                  <label className="mb-2 font-bold text-[16px]">
+                    Bill From:
+                  </label>
                   <div className="col-span-12 grid grid-cols-2 gap-x-4">
-                    <label className="mb-2 form-label font-bold">
-                      Bill From:
-                    </label>
                     <label className="mb-2 font-bold">Name:</label>
-                    <span>Company</span>
+                    <span>{auth?.user?.defaultWorkspace?.name ?? ""}</span>
 
                     <label className="mb-2 font-bold">Phone Number:</label>
-                    <span>8563256987</span>
+                    <span>{auth?.user?.defaultWorkspace?.phone ?? ""}</span>
+
+                    <label className="mb-2 font-bold">Email:</label>
+                    <span>{auth?.user?.defaultWorkspace?.email ?? ""}</span>
 
                     <label className="mb-2 font-bold">Address:</label>
-                    <span>This is address</span>
+                    <span>{auth?.user?.defaultWorkspace?.addressLine1 ?? ""}<br />{auth?.user?.defaultWorkspace?.addressLine2 ?? ""}</span>
                   </div>
                 </div>
 
                 <div className="col-span-4">
-                  <div className="col-span-12">
-                    <label className="mb-2 form-label font-bold">
-                      Bill To:
-                    </label>
-                    <div className="mb-4">
-                      <label className="mb-2 font-bold">Company Name:</label>
-                      <span>{caseInfo?.client?.companyName}</span>
-                    </div>
+                  <label className="mb-2 font-bold text-[16px]">
+                    Bill To:
+                  </label>
+                  <div className="col-span-12 grid grid-cols-2 gap-x-4">
+                    <label className="mb-2 font-bold">Name:</label>
+                    <span>{caseInfo?.client?.companyName ?? ""}</span>
+
+                    <label className="mb-2 font-bold">Phone Number:</label>
+                    <span>{caseInfo?.client?.phones?.map(item => {
+                      return (
+                        <>
+                          <span>{item?.dialCode} {item?.phoneNumber}</span>
+                          <br />
+
+                        </>
+                      )
+                    })}</span>
+
+                    <label className="mb-2 font-bold">Email:</label>
+                    <span>{caseInfo?.client?.emails?.map(item => {
+                      return (
+                        <>
+                          <span>{item?.value}</span>
+                          <br />
+
+                        </>
+                      )
+                    })}</span>
+
+                    <label className="mb-2 font-bold">Address:</label>
+                    <span>{caseInfo?.client?.addresses?.map(address => {
+                      return (
+                        <div
+                          key={
+                            address?._id
+                          }
+                        >
+                          {`${address.houseNumber ||
+                            'N/A'
+                            }, ${address.street ||
+                            'N/A'
+                            }, ${address.city ||
+                            'N/A'
+                            }, ${address.barangay ||
+                            'N/A'
+                            }, ${address.zip ||
+                            'N/A'
+                            }, ${address.region ||
+                            'N/A'
+                            }, ${address.country ||
+                            'N/A'
+                            }`}{' '}
+                          <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
+                            {
+                              address?.label
+                            }
+                          </span>{' '}
+                        </div>
+                      )
+                    })}</span>
                   </div>
                 </div>
 
@@ -215,21 +307,39 @@ const CreateModal = ({
                   </div>
                   <div className="grid grid-cols-12 gap-4 col-span-12">
                     <div className="mb-4 col-span-6">
-                      <label htmlFor="date" className="form-label">
-                        Date
+                      <label htmlFor="billingStart" className="form-label">
+                        Billing Start
                       </label>
                       <DatePicker
                         className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
-                        selected={data?.date}
-                        onChange={(date) => {
+                        selected={data?.billingStart}
+                        onChange={(billingStart) => {
                           setData({
                             ...data,
-                            date: date,
+                            billingStart: billingStart,
                           });
                         }}
                         dateFormat="MMMM d, yyyy"
                       />
                     </div>
+
+                    {data?.billingType == "timeBased" &&
+                      <div className="mb-4 col-span-6">
+                        <label htmlFor="billingEnd" className="form-label">
+                          Billing End
+                        </label>
+                        <DatePicker
+                          className="ti-form-input ltr:rounded-l-none rtl:rounded-r-none focus:z-10"
+                          selected={data?.billingEnd}
+                          onChange={(billingEnd) => {
+                            setData({
+                              ...data,
+                              billingEnd: billingEnd,
+                            });
+                          }}
+                          dateFormat="MMMM d, yyyy"
+                        />
+                      </div>}
                     <div className="mb-4 col-span-6">
                       <label htmlFor="dueDate" className="form-label">
                         Due Date
@@ -251,16 +361,19 @@ const CreateModal = ({
               </div>
 
               <div className="co-span-12 border border-defaultborder crm-contact p-2">
-                <div className="flex justify-end">
-                  <button
-                    className="ti-btn ti-btn-primary-full py-2 px-4"
-                    onClick={() => {
-                      setItems([...items, itemSkeleton]);
-                    }}
-                  >
-                    + Add item
-                  </button>
-                </div>
+
+                {data?.billingType !== "timeBased" &&
+                  <div className="flex justify-end">
+                    <button
+                      className="ti-btn ti-btn-primary-full py-2 px-4"
+                      onClick={() => {
+                        setItems([...items, itemSkeleton]);
+                      }}
+                    >
+                      + Add item
+                    </button>
+                  </div>
+                }
                 <div className="table-responsive">
                   <table className="table whitespace-nowrap min-w-full">
                     <thead>
@@ -305,6 +418,8 @@ const CreateModal = ({
                                   e.target.value
                                 )
                               }
+
+                              disabled={data?.billingType == "timeBased"}
                             />
                           </td>
                           <td>
@@ -320,6 +435,7 @@ const CreateModal = ({
                                   parseFloat(e.target.value)
                                 )
                               }
+                              disabled={data?.billingType == "timeBased"}
                             />
                           </td>
                           <td>
@@ -335,6 +451,7 @@ const CreateModal = ({
                                   parseFloat(e.target.value)
                                 )
                               }
+                              disabled={data?.billingType == "timeBased"}
                             />
                           </td>
                           <td>
@@ -350,6 +467,7 @@ const CreateModal = ({
                                   parseFloat(e.target.value)
                                 )
                               }
+                              disabled={data?.billingType == "timeBased"}
                             />
                           </td>
                           <td>
@@ -365,6 +483,7 @@ const CreateModal = ({
                                   parseFloat(e.target.value)
                                 )
                               }
+                              disabled={data?.billingType == "timeBased"}
                             />
                           </td>
                           <td>
@@ -437,7 +556,7 @@ const CreateModal = ({
                 type="button"
                 className="ti-btn bg-primary text-white !font-medium"
                 onClick={handleSubmit}
-                disabled={isSubmitting }
+                disabled={isSubmitting}
               >
                 {isSubmitting ? <ButtonSpinner text="Creating" /> : "Create"}
               </button>
