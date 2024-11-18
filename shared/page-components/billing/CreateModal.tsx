@@ -112,40 +112,48 @@ const CreateModal = ({
   };
 
   const handleBillingTypeChange = () => {
-
-    setItems([itemSkeleton])
+    setItems([itemSkeleton]);
 
     if (data?.billingType == "timeBased") {
-      userPrivateRequest.get(`/api/hrm/dsr/getDsrRecordsByCase/${caseInfo?._id}`).then(response => {
-
-        let abc = response?.data?.data ?? []
-        let tempItems = abc?.map(item => {
-          return {
-            particulars: item?.title ?? "",
-            quantity: item?.hourCount ?? 0,
-            price: item?.hourlyRate ?? 0,
-            discount: 0,
-            vat: 0,
-            amount: Number(item?.hourCount ?? 0) * Number(item?.hourlyRate ?? 0),
-          }
+      userPrivateRequest
+        .get(`/api/hrm/dsr/getDsrRecordsByCase/${caseInfo?._id}`, {
+          params: {
+            ...(data?.billingStart && {
+              billingStart: moment(data?.billingStart).format("YYYY-MM-DD"),
+            }),
+            ...(data?.billingEnd && {
+              billingEnd: moment(data?.billingEnd).format("YYYY-MM-DD"),
+            }),
+          },
         })
+        .then((response) => {
+          let abc = response?.data?.data ?? [];
+          let tempItems = abc?.map((item) => {
+            return {
+              particulars: item?.title ?? "",
+              quantity: item?.hourCount ?? 0,
+              price: item?.hourlyRate ?? 0,
+              discount: 0,
+              vat: 0,
+              amount:
+                Number(item?.hourCount ?? 0) * Number(item?.hourlyRate ?? 0),
+            };
+          });
 
-        setItems(tempItems)
-      }).catch(error => {
-        console.log(error?.message)
-      }).finally(() => {
-
-      })
+          setItems(tempItems);
+        })
+        .catch((error) => {
+          console.log(error?.message);
+        })
+        .finally(() => {});
     }
-
-  }
+  };
 
   useEffect(() => {
-    handleBillingTypeChange()
-  }, [data?.billingType])
+    handleBillingTypeChange();
+  }, [data?.billingType, data?.billingStart, data?.billingEnd]);
 
   const config = useConfig();
-
 
   const { auth } = store.getState();
   return (
@@ -186,71 +194,65 @@ const CreateModal = ({
                     <span>{auth?.user?.defaultWorkspace?.email ?? ""}</span>
 
                     <label className="mb-2 font-bold">Address:</label>
-                    <span>{auth?.user?.defaultWorkspace?.addressLine1 ?? ""}<br />{auth?.user?.defaultWorkspace?.addressLine2 ?? ""}</span>
+                    <span>
+                      {auth?.user?.defaultWorkspace?.addressLine1 ?? ""}
+                      <br />
+                      {auth?.user?.defaultWorkspace?.addressLine2 ?? ""}
+                    </span>
                   </div>
                 </div>
 
                 <div className="col-span-4">
-                  <label className="mb-2 font-bold text-[16px]">
-                    Bill To:
-                  </label>
+                  <label className="mb-2 font-bold text-[16px]">Bill To:</label>
                   <div className="col-span-12 grid grid-cols-2 gap-x-4">
                     <label className="mb-2 font-bold">Name:</label>
                     <span>{caseInfo?.client?.companyName ?? ""}</span>
 
                     <label className="mb-2 font-bold">Phone Number:</label>
-                    <span>{caseInfo?.client?.phones?.map(item => {
-                      return (
-                        <>
-                          <span>{item?.dialCode} {item?.phoneNumber}</span>
-                          <br />
-
-                        </>
-                      )
-                    })}</span>
+                    <span>
+                      {caseInfo?.client?.phones?.map((item) => {
+                        return (
+                          <>
+                            <span>
+                              {item?.dialCode} {item?.phoneNumber}
+                            </span>
+                            <br />
+                          </>
+                        );
+                      })}
+                    </span>
 
                     <label className="mb-2 font-bold">Email:</label>
-                    <span>{caseInfo?.client?.emails?.map(item => {
-                      return (
-                        <>
-                          <span>{item?.value}</span>
-                          <br />
-
-                        </>
-                      )
-                    })}</span>
+                    <span>
+                      {caseInfo?.client?.emails?.map((item) => {
+                        return (
+                          <>
+                            <span>{item?.value}</span>
+                            <br />
+                          </>
+                        );
+                      })}
+                    </span>
 
                     <label className="mb-2 font-bold">Address:</label>
-                    <span>{caseInfo?.client?.addresses?.map(address => {
-                      return (
-                        <div
-                          key={
-                            address?._id
-                          }
-                        >
-                          {`${address.houseNumber ||
-                            'N/A'
-                            }, ${address.street ||
-                            'N/A'
-                            }, ${address.city ||
-                            'N/A'
-                            }, ${address.barangay ||
-                            'N/A'
-                            }, ${address.zip ||
-                            'N/A'
-                            }, ${address.region ||
-                            'N/A'
-                            }, ${address.country ||
-                            'N/A'
-                            }`}{' '}
-                          <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
-                            {
-                              address?.label
-                            }
-                          </span>{' '}
-                        </div>
-                      )
-                    })}</span>
+                    <span>
+                      {caseInfo?.client?.addresses?.map((address) => {
+                        return (
+                          <div key={address?._id}>
+                            {`${address.houseNumber || "N/A"}, ${
+                              address.street || "N/A"
+                            }, ${address.city || "N/A"}, ${
+                              address.barangay || "N/A"
+                            }, ${address.zip || "N/A"}, ${
+                              address.region || "N/A"
+                            }, ${address.country || "N/A"}`}{" "}
+                            <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
+                              {address?.label}
+                            </span>{" "}
+                          </div>
+                        );
+                      })}
+                    </span>
                   </div>
                 </div>
 
@@ -323,7 +325,7 @@ const CreateModal = ({
                       />
                     </div>
 
-                    {data?.billingType == "timeBased" &&
+                    {data?.billingType == "timeBased" && (
                       <div className="mb-4 col-span-6">
                         <label htmlFor="billingEnd" className="form-label">
                           Billing End
@@ -339,7 +341,8 @@ const CreateModal = ({
                           }}
                           dateFormat="MMMM d, yyyy"
                         />
-                      </div>}
+                      </div>
+                    )}
                     <div className="mb-4 col-span-6">
                       <label htmlFor="dueDate" className="form-label">
                         Due Date
@@ -361,8 +364,7 @@ const CreateModal = ({
               </div>
 
               <div className="co-span-12 border border-defaultborder crm-contact p-2">
-
-                {data?.billingType !== "timeBased" &&
+                {data?.billingType !== "timeBased" && (
                   <div className="flex justify-end">
                     <button
                       className="ti-btn ti-btn-primary-full py-2 px-4"
@@ -373,7 +375,7 @@ const CreateModal = ({
                       + Add item
                     </button>
                   </div>
-                }
+                )}
                 <div className="table-responsive">
                   <table className="table whitespace-nowrap min-w-full">
                     <thead>
@@ -418,7 +420,6 @@ const CreateModal = ({
                                   e.target.value
                                 )
                               }
-
                               disabled={data?.billingType == "timeBased"}
                             />
                           </td>

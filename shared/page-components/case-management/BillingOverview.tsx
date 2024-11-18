@@ -1,22 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { userPrivateRequest } from "@/config/axios.config";
-import Modal from "@/shared/modals/Modal";
-import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
-import dynamic from "next/dynamic";
-import Link from "next/link";
 import { useConfig } from "@/shared/providers/ConfigProvider";
-import {
-  formatAmount,
-  formatDate,
-  getImageUrl,
-  toWordUpperCase,
-} from "@/utils/utils";
+import { formatAmount, formatDate, toWordUpperCase } from "@/utils/utils";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+// import BillingPdfDownload from "../billing/BillingPdfDownload";
 import CreateModal from "../billing/CreateModal";
-import ViewBilling from "../billing/ViewBilling";
 import EditModal from "../billing/EditModal";
-import BillingPdfDownload from "../billing/BillingPdfDownload";
+import ViewBilling from "../billing/ViewBilling";
+import BillingReceipt from "./BillingReceipt";
 
 // Dynamically import react-select to avoid SSR issues
 const Select = dynamic(() => import("react-select"), { ssr: false });
@@ -85,11 +80,53 @@ const BillingOverview = ({ caseInfo }: any) => {
     });
   };
 
+  // Download code
+
+  const downloadPDF = (billing: any) => {
+    const invoiceContent = document.getElementById("invoice-content");
+    if (!invoiceContent) return;
+
+    // Set the content with the selected billing data
+    setSelectedBilling(billing);
+
+    // Use setTimeout to ensure the content is updated
+    setTimeout(() => {
+      html2canvas(invoiceContent, {
+        scale: 2, // Increase quality
+        logging: false, // Disable logging
+        onclone: (document) => {
+          // Make the hidden element visible in the clone
+          const element = document.getElementById("invoice-content");
+          if (element) {
+            element.style.display = "block";
+          }
+        },
+      }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        const scale = Math.min(
+          (pageWidth - 20) / (canvas.width * 0.26458333),
+          pageHeight / (canvas.height * 0.26458333)
+        );
+
+        const imgWidth = canvas.width * 0.26458333 * scale;
+        const imgHeight = canvas.height * 0.26458333 * scale;
+
+        const xOffset = (pageWidth - imgWidth) / 2;
+        const yOffset = 10;
+
+        pdf.addImage(imgData, "PNG", xOffset, yOffset, imgWidth, imgHeight);
+        pdf.save(`invoice-${billing.billNumber}.pdf`);
+      });
+    }, 100);
+  };
+
   return (
     <>
-
-
-
       <div className="box custom-box">
         <div className="box-header">
           <div className="box-title">Billing Information</div>
@@ -105,7 +142,6 @@ const BillingOverview = ({ caseInfo }: any) => {
           </div>
         </div>
         <div className="box-body">
-
           <div className="grid grid-cols-12 gap-6">
             <div className="xl:col-span-12 col-span-12">
               <div className="">
@@ -116,10 +152,17 @@ const BillingOverview = ({ caseInfo }: any) => {
                       type="text"
                       placeholder="Search"
                       aria-label="Search"
+                      value={temporaryKeyword}
+                      onChange={(e) => setTemporaryKeyword(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          setSearch(temporaryKeyword);
+                        }
+                      }}
                     />
                     <button
                       className="ti-btn ti-btn-light !mb-0 h-[36.47px]"
-                      type="submit"
+                      onClick={() => setSearch(temporaryKeyword)}
                     >
                       Search
                     </button>
@@ -152,11 +195,11 @@ const BillingOverview = ({ caseInfo }: any) => {
                   caseInfo={caseInfo}
                 />
 
-                <BillingPdfDownload
+                {/* <BillingPdfDownload
                   setDownloadModalOpen={setDownloadModalOpen}
                   downloadModalOpen={downloadModalOpen}
                   selectedBilling={selectedBilling}
-                />
+                /> */}
 
                 <div className="box-body !p-0">
                   <div className="table-responsive">
@@ -173,7 +216,7 @@ const BillingOverview = ({ caseInfo }: any) => {
                             Bill Type
                           </th>
                           <th scope="col" className="text-start">
-                            Bill From
+                            Bill To
                           </th>
                           <th scope="col" className="text-start">
                             Date Of Reciept
@@ -229,13 +272,10 @@ const BillingOverview = ({ caseInfo }: any) => {
                                       <i className="ri-eye-line"></i>
                                     </button>
                                     <button
-                                      onClick={() => {
-                                        setDownloadModalOpen(true);
-                                        setSelectedBilling(item);
-                                      }}
-                                      aria-label="view button"
+                                      onClick={() => downloadPDF(item)}
+                                      aria-label="download button"
                                       type="button"
-                                      className="ti-btn ti-btn-sm ti-btn-danger ti-btn-icon contact-view"
+                                      className="ti-btn ti-btn-sm ti-btn-danger ti-btn-icon"
                                     >
                                       <i className="ri-download-line"></i>
                                     </button>
@@ -279,6 +319,8 @@ const BillingOverview = ({ caseInfo }: any) => {
           </div>
         </div>
       </div>
+
+      <BillingReceipt selectedBilling={selectedBilling} caseInfo={caseInfo} />
     </>
   );
 };

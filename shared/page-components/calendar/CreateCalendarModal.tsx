@@ -193,6 +193,7 @@ const CreateCalendarModal = ({ pageData, onCreateCalendar }) => {
                   type="submit"
                   className="ti-btn bg-primary text-white"
                   disabled={isSubmitting}
+                  onClick={handleSubmit}
                 >
                   {isSubmitting ? <ButtonSpinner text="Creating" /> : "Create"}
                 </button>

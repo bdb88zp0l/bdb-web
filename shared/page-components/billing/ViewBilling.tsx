@@ -1,14 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import dynamic from "next/dynamic";
-
-import { useConfig } from "@/shared/providers/ConfigProvider";
-import Modal from "@/shared/modals/Modal";
-import AddPaymentModal from "./AddPaymentModal";
 import { userPrivateRequest } from "@/config/axios.config";
-import { formatAmount, formatDate } from "@/utils/utils";
+import Modal from "@/shared/modals/Modal";
+import { useConfig } from "@/shared/providers/ConfigProvider";
 import store from "@/shared/redux/store";
+import { formatAmount, formatDate } from "@/utils/utils";
+import AddPaymentModal from "./AddPaymentModal";
 
 const ViewBilling = ({
   showModalOpen,
@@ -51,7 +49,6 @@ const ViewBilling = ({
     };
     return statusColors[status] || "bg-gray-500";
   };
-
 
   const { auth } = store.getState();
   return (
@@ -96,7 +93,6 @@ const ViewBilling = ({
                   </div>
                 </div>
 
-
                 <div className="grid grid-cols-12 gap-4">
                   <div className="col-span-4">
                     <label className="mb-2 font-bold text-[16px]">
@@ -113,7 +109,11 @@ const ViewBilling = ({
                       <span>{auth?.user?.defaultWorkspace?.email ?? ""}</span>
 
                       <label className="mb-2 font-bold">Address:</label>
-                      <span>{auth?.user?.defaultWorkspace?.addressLine1 ?? ""}<br />{auth?.user?.defaultWorkspace?.addressLine2 ?? ""}</span>
+                      <span>
+                        {auth?.user?.defaultWorkspace?.addressLine1 ?? ""}
+                        <br />
+                        {auth?.user?.defaultWorkspace?.addressLine2 ?? ""}
+                      </span>
                     </div>
                   </div>
 
@@ -126,78 +126,71 @@ const ViewBilling = ({
                       <span>{caseInfo?.client?.companyName ?? ""}</span>
 
                       <label className="mb-2 font-bold">Phone Number:</label>
-                      <span>{caseInfo?.client?.phones?.map(item => {
-                        return (
-                          <>
-                            <span>{item?.dialCode} {item?.phoneNumber}</span>
-                            <br />
-
-                          </>
-                        )
-                      })}</span>
+                      <span>
+                        {caseInfo?.client?.phones?.map((item) => {
+                          return (
+                            <>
+                              <span>
+                                {item?.dialCode} {item?.phoneNumber}
+                              </span>
+                              <br />
+                            </>
+                          );
+                        })}
+                      </span>
 
                       <label className="mb-2 font-bold">Email:</label>
-                      <span>{caseInfo?.client?.emails?.map(item => {
-                        return (
-                          <>
-                            <span>{item?.value}</span>
-                            <br />
-
-                          </>
-                        )
-                      })}</span>
+                      <span>
+                        {caseInfo?.client?.emails?.map((item) => {
+                          return (
+                            <>
+                              <span>{item?.value}</span>
+                              <br />
+                            </>
+                          );
+                        })}
+                      </span>
 
                       <label className="mb-2 font-bold">Address:</label>
-                      <span>{caseInfo?.client?.addresses?.map(address => {
-                        return (
-                          <div
-                            key={
-                              address?._id
-                            }
-                          >
-                            {`${address.houseNumber ||
-                              'N/A'
-                              }, ${address.street ||
-                              'N/A'
-                              }, ${address.city ||
-                              'N/A'
-                              }, ${address.barangay ||
-                              'N/A'
-                              }, ${address.zip ||
-                              'N/A'
-                              }, ${address.region ||
-                              'N/A'
-                              }, ${address.country ||
-                              'N/A'
-                              }`}{' '}
-                            <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
-                              {
-                                address?.label
-                              }
-                            </span>{' '}
-                          </div>
-                        )
-                      })}</span>
+                      <span>
+                        {caseInfo?.client?.addresses?.map((address) => {
+                          return (
+                            <div key={address?._id}>
+                              {`${address.houseNumber || "N/A"}, ${
+                                address.street || "N/A"
+                              }, ${address.city || "N/A"}, ${
+                                address.barangay || "N/A"
+                              }, ${address.zip || "N/A"}, ${
+                                address.region || "N/A"
+                              }, ${address.country || "N/A"}`}{" "}
+                              <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
+                                {address?.label}
+                              </span>{" "}
+                            </div>
+                          );
+                        })}
+                      </span>
                     </div>
                   </div>
 
                   <div className="col-span-4">
-
-
                     <label className="mb-2 font-bold text-[16px]">
                       Summary:
                     </label>
                     <div className="col-span-12 grid grid-cols-2 gap-x-4">
                       <label className="mb-2 font-bold">Billing Type:</label>
-                      <span>{selectedBilling?.billingType}
-                      </span>
+                      <span>{selectedBilling?.billingType}</span>
                       <label className="mb-2 font-bold">Billing Date:</label>
-                      <span>{formatDate(selectedBilling?.billingStart)}
+                      <span>
+                        {formatDate(selectedBilling?.billingStart)}
 
-                        {selectedBilling?.billingType == "timeBased" && <span> - {formatDate(selectedBilling?.billingEnd)}  </span>}
+                        {selectedBilling?.billingType == "timeBased" && (
+                          <span>
+                            {" "}
+                            - {formatDate(selectedBilling?.billingEnd)}{" "}
+                          </span>
+                        )}
                       </span>
-
-
                     </div>
                   </div>
                 </div>
@@ -233,7 +226,7 @@ const ViewBilling = ({
                       </thead>
                       <tbody>
                         {selectedBilling?.items &&
-                          selectedBilling.items.length > 0 ? (
+                        selectedBilling.items.length > 0 ? (
                           selectedBilling.items.map((billing, index) => (
                             <tr className="border-b" key={billing._id}>
                               <td className="p-3">{index + 1}</td>
@@ -373,23 +366,24 @@ const ViewBilling = ({
               </div>
             </div>
             <div className="ti-modal-footer">
-              <button
+              {/* <button
                 onClick={() => {
                   downloadPDF;
                 }}
                 className="ti-btn ti-btn-primary-full py-2 px-4"
               >
                 Download
-              </button>
+              </button> */}
 
-              {selectedBilling?.status !== "paid" &&
+              {selectedBilling?.status !== "paid" && (
                 <button
                   onClick={() => setAddPaymentModal(true)}
                   className="ti-btn ti-btn-primary-full py-2 px-4"
-                // disabled={selectedBilling?.status === "paid"}
+                  // disabled={selectedBilling?.status === "paid"}
                 >
                   Add Payment
-                </button>}
+                </button>
+              )}
               <button
                 type="button"
                 className="hs-dropdown-toggle ti-btn ti-btn-light align-middle"
