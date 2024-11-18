@@ -195,7 +195,7 @@ const BillingOverview = ({ caseInfo }: any) => {
                             Bill Type
                           </th>
                           <th scope="col" className="text-start">
-                            Bill From
+                            Bill To
                           </th>
                           <th scope="col" className="text-start">
                             Date Of Reciept

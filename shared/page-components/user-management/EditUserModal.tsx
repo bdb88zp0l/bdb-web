@@ -9,15 +9,15 @@
  * @returns {React.ReactElement} The rendered modal component for editing a user.
  */
 
-import React, { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
-import { toast } from "react-toastify";
 import { userPrivateRequest } from "@/config/axios.config";
 import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
 import Modal from "@/shared/modals/Modal";
-import { useSelector } from "react-redux";
 import TwoFASetupModal from "@/shared/modals/TwoFASetupModal";
-import { toWordUpperCase } from "@/utils/utils";
+import { formatDate, toWordUpperCase } from "@/utils/utils";
+import dynamic from "next/dynamic";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 // Dynamically import react-select to avoid SSR issues
 const Select = dynamic(() => import("react-select"), { ssr: false });
@@ -357,7 +357,7 @@ const EditUserModal = ({
                     className="form-control"
                     id="createdat"
                     placeholder="Created At"
-                    value={data?.createdAt || ""}
+                    value={formatDate(data?.createdAt || "")}
                     onChange={(e) =>
                       setData({ ...data, createdAt: e.target.value })
                     }
