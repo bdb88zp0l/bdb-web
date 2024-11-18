@@ -94,7 +94,7 @@ export const MenuItems: any = [
     permission: "file_manager.read",
   },
   {
-    title: "HRM",
+    title: "HR",
     icon: HrIcon,
     type: "sub",
     menusub: true,

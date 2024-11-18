@@ -11,8 +11,8 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false })
 const Hrm = () => {
     return (
         <Fragment>
-            <Seo title={"HRM"} />
-            <Pageheader currentpage="HRM" activepage="Dashboards" mainpage="HRM" />
+            <Seo title={"HR"} />
+            <Pageheader currentpage="HR" activepage="Dashboards" mainpage="HR" />
             <div className="grid grid-cols-12 gap-x-6">
                 <div className="xxl:col-span-5 xl:col-span-12 col-span-12">
                     <div className="grid grid-cols-12 gap-x-6">
