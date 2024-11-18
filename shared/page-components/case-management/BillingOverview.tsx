@@ -152,10 +152,17 @@ const BillingOverview = ({ caseInfo }: any) => {
                       type="text"
                       placeholder="Search"
                       aria-label="Search"
+                      value={temporaryKeyword}
+                      onChange={(e) => setTemporaryKeyword(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          setSearch(temporaryKeyword);
+                        }
+                      }}
                     />
                     <button
                       className="ti-btn ti-btn-light !mb-0 h-[36.47px]"
-                      type="submit"
+                      onClick={() => setSearch(temporaryKeyword)}
                     >
                       Search
                     </button>
@@ -313,10 +320,7 @@ const BillingOverview = ({ caseInfo }: any) => {
         </div>
       </div>
 
-      <BillingReceipt
-        selectedBilling={selectedBilling}
-        caseInfo={caseInfo}
-      />
+      <BillingReceipt selectedBilling={selectedBilling} caseInfo={caseInfo} />
     </>
   );
 };

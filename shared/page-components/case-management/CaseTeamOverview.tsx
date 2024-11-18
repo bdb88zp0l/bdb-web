@@ -366,24 +366,6 @@ const CaseTeamOverview = ({
                     }}
                   />
                 </div>
-
-                <div className="col-span-12">
-                  <label className="form-label">
-                    Rate ({data.defaultBillingType ?? ""})
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="Rate"
-                    value={addMemberData?.rate}
-                    onChange={(e: any) => {
-                      setAddMemberData({
-                        ...addMemberData,
-                        rate: Number(e.target.value),
-                      });
-                    }}
-                  />
-                </div>
               </div>
             </div>
             <div className="ti-modal-footer">

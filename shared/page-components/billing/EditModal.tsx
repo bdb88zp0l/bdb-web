@@ -121,6 +121,12 @@ const EditModal = ({
   const config = useConfig();
 
   const { auth } = store.getState();
+
+  const billingTypeOptions = [
+    { value: "oneTime", label: "One Time Billing" },
+    { value: "milestone", label: "Stage Billing" },
+    { value: "timeBased", label: "Based on time billing" },
+  ];
   return (
     <>
       <Modal isOpen={editModalOpen} close={closeModal}>
@@ -143,7 +149,6 @@ const EditModal = ({
               </button>
             </div>
             <div className="ti-modal-body px-4 overflow-y-auto">
-
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-4">
                   <label className="mb-2 font-bold text-[16px]">
@@ -160,71 +165,65 @@ const EditModal = ({
                     <span>{auth?.user?.defaultWorkspace?.email ?? ""}</span>
 
                     <label className="mb-2 font-bold">Address:</label>
-                    <span>{auth?.user?.defaultWorkspace?.addressLine1 ?? ""}<br />{auth?.user?.defaultWorkspace?.addressLine2 ?? ""}</span>
+                    <span>
+                      {auth?.user?.defaultWorkspace?.addressLine1 ?? ""}
+                      <br />
+                      {auth?.user?.defaultWorkspace?.addressLine2 ?? ""}
+                    </span>
                   </div>
                 </div>
 
                 <div className="col-span-4">
-                  <label className="mb-2 font-bold text-[16px]">
-                    Bill To:
-                  </label>
+                  <label className="mb-2 font-bold text-[16px]">Bill To:</label>
                   <div className="col-span-12 grid grid-cols-2 gap-x-4">
                     <label className="mb-2 font-bold">Name:</label>
                     <span>{caseInfo?.client?.companyName ?? ""}</span>
 
                     <label className="mb-2 font-bold">Phone Number:</label>
-                    <span>{caseInfo?.client?.phones?.map(item => {
-                      return (
-                        <>
-                          <span>{item?.dialCode} {item?.phoneNumber}</span>
-                          <br />
-
-                        </>
-                      )
-                    })}</span>
+                    <span>
+                      {caseInfo?.client?.phones?.map((item) => {
+                        return (
+                          <>
+                            <span>
+                              {item?.dialCode} {item?.phoneNumber}
+                            </span>
+                            <br />
+                          </>
+                        );
+                      })}
+                    </span>
 
                     <label className="mb-2 font-bold">Email:</label>
-                    <span>{caseInfo?.client?.emails?.map(item => {
-                      return (
-                        <>
-                          <span>{item?.value}</span>
-                          <br />
-
-                        </>
-                      )
-                    })}</span>
+                    <span>
+                      {caseInfo?.client?.emails?.map((item) => {
+                        return (
+                          <>
+                            <span>{item?.value}</span>
+                            <br />
+                          </>
+                        );
+                      })}
+                    </span>
 
                     <label className="mb-2 font-bold">Address:</label>
-                    <span>{caseInfo?.client?.addresses?.map(address => {
-                      return (
-                        <div
-                          key={
-                            address?._id
-                          }
-                        >
-                          {`${address.houseNumber ||
-                            'N/A'
-                            }, ${address.street ||
-                            'N/A'
-                            }, ${address.city ||
-                            'N/A'
-                            }, ${address.barangay ||
-                            'N/A'
-                            }, ${address.zip ||
-                            'N/A'
-                            }, ${address.region ||
-                            'N/A'
-                            }, ${address.country ||
-                            'N/A'
-                            }`}{' '}
-                          <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
-                            {
-                              address?.label
-                            }
-                          </span>{' '}
-                        </div>
-                      )
-                    })}</span>
+                    <span>
+                      {caseInfo?.client?.addresses?.map((address) => {
+                        return (
+                          <div key={address?._id}>
+                            {`${address.houseNumber || "N/A"}, ${
+                              address.street || "N/A"
+                            }, ${address.city || "N/A"}, ${
+                              address.barangay || "N/A"
+                            }, ${address.zip || "N/A"}, ${
+                              address.region || "N/A"
+                            }, ${address.country || "N/A"}`}{" "}
+                            <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
+                              {address?.label}
+                            </span>{" "}
+                          </div>
+                        );
+                      })}
+                    </span>
                   </div>
                 </div>
 
@@ -265,15 +264,14 @@ const EditModal = ({
                     </label>
                     <Select
                       name="billingType"
-                      options={[
-                        { value: "oneTime", label: "One Time Billing" },
-                        { value: "milestone", label: "Stage Billing" },
-                        { value: "timeBased", label: "Based on time billing" },
-                      ]}
+                      options={billingTypeOptions}
                       className="basic-multi-select"
                       menuPlacement="auto"
                       classNamePrefix="Select2"
                       placeholder="Select Billing Type"
+                      value={billingTypeOptions.find(
+                        (option) => option.value === data?.billingType
+                      )}
                       onChange={(e: any) => {
                         setData({ ...data, billingType: e.value });
                       }}
@@ -297,7 +295,7 @@ const EditModal = ({
                       />
                     </div>
 
-                    {data?.billingType == "timeBased" &&
+                    {data?.billingType == "timeBased" && (
                       <div className="mb-4 col-span-6">
                         <label htmlFor="billingEnd" className="form-label">
                           Billing End
@@ -313,7 +311,8 @@ const EditModal = ({
                           }}
                           dateFormat="MMMM d, yyyy"
                         />
-                      </div>}
+                      </div>
+                    )}
                     <div className="mb-4 col-span-6">
                       <label htmlFor="dueDate" className="form-label">
                         Due Date
@@ -335,8 +334,7 @@ const EditModal = ({
               </div>
 
               <div className="co-span-12 border border-defaultborder crm-contact p-2">
-
-                {data?.billingType !== "timeBased" &&
+                {data?.billingType !== "timeBased" && (
                   <div className="flex justify-end">
                     <button
                       className="ti-btn ti-btn-primary-full py-2 px-4"
@@ -346,7 +344,8 @@ const EditModal = ({
                     >
                       + Add item
                     </button>
-                  </div>}
+                  </div>
+                )}
                 <div className="table-responsive">
                   <table className="table whitespace-nowrap min-w-full">
                     <thead>
