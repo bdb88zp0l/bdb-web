@@ -115,6 +115,12 @@ const EditModal = ({
   const config = useConfig();
 
   const { auth } = store.getState();
+
+  const billingTypeOptions = [
+    { value: "oneTime", label: "One Time Billing" },
+    { value: "milestone", label: "Stage Billing" },
+    { value: "timeBased", label: "Based on time billing" },
+  ];
   return (
     <>
       <Modal isOpen={editModalOpen} close={closeModal}>
@@ -252,15 +258,14 @@ const EditModal = ({
                     </label>
                     <Select
                       name="billingType"
-                      options={[
-                        { value: "oneTime", label: "One Time Billing" },
-                        { value: "milestone", label: "Stage Billing" },
-                        { value: "timeBased", label: "Based on time billing" },
-                      ]}
+                      options={billingTypeOptions}
                       className="basic-multi-select"
                       menuPlacement="auto"
                       classNamePrefix="Select2"
                       placeholder="Select Billing Type"
+                      value={billingTypeOptions.find(
+                        (option) => option.value === data?.billingType
+                      )}
                       onChange={(e: any) => {
                         setData({ ...data, billingType: e.value });
                       }}
