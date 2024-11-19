@@ -130,7 +130,7 @@ const CreateModal = ({
           let abc = response?.data?.data ?? [];
           let tempItems = abc?.map((item) => {
             return {
-              particulars: item?.title ?? "",
+              particulars: item?.task ?? "",
               quantity: item?.hourCount ?? 0,
               price: item?.hourlyRate ?? 0,
               discount: 0,
@@ -145,7 +145,7 @@ const CreateModal = ({
         .catch((error) => {
           console.log(error?.message);
         })
-        .finally(() => {});
+        .finally(() => { });
     }
   };
 
@@ -239,13 +239,10 @@ const CreateModal = ({
                       {caseInfo?.client?.addresses?.map((address) => {
                         return (
                           <div key={address?._id}>
-                            {`${address.houseNumber || "N/A"}, ${
-                              address.street || "N/A"
-                            }, ${address.city || "N/A"}, ${
-                              address.barangay || "N/A"
-                            }, ${address.zip || "N/A"}, ${
-                              address.region || "N/A"
-                            }, ${address.country || "N/A"}`}{" "}
+                            {`${address.houseNumber || "N/A"}, ${address.street || "N/A"
+                              }, ${address.city || "N/A"}, ${address.barangay || "N/A"
+                              }, ${address.zip || "N/A"}, ${address.region || "N/A"
+                              }, ${address.country || "N/A"}`}{" "}
                             <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
                               {address?.label}
                             </span>{" "}
