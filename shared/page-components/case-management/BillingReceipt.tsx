@@ -14,7 +14,6 @@ const BillingReceipt: React.FC<BillingReceiptProps> = ({
   caseInfo,
 }) => {
   const { auth } = store.getState();
-
   return (
     <div
       id="invoice-content"
@@ -40,7 +39,7 @@ const BillingReceipt: React.FC<BillingReceiptProps> = ({
           <h4 className="text-xl font-semibold">BILLING INVOICE</h4>
           <p className="text-black">Invoice No: {selectedBilling?.title}</p>
           <p className="text-black">
-            Date: {formatDate(selectedBilling?.date)}
+            Date: {formatDate(selectedBilling?.billingStart)}
           </p>
           <p className="text-black">
             Our Ref: {formatDate(selectedBilling?.dueDate)}

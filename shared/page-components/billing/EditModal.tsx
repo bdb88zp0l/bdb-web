@@ -151,50 +151,34 @@ const EditModal = ({
             <div className="ti-modal-body px-4 overflow-y-auto">
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-4">
-                  <div className="flex justify-center mb-4">
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLuenhuyfEyo4EI0HUoAjPpmT1rAsSUeYtbA&s"
-                      alt="Logo"
-                      className="h-12 w-auto" 
-                    />
-                  </div>
-
+                  {/* <label className="mb-2 font-bold text-[16px]">Bill From:</label> */}
                   <div className="col-span-12 flex flex-col gap-4">
-
-
+                    {/* <label className="mb-2 font-bold">Name:</label> */}
                     <span>{auth?.user?.defaultWorkspace?.name ?? ""}</span>
 
-
+                    {/* <label className="mb-2 font-bold">Phone Number:</label> */}
                     <span>{auth?.user?.defaultWorkspace?.phone ?? ""}</span>
 
-
+                    {/* <label className="mb-2 font-bold">Email:</label> */}
                     <span>{auth?.user?.defaultWorkspace?.email ?? ""}</span>
 
-
+                    {/* <label className="mb-2 font-bold">Address:</label> */}
                     <span>
                       {auth?.user?.defaultWorkspace?.addressLine1 ?? ""}
                       <br />
                       {auth?.user?.defaultWorkspace?.addressLine2 ?? ""}
                     </span>
-
                   </div>
                 </div>
-                
+
+
                 <div className="col-span-4">
-                  <div className="flex justify-center mb-4">
-                    <img
-                      src="logo"
-                      alt="Logo"
-                      className="h-12 w-auto"
-                    />
-                  </div>
-
+                  {/* <label className="mb-2 font-bold text-[16px]">Bill To:</label> */}
                   <div className="col-span-12 flex flex-col gap-4">
-
-
+                    {/* <label className="mb-2 font-bold">Name:</label> */}
                     <span>{caseInfo?.client?.companyName ?? ""}</span>
 
-
+                    {/* <label className="mb-2 font-bold">Phone Number:</label> */}
                     <span>
                       {caseInfo?.client?.phones?.map((item, index) => (
                         <React.Fragment key={index}>
@@ -204,7 +188,7 @@ const EditModal = ({
                       ))}
                     </span>
 
-
+                    {/* <label className="mb-2 font-bold">Email:</label> */}
                     <span>
                       {caseInfo?.client?.emails?.map((item, index) => (
                         <React.Fragment key={index}>
@@ -214,14 +198,14 @@ const EditModal = ({
                       ))}
                     </span>
 
-
+                    {/* <label className="mb-2 font-bold">Address:</label> */}
                     <span>
-                      {caseInfo?.client?.addresses?.map((address) => (
-                        <div key={address?._id}>
+                      {caseInfo?.client?.addresses?.map((address, index) => (
+                        <div key={index}>
                           {`${address.houseNumber || "N/A"}, ${address.street || "N/A"}, 
-            ${address.city || "N/A"}, ${address.barangay || "N/A"}, 
-            ${address.zip || "N/A"}, ${address.region || "N/A"}, 
-            ${address.country || "N/A"}`}{" "}
+          ${address.city || "N/A"}, ${address.barangay || "N/A"}, 
+          ${address.zip || "N/A"}, ${address.region || "N/A"}, 
+          ${address.country || "N/A"}`}
                           <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
                             {address?.label}
                           </span>
@@ -230,6 +214,7 @@ const EditModal = ({
                     </span>
                   </div>
                 </div>
+
 
 
                 <div className="col-span-4">

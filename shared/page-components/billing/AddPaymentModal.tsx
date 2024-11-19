@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
+import { formatAmount } from "@/utils/utils";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
@@ -79,8 +80,11 @@ const AddPaymentModal = ({
 
     await userPrivateRequest.post("/api/payments", payload).then(response => {
 
-      toast.success("Payment added successfully");
-      setAddPaymentModal(false)
+      toast.success("Payment added successfully", {
+        style: {
+          zIndex: 9999
+        }
+      });
       closeModal();
       fetchPayments();
       fetchBillings();
@@ -89,6 +93,7 @@ const AddPaymentModal = ({
       toast.error(error?.message)
     }).finally(() => {
       setIsSubmitting(false)
+      setAddPaymentModal(false)
     });
   };
 
@@ -105,9 +110,9 @@ const AddPaymentModal = ({
             <button
               type="button"
               className="hs-dropdown-toggle !text-[1rem] !font-semibold !text-defaulttextcolor"
-             onClick={()=>{
-              closeModal()
-             }}
+              onClick={() => {
+                closeModal()
+              }}
             >
               <span className="sr-only">Close</span>
               <i className="ri-close-line"></i>
@@ -120,15 +125,15 @@ const AddPaymentModal = ({
               <div className="xl:col-span-12 col-span-12 bg-gray-50 p-4 rounded-md">
                 <div className="flex justify-between mb-2">
                   <span>Total Amount:</span>
-                  <span>${selectedBilling?.grandTotal}</span>
+                  <span>{formatAmount(selectedBilling?.grandTotal)}</span>
                 </div>
                 <div className="flex justify-between mb-2">
                   <span>Already Paid:</span>
-                  <span>${selectedBilling?.totalPaid}</span>
+                  <span>{formatAmount(selectedBilling?.totalPaid)}</span>
                 </div>
                 <div className="flex justify-between font-semibold">
                   <span>Due Amount:</span>
-                  <span>${selectedBilling?.dueAmount}</span>
+                  <span>{formatAmount(selectedBilling?.dueAmount)}</span>
                 </div>
               </div>
 

@@ -197,6 +197,8 @@ const BillingOverview = ({ caseInfo }: any) => {
                   selectedBilling={selectedBilling}
                   fetchBillings={fetchBillings}
                   caseInfo={caseInfo}
+                  downloadPDF={downloadPDF}
+
                 />
                 <EditModal
                   editModalOpen={editModalOpen}

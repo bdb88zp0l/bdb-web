@@ -98,20 +98,18 @@ const ViewBilling = ({
 
                 <div className="grid grid-cols-12 gap-4">
                   <div className="col-span-4">
-                    <label className="mb-2 font-bold text-[16px]">
-                      Bill From:
-                    </label>
-                    <div className="col-span-12 grid grid-cols-2 gap-x-4">
-                      <label className="mb-2 font-bold">Name:</label>
+                    {/* <label className="mb-2 font-bold text-[16px]">Bill From:</label> */}
+                    <div className="col-span-12 flex flex-col gap-4">
+                      {/* <label className="mb-2 font-bold">Name:</label> */}
                       <span>{auth?.user?.defaultWorkspace?.name ?? ""}</span>
 
-                      <label className="mb-2 font-bold">Phone Number:</label>
+                      {/* <label className="mb-2 font-bold">Phone Number:</label> */}
                       <span>{auth?.user?.defaultWorkspace?.phone ?? ""}</span>
 
-                      <label className="mb-2 font-bold">Email:</label>
+                      {/* <label className="mb-2 font-bold">Email:</label> */}
                       <span>{auth?.user?.defaultWorkspace?.email ?? ""}</span>
 
-                      <label className="mb-2 font-bold">Address:</label>
+                      {/* <label className="mb-2 font-bold">Address:</label> */}
                       <span>
                         {auth?.user?.defaultWorkspace?.addressLine1 ?? ""}
                         <br />
@@ -120,71 +118,62 @@ const ViewBilling = ({
                     </div>
                   </div>
 
+
                   <div className="col-span-4">
-                    <label className="mb-2 font-bold text-[16px]">
-                      Bill To:
-                    </label>
-                    <div className="col-span-12 grid grid-cols-2 gap-x-4">
-                      <label className="mb-2 font-bold">Name:</label>
+                    {/* <label className="mb-2 font-bold text-[16px]">Bill To:</label> */}
+                    <div className="col-span-12 flex flex-col gap-4">
+                      {/* <label className="mb-2 font-bold">Name:</label> */}
                       <span>{caseInfo?.client?.companyName ?? ""}</span>
 
-                      <label className="mb-2 font-bold">Phone Number:</label>
+                      {/* <label className="mb-2 font-bold">Phone Number:</label> */}
                       <span>
-                        {caseInfo?.client?.phones?.map((item) => {
-                          return (
-                            <>
-                              <span>
-                                {item?.dialCode} {item?.phoneNumber}
-                              </span>
-                              <br />
-                            </>
-                          );
-                        })}
+                        {caseInfo?.client?.phones?.map((item, index) => (
+                          <div key={index}>
+                            <span>{item?.dialCode} {item?.phoneNumber}</span>
+                            <br />
+                          </div>
+                        ))}
                       </span>
 
-                      <label className="mb-2 font-bold">Email:</label>
+                      {/* <label className="mb-2 font-bold">Email:</label> */}
                       <span>
-                        {caseInfo?.client?.emails?.map((item) => {
-                          return (
-                            <>
-                              <span>{item?.value}</span>
-                              <br />
-                            </>
-                          );
-                        })}
+                        {caseInfo?.client?.emails?.map((item, index) => (
+                          <div key={index}>
+                            <span>{item?.value}</span>
+                            <br />
+                          </div>
+                        ))}
                       </span>
 
-                      <label className="mb-2 font-bold">Address:</label>
+                      {/* <label className="mb-2 font-bold">Address:</label> */}
                       <span>
-                        {caseInfo?.client?.addresses?.map((address) => {
-                          return (
-                            <div key={address?._id}>
-                              {`${address.houseNumber || "N/A"}, ${address.street || "N/A"
-                                }, ${address.city || "N/A"}, ${address.barangay || "N/A"
-                                }, ${address.zip || "N/A"}, ${address.region || "N/A"
-                                }, ${address.country || "N/A"}`}{" "}
-                              <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
-                                {address?.label}
-                              </span>{" "}
-                            </div>
-                          );
-                        })}
+                        {caseInfo?.client?.addresses?.map((address, index) => (
+                          <div key={index}>
+                            {`${address.houseNumber || "N/A"}, ${address.street || "N/A"}, 
+          ${address.city || "N/A"}, ${address.barangay || "N/A"}, 
+          ${address.zip || "N/A"}, ${address.region || "N/A"}, 
+          ${address.country || "N/A"}`}
+                            <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
+                              {address?.label}
+                            </span>
+                          </div>
+                        ))}
                       </span>
                     </div>
                   </div>
 
+
                   <div className="col-span-4">
-                    <label className="mb-2 font-bold text-[16px]">
-                      Summary:
-                    </label>
-                    <div className="col-span-12 grid grid-cols-2 gap-x-4">
-                      <label className="mb-2 font-bold">Billing Type:</label>
+                    {/* <label className="mb-2 font-bold text-[16px]">Summary:</label> */}
+                    <div className="col-span-12 flex flex-col gap-4">
+                      {/* <label className="mb-2 font-bold">Billing Type:</label> */}
                       <span>{selectedBilling?.billingType}</span>
-                      <label className="mb-2 font-bold">Billing Date:</label>
+
+                      {/* <label className="mb-2 font-bold">Billing Date:</label> */}
                       <span>
                         {formatDate(selectedBilling?.billingStart)}
 
-                        {selectedBilling?.billingType == "timeBased" && (
+                        {selectedBilling?.billingType === "timeBased" && (
                           <span>
                             {" "}
                             - {formatDate(selectedBilling?.billingEnd)}{" "}
@@ -193,6 +182,7 @@ const ViewBilling = ({
                       </span>
                     </div>
                   </div>
+
                 </div>
 
                 <div className="mb-6">
@@ -366,14 +356,14 @@ const ViewBilling = ({
               </div>
             </div>
             <div className="ti-modal-footer">
-              {/* <button
+              <button
                 onClick={() => {
-                  downloadPDF;
+                  downloadPDF(selectedBilling)
                 }}
                 className="ti-btn ti-btn-primary-full py-2 px-4"
               >
                 Download
-              </button> */}
+              </button>
 
               {selectedBilling?.status !== "paid" && (
                 <button
