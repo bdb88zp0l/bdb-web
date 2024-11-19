@@ -100,7 +100,7 @@ const BillingPdf = ({
                       Invoice No: {selectedBilling?.title}
                     </p>
                     <p className="text-black">
-                      Date: {formatDate(selectedBilling?.date)}
+                      Date: {formatDate(selectedBilling?.billingStart)}
                     </p>
                     <p className="text-black">
                       Our Ref: {formatDate(selectedBilling?.dueDate)}

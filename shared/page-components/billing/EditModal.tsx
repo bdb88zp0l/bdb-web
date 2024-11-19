@@ -2,12 +2,18 @@
 import { userPrivateRequest } from "@/config/axios.config";
 import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
 import Modal from "@/shared/modals/Modal";
-import { useConfig } from "@/shared/providers/ConfigProvider";
-import store from "@/shared/redux/store";
-import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import DatePicker from "react-datepicker";
+import CompanyForm from "../contacts/components/CompanyForm";
+import PhoneForm from "../contacts/components/PhoneForm";
+import AddressForm from "../contacts/components/AddressForm";
+import moment from "moment";
+import { useConfig } from "@/shared/providers/ConfigProvider";
+import { getImageUrl, toWordUpperCase } from "@/utils/utils";
+import store from "@/shared/redux/store";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
@@ -145,81 +151,86 @@ const EditModal = ({
             <div className="ti-modal-body px-4 overflow-y-auto">
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-4">
-                  <label className="mb-2 font-bold text-[16px]">
-                    Bill From:
-                  </label>
-                  <div className="col-span-12 grid grid-cols-2 gap-x-4">
-                    <label className="mb-2 font-bold">Name:</label>
+                  <div className="flex justify-center mb-4">
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLuenhuyfEyo4EI0HUoAjPpmT1rAsSUeYtbA&s"
+                      alt="Logo"
+                      className="h-12 w-auto" 
+                    />
+                  </div>
+
+                  <div className="col-span-12 flex flex-col gap-4">
+
+
                     <span>{auth?.user?.defaultWorkspace?.name ?? ""}</span>
 
-                    <label className="mb-2 font-bold">Phone Number:</label>
+
                     <span>{auth?.user?.defaultWorkspace?.phone ?? ""}</span>
 
-                    <label className="mb-2 font-bold">Email:</label>
+
                     <span>{auth?.user?.defaultWorkspace?.email ?? ""}</span>
 
-                    <label className="mb-2 font-bold">Address:</label>
+
                     <span>
                       {auth?.user?.defaultWorkspace?.addressLine1 ?? ""}
                       <br />
                       {auth?.user?.defaultWorkspace?.addressLine2 ?? ""}
                     </span>
+
                   </div>
                 </div>
-
+                
                 <div className="col-span-4">
-                  <label className="mb-2 font-bold text-[16px]">Bill To:</label>
-                  <div className="col-span-12 grid grid-cols-2 gap-x-4">
-                    <label className="mb-2 font-bold">Name:</label>
+                  <div className="flex justify-center mb-4">
+                    <img
+                      src="logo"
+                      alt="Logo"
+                      className="h-12 w-auto"
+                    />
+                  </div>
+
+                  <div className="col-span-12 flex flex-col gap-4">
+
+
                     <span>{caseInfo?.client?.companyName ?? ""}</span>
 
-                    <label className="mb-2 font-bold">Phone Number:</label>
+
                     <span>
-                      {caseInfo?.client?.phones?.map((item) => {
-                        return (
-                          <>
-                            <span>
-                              {item?.dialCode} {item?.phoneNumber}
-                            </span>
-                            <br />
-                          </>
-                        );
-                      })}
+                      {caseInfo?.client?.phones?.map((item, index) => (
+                        <React.Fragment key={index}>
+                          <span>{item?.dialCode} {item?.phoneNumber}</span>
+                          <br />
+                        </React.Fragment>
+                      ))}
                     </span>
 
-                    <label className="mb-2 font-bold">Email:</label>
+
                     <span>
-                      {caseInfo?.client?.emails?.map((item) => {
-                        return (
-                          <>
-                            <span>{item?.value}</span>
-                            <br />
-                          </>
-                        );
-                      })}
+                      {caseInfo?.client?.emails?.map((item, index) => (
+                        <React.Fragment key={index}>
+                          <span>{item?.value}</span>
+                          <br />
+                        </React.Fragment>
+                      ))}
                     </span>
 
-                    <label className="mb-2 font-bold">Address:</label>
+
                     <span>
-                      {caseInfo?.client?.addresses?.map((address) => {
-                        return (
-                          <div key={address?._id}>
-                            {`${address.houseNumber || "N/A"}, ${
-                              address.street || "N/A"
-                            }, ${address.city || "N/A"}, ${
-                              address.barangay || "N/A"
-                            }, ${address.zip || "N/A"}, ${
-                              address.region || "N/A"
-                            }, ${address.country || "N/A"}`}{" "}
-                            <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
-                              {address?.label}
-                            </span>{" "}
-                          </div>
-                        );
-                      })}
+                      {caseInfo?.client?.addresses?.map((address) => (
+                        <div key={address?._id}>
+                          {`${address.houseNumber || "N/A"}, ${address.street || "N/A"}, 
+            ${address.city || "N/A"}, ${address.barangay || "N/A"}, 
+            ${address.zip || "N/A"}, ${address.region || "N/A"}, 
+            ${address.country || "N/A"}`}{" "}
+                          <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
+                            {address?.label}
+                          </span>
+                        </div>
+                      ))}
                     </span>
                   </div>
                 </div>
+
 
                 <div className="col-span-4">
                   <div className="mb-4">

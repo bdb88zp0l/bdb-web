@@ -48,6 +48,7 @@ const AddPaymentModal = ({
 
   const closeModal = () => {
     setAddPaymentModal(false);
+    console.log('closeModal')
     // Reset form
     setData({
       billingId: selectedBilling?._id,
@@ -92,7 +93,9 @@ const AddPaymentModal = ({
   };
 
   return (
-    <Modal isOpen={addPaymentModal} close={closeModal}>
+    <Modal isOpen={addPaymentModal} close={() => {
+      setAddPaymentModal
+    }}>
       <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
         <div className="max-h-full w-full overflow-hidden ti-modal-content">
           <div className="ti-modal-header">
@@ -102,7 +105,9 @@ const AddPaymentModal = ({
             <button
               type="button"
               className="hs-dropdown-toggle !text-[1rem] !font-semibold !text-defaulttextcolor"
-              onClick={closeModal}
+             onClick={()=>{
+              closeModal()
+             }}
             >
               <span className="sr-only">Close</span>
               <i className="ri-close-line"></i>

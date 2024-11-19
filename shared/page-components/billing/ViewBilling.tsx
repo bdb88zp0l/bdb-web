@@ -54,13 +54,16 @@ const ViewBilling = ({
   return (
     <>
       <Modal isOpen={showModalOpen} close={() => setShowModalOpen(false)}>
-        <AddPaymentModal
-          addPaymentModal={addPaymentModal}
-          setAddPaymentModal={setAddPaymentModal}
-          fetchPayments={fetchPayments}
-          selectedBilling={selectedBilling}
-          fetchBillings={fetchBillings}
-        />
+
+        {addPaymentModal &&
+          <AddPaymentModal
+            addPaymentModal={addPaymentModal}
+            setAddPaymentModal={setAddPaymentModal}
+            fetchPayments={fetchPayments}
+            selectedBilling={selectedBilling}
+            fetchBillings={fetchBillings}
+          />
+        }
 
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center  min-w-[calc(100%-3.5rem)]">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">
@@ -156,13 +159,10 @@ const ViewBilling = ({
                         {caseInfo?.client?.addresses?.map((address) => {
                           return (
                             <div key={address?._id}>
-                              {`${address.houseNumber || "N/A"}, ${
-                                address.street || "N/A"
-                              }, ${address.city || "N/A"}, ${
-                                address.barangay || "N/A"
-                              }, ${address.zip || "N/A"}, ${
-                                address.region || "N/A"
-                              }, ${address.country || "N/A"}`}{" "}
+                              {`${address.houseNumber || "N/A"}, ${address.street || "N/A"
+                                }, ${address.city || "N/A"}, ${address.barangay || "N/A"
+                                }, ${address.zip || "N/A"}, ${address.region || "N/A"
+                                }, ${address.country || "N/A"}`}{" "}
                               <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
                                 {address?.label}
                               </span>{" "}
@@ -226,7 +226,7 @@ const ViewBilling = ({
                       </thead>
                       <tbody>
                         {selectedBilling?.items &&
-                        selectedBilling.items.length > 0 ? (
+                          selectedBilling.items.length > 0 ? (
                           selectedBilling.items.map((billing, index) => (
                             <tr className="border-b" key={billing._id}>
                               <td className="p-3">{index + 1}</td>
@@ -379,7 +379,7 @@ const ViewBilling = ({
                 <button
                   onClick={() => setAddPaymentModal(true)}
                   className="ti-btn ti-btn-primary-full py-2 px-4"
-                  // disabled={selectedBilling?.status === "paid"}
+                // disabled={selectedBilling?.status === "paid"}
                 >
                   Add Payment
                 </button>
