@@ -168,8 +168,19 @@ const ViewBilling = ({
                       Summary:
                     </label>
                     <div className="col-span-12 grid grid-cols-2 gap-x-4">
+                      <label className="mb-2 font-bold">Currency:</label>
+
+                      <span>{selectedBilling?.currency}
+                      </span>
                       <label className="mb-2 font-bold">Billing Type:</label>
-                      <span>{selectedBilling?.billingType}</span>
+
+                      <span>{selectedBilling?.billingType == "oneTime"
+                        ? "One Time Billing"
+                        : selectedBilling?.billingType == "progressBased"
+                          ? "Progress Billing" :
+                          selectedBilling?.billingType == "taskBased" ? "Task-Based Billing"
+                            : "Time-Based Billing"}
+                      </span>
                       <label className="mb-2 font-bold">Billing Date:</label>
                       <span>
                         {formatDate(selectedBilling?.billingStart)}
@@ -402,7 +413,7 @@ const ViewBilling = ({
             </div>
           </div>
         </div>
-      </Modal>
+      </Modal >
     </>
   );
 };
