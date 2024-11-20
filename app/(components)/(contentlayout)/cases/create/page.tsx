@@ -170,13 +170,13 @@ const CreateCase = () => {
                 </div>
                 <div className="xl:col-span-4 col-span-12">
                   <label htmlFor="input-label" className="form-label">
-                    Title :
+                    Matter :
                   </label>
                   <input
                     type="text"
                     className="form-control"
                     id="input-label"
-                    placeholder="Enter Title"
+                    placeholder="Enter Matter"
                     onChange={(e) => {
                       setData({
                         ...data,

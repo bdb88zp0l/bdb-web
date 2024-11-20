@@ -140,14 +140,14 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
               </div>
               <div className="box-body">
                 <div className="text-[.9375rem] font-semibold mb-2">
-                  Case Title :
+                  Matter :
                 </div>
                 {isEdit ? (
                   <input
                     type="text"
                     className="form-control"
                     id="input-label"
-                    placeholder="Enter Title"
+                    placeholder="Enter Matter"
                     value={data?.title}
                     onChange={(e) => {
                       setData({
@@ -227,16 +227,14 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                         options={pageData?.clients?.map((option: any) => {
                           return {
                             value: option._id,
-                            label: `${option?.companyName ?? ""} - ${option?.clientNumber ?? ""
-                              }`,
+                            label: `${option?.companyName ?? ""}`,
                           };
                         })}
                         defaultValue={pageData?.clients
                           ?.map((option: any) => {
                             return {
                               value: option._id,
-                              label: `${option?.companyName ?? ""} - ${option?.clientNumber ?? ""
-                                }`,
+                              label: `${option?.companyName ?? ""}`,
                             };
                           })
                           ?.find((option: any) => {
@@ -246,8 +244,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           ?.map((option: any) => {
                             return {
                               value: option._id,
-                              label: `${option?.companyName ?? ""} - ${option?.clientNumber ?? ""
-                                }`,
+                              label: `${option?.companyName ?? ""}`,
                             };
                           })
                           ?.find((option: any) => {
@@ -264,11 +261,32 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     ) : (
                       <>
                         <span className="block text-[.875rem] font-semibold">
-                          {`${data?.client?.companyName ?? ""} - ${data?.client?.clientNumber ?? ""
-                            }`}
+                          {`${data?.client?.companyName ?? ""}`}
                         </span>
                       </>
                     )}
+                  </div>
+                  <div className="xl:col-span-4 col-span-12">
+                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
+                      Partners Incharge
+                    </span>
+
+                    <>
+                      <span className="block text-[.875rem] font-semibold">
+                        {`${data?.client?.supervisingPartner?.firstName ?? ""}`} {`${data?.client?.supervisingPartner?.lastName ?? ""}`}
+                      </span>
+                    </>
+                  </div>
+                  <div className="xl:col-span-4 col-span-12">
+                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
+                      Relationship Partner
+                    </span>
+
+                    <>
+                      <span className="block text-[.875rem] font-semibold">
+                        {`${data?.client?.referredBy?.firstName ?? ""}`} {`${data?.client?.referredBy?.lastName ?? ""}`}
+                      </span>
+                    </>
                   </div>
                   <div className="xl:col-span-4 col-span-12">
                     <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">

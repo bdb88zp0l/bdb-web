@@ -253,10 +253,11 @@ const BillingOverview = ({ caseInfo }: any) => {
                                 <td>{item?.title}</td>
                                 <td>
                                   {item?.billingType == "oneTime"
-                                    ? "One Time"
-                                    : item?.billingType == "milestone"
-                                    ? "Stage"
-                                    : "Time Based"}
+                                    ? "One Time Billing"
+                                    : item?.billingType == "progressBased"
+                                      ? "Progress Billing" :
+                                      item?.billingType == "taskBased" ? "Task-Based Billing"
+                                        : "Time-Based Billing"}
                                 </td>
                                 <td>{item?.clientData?.companyName ?? ""}</td>
                                 <td>{formatDate(item?.billingStart)}</td>

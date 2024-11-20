@@ -124,8 +124,9 @@ const EditModal = ({
 
   const billingTypeOptions = [
     { value: "oneTime", label: "One Time Billing" },
-    { value: "milestone", label: "Stage Billing" },
-    { value: "timeBased", label: "Based on time billing" },
+    { value: "progressBased", label: "Progress Billing" },
+    { value: "timeBased", label: "Time-Based Billing" },
+    { value: "taskBased", label: "Task-Based Billing" },
   ];
   return (
     <>
@@ -210,13 +211,10 @@ const EditModal = ({
                       {caseInfo?.client?.addresses?.map((address) => {
                         return (
                           <div key={address?._id}>
-                            {`${address.houseNumber || "N/A"}, ${
-                              address.street || "N/A"
-                            }, ${address.city || "N/A"}, ${
-                              address.barangay || "N/A"
-                            }, ${address.zip || "N/A"}, ${
-                              address.region || "N/A"
-                            }, ${address.country || "N/A"}`}{" "}
+                            {`${address.houseNumber || "N/A"}, ${address.street || "N/A"
+                              }, ${address.city || "N/A"}, ${address.barangay || "N/A"
+                              }, ${address.zip || "N/A"}, ${address.region || "N/A"
+                              }, ${address.country || "N/A"}`}{" "}
                             <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
                               {address?.label}
                             </span>{" "}

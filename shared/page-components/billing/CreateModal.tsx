@@ -29,7 +29,7 @@ const CreateModal = ({
     title: "",
     case: caseInfo?._id,
     billingType: "oneTime",
-    currency: "USD",
+    currency: "PHP",
     billNumber: "",
     note: "",
     date: new Date(),
@@ -145,7 +145,7 @@ const CreateModal = ({
         .catch((error) => {
           console.log(error?.message);
         })
-        .finally(() => {});
+        .finally(() => { });
     }
   };
 
@@ -239,13 +239,10 @@ const CreateModal = ({
                       {caseInfo?.client?.addresses?.map((address) => {
                         return (
                           <div key={address?._id}>
-                            {`${address.houseNumber || "N/A"}, ${
-                              address.street || "N/A"
-                            }, ${address.city || "N/A"}, ${
-                              address.barangay || "N/A"
-                            }, ${address.zip || "N/A"}, ${
-                              address.region || "N/A"
-                            }, ${address.country || "N/A"}`}{" "}
+                            {`${address.houseNumber || "N/A"}, ${address.street || "N/A"
+                              }, ${address.city || "N/A"}, ${address.barangay || "N/A"
+                              }, ${address.zip || "N/A"}, ${address.region || "N/A"
+                              }, ${address.country || "N/A"}`}{" "}
                             <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
                               {address?.label}
                             </span>{" "}
@@ -295,8 +292,9 @@ const CreateModal = ({
                       name="billingType"
                       options={[
                         { value: "oneTime", label: "One Time Billing" },
-                        { value: "milestone", label: "Stage Billing" },
-                        { value: "timeBased", label: "Based on time billing" },
+                        { value: "progressBased", label: "Progress Billing" },
+                        { value: "timeBased", label: "Time-Based Billing" },
+                        { value: "taskBased", label: "Task-Based Billing" },
                       ]}
                       className="basic-multi-select"
                       menuPlacement="auto"
