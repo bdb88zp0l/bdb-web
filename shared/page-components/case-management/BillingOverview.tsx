@@ -12,6 +12,7 @@ import CreateModal from "../billing/CreateModal";
 import EditModal from "../billing/EditModal";
 import ViewBilling from "../billing/ViewBilling";
 import BillingReceipt from "./BillingReceipt";
+import Pagination from "@/shared/common-components/Pagination";
 
 // Dynamically import react-select to avoid SSR issues
 const Select = dynamic(() => import("react-select"), { ssr: false });
@@ -292,16 +293,18 @@ const BillingOverview = ({ caseInfo }: any) => {
                                     >
                                       <i className="ri-download-line"></i>
                                     </button>
+                                    {item.status !== "paid" && (
+                                      <button
+                                        className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon"
+                                        onClick={() => {
+                                          setSelectedBilling(item);
+                                          setEditModalOpen(true);
+                                        }}
+                                      >
+                                        <i className="ri-pencil-line"></i>
+                                      </button>
+                                    )}
 
-                                    <button
-                                      className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon"
-                                      onClick={() => {
-                                        setSelectedBilling(item);
-                                        setEditModalOpen(true);
-                                      }}
-                                    >
-                                      <i className="ri-pencil-line"></i>
-                                    </button>
                                     <button
                                       aria-label="button"
                                       type="button"
@@ -327,6 +330,22 @@ const BillingOverview = ({ caseInfo }: any) => {
                     </table>
                   </div>
                 </div>
+
+                <Pagination
+                  limit={limit}
+                  page={page}
+                  totalRow={data?.totalDocs ?? 0}
+                  handlePageChange={(
+                    limit: number,
+                    newOffset: number,
+                    page: number
+                  ) => {
+                    setPage(page);
+                  }}
+                  handleLimitChange={(updatedLimit: number) => {
+                    setLimit(updatedLimit);
+                  }}
+                />
               </div>
             </div>
           </div>
