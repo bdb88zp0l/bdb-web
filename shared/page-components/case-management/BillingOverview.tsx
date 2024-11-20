@@ -62,10 +62,12 @@ const BillingOverview = ({ caseInfo }: any) => {
         setData(res.data.data ?? {});
 
         if (selectedBilling) {
-          let temporary = res.data.data?.docs ?? []
-          setSelectedBilling(temporary.find(i => {
-            return i._id == selectedBilling?._id
-          }))
+          let temporary = res.data.data?.docs ?? [];
+          setSelectedBilling(
+            temporary.find((i) => {
+              return i._id == selectedBilling?._id;
+            })
+          );
         }
       })
       .catch((error: any) => {
@@ -174,11 +176,14 @@ const BillingOverview = ({ caseInfo }: any) => {
                     >
                       Search
                     </button>
-                    <button onClick={() => {
-                      setTemporaryKeyword("");
-                      setSearch("");
-                      setPage(1);
-                    }} className="text-info !py-1 !px-4 !text-[0.75rem] !m-0 h-[36.47px] content-center text-nowrap">
+                    <button
+                      onClick={() => {
+                        setTemporaryKeyword("");
+                        setSearch("");
+                        setPage(1);
+                      }}
+                      className="text-info !py-1 !px-4 !text-[0.75rem] !m-0 h-[36.47px] content-center text-nowrap"
+                    >
                       Clear Search Results
                     </button>
                   </div>
@@ -199,7 +204,6 @@ const BillingOverview = ({ caseInfo }: any) => {
                   fetchBillings={fetchBillings}
                   caseInfo={caseInfo}
                   downloadPDF={downloadPDF}
-
                 />
                 <EditModal
                   editModalOpen={editModalOpen}

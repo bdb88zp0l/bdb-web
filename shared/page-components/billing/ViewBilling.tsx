@@ -54,8 +54,7 @@ const ViewBilling = ({
   return (
     <>
       <Modal isOpen={showModalOpen} close={() => setShowModalOpen(false)}>
-
-        {addPaymentModal &&
+        {addPaymentModal && (
           <AddPaymentModal
             addPaymentModal={addPaymentModal}
             setAddPaymentModal={setAddPaymentModal}
@@ -63,7 +62,7 @@ const ViewBilling = ({
             selectedBilling={selectedBilling}
             fetchBillings={fetchBillings}
           />
-        }
+        )}
 
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center  min-w-[calc(100%-3.5rem)]">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">
@@ -118,7 +117,6 @@ const ViewBilling = ({
                     </div>
                   </div>
 
-
                   <div className="col-span-4">
                     {/* <label className="mb-2 font-bold text-[16px]">Bill To:</label> */}
                     <div className="col-span-12 flex flex-col gap-4">
@@ -129,7 +127,9 @@ const ViewBilling = ({
                       <span>
                         {caseInfo?.client?.phones?.map((item, index) => (
                           <div key={index}>
-                            <span>{item?.dialCode} {item?.phoneNumber}</span>
+                            <span>
+                              {item?.dialCode} {item?.phoneNumber}
+                            </span>
                             <br />
                           </div>
                         ))}
@@ -149,7 +149,9 @@ const ViewBilling = ({
                       <span>
                         {caseInfo?.client?.addresses?.map((address, index) => (
                           <div key={index}>
-                            {`${address.houseNumber || "N/A"}, ${address.street || "N/A"}, 
+                            {`${address.houseNumber || "N/A"}, ${
+                              address.street || "N/A"
+                            }, 
           ${address.city || "N/A"}, ${address.barangay || "N/A"}, 
           ${address.zip || "N/A"}, ${address.region || "N/A"}, 
           ${address.country || "N/A"}`}
@@ -161,7 +163,6 @@ const ViewBilling = ({
                       </span>
                     </div>
                   </div>
-
 
                   <div className="col-span-4">
                     {/* <label className="mb-2 font-bold text-[16px]">Summary:</label> */}
@@ -182,7 +183,6 @@ const ViewBilling = ({
                       </span>
                     </div>
                   </div>
-
                 </div>
 
                 <div className="mb-6">
@@ -216,7 +216,7 @@ const ViewBilling = ({
                       </thead>
                       <tbody>
                         {selectedBilling?.items &&
-                          selectedBilling.items.length > 0 ? (
+                        selectedBilling.items.length > 0 ? (
                           selectedBilling.items.map((billing, index) => (
                             <tr className="border-b" key={billing._id}>
                               <td className="p-3">{index + 1}</td>
@@ -357,8 +357,15 @@ const ViewBilling = ({
             </div>
             <div className="ti-modal-footer">
               <button
+                type="button"
+                className="hs-dropdown-toggle ti-btn ti-btn-light align-middle"
+                onClick={() => setShowModalOpen(false)}
+              >
+                Cancel
+              </button>
+              <button
                 onClick={() => {
-                  downloadPDF(selectedBilling)
+                  downloadPDF(selectedBilling);
                 }}
                 className="ti-btn ti-btn-primary-full py-2 px-4"
               >
@@ -369,18 +376,11 @@ const ViewBilling = ({
                 <button
                   onClick={() => setAddPaymentModal(true)}
                   className="ti-btn ti-btn-primary-full py-2 px-4"
-                // disabled={selectedBilling?.status === "paid"}
+                  // disabled={selectedBilling?.status === "paid"}
                 >
                   Add Payment
                 </button>
               )}
-              <button
-                type="button"
-                className="hs-dropdown-toggle ti-btn ti-btn-light align-middle"
-                onClick={() => setShowModalOpen(false)}
-              >
-                Cancel
-              </button>
             </div>
           </div>
         </div>
