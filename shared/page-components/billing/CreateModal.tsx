@@ -29,7 +29,7 @@ const CreateModal = ({
     title: "",
     case: caseInfo?._id,
     billingType: "oneTime",
-    currency: "USD",
+    currency: "PHP",
     billNumber: "",
     note: "",
     date: new Date(),
@@ -62,7 +62,13 @@ const CreateModal = ({
     items.forEach((item) => {
       const itemTotal = item.quantity * item.price;
       const itemDiscount = itemTotal * (Number(item.discount) / 100);
-      const itemVat = (itemTotal - itemDiscount) * (Number(item.vat) / 100);
+      const itemVat =
+
+        (item.vat?.type == "percentage"
+          ? (itemTotal - itemDiscount) * item?.vat?.rate / 100
+          : item?.vat?.type == "flat"
+            ? item?.vat?.rate
+            : 0);
       item.amount = itemTotal;
       subtotal += itemTotal;
       totalDiscount += itemDiscount;
@@ -130,7 +136,7 @@ const CreateModal = ({
           let abc = response?.data?.data ?? [];
           let tempItems = abc?.map((item) => {
             return {
-              particulars: item?.title ?? "",
+              particulars: item?.task ?? "",
               quantity: item?.hourCount ?? 0,
               price: item?.hourlyRate ?? 0,
               discount: 0,
@@ -145,7 +151,7 @@ const CreateModal = ({
         .catch((error) => {
           console.log(error?.message);
         })
-        .finally(() => {});
+        .finally(() => { });
     }
   };
 
@@ -156,6 +162,8 @@ const CreateModal = ({
   const config = useConfig();
 
   const { auth } = store.getState();
+
+  console.log(items);
   return (
     <>
       <Modal isOpen={modalOpen} close={closeModal}>
@@ -180,20 +188,18 @@ const CreateModal = ({
             <div className="ti-modal-body px-4 overflow-y-auto">
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-4">
-                  <label className="mb-2 font-bold text-[16px]">
-                    Bill From:
-                  </label>
-                  <div className="col-span-12 grid grid-cols-2 gap-x-4">
-                    <label className="mb-2 font-bold">Name:</label>
+                  {/* <label className="mb-2 font-bold text-[16px]">Bill From:</label> */}
+                  <div className="col-span-12 flex flex-col gap-4">
+                    {/* <label className="mb-2 font-bold">Name:</label> */}
                     <span>{auth?.user?.defaultWorkspace?.name ?? ""}</span>
 
-                    <label className="mb-2 font-bold">Phone Number:</label>
+                    {/* <label className="mb-2 font-bold">Phone Number:</label> */}
                     <span>{auth?.user?.defaultWorkspace?.phone ?? ""}</span>
 
-                    <label className="mb-2 font-bold">Email:</label>
+                    {/* <label className="mb-2 font-bold">Email:</label> */}
                     <span>{auth?.user?.defaultWorkspace?.email ?? ""}</span>
 
-                    <label className="mb-2 font-bold">Address:</label>
+                    {/* <label className="mb-2 font-bold">Address:</label> */}
                     <span>
                       {auth?.user?.defaultWorkspace?.addressLine1 ?? ""}
                       <br />
@@ -203,55 +209,46 @@ const CreateModal = ({
                 </div>
 
                 <div className="col-span-4">
-                  <label className="mb-2 font-bold text-[16px]">Bill To:</label>
-                  <div className="col-span-12 grid grid-cols-2 gap-x-4">
-                    <label className="mb-2 font-bold">Name:</label>
+                  {/* <label className="mb-2 font-bold text-[16px]">Bill To:</label> */}
+                  <div className="col-span-12 flex flex-col gap-4">
+                    {/* <label className="mb-2 font-bold">Name:</label> */}
                     <span>{caseInfo?.client?.companyName ?? ""}</span>
 
-                    <label className="mb-2 font-bold">Phone Number:</label>
+                    {/* <label className="mb-2 font-bold">Phone Number:</label> */}
                     <span>
-                      {caseInfo?.client?.phones?.map((item) => {
-                        return (
-                          <>
-                            <span>
-                              {item?.dialCode} {item?.phoneNumber}
-                            </span>
-                            <br />
-                          </>
-                        );
-                      })}
+                      {caseInfo?.client?.phones?.map((item, index) => (
+                        <React.Fragment key={index}>
+                          <span>
+                            {item?.dialCode} {item?.phoneNumber}
+                          </span>
+                          <br />
+                        </React.Fragment>
+                      ))}
                     </span>
 
-                    <label className="mb-2 font-bold">Email:</label>
+                    {/* <label className="mb-2 font-bold">Email:</label> */}
                     <span>
-                      {caseInfo?.client?.emails?.map((item) => {
-                        return (
-                          <>
-                            <span>{item?.value}</span>
-                            <br />
-                          </>
-                        );
-                      })}
+                      {caseInfo?.client?.emails?.map((item, index) => (
+                        <React.Fragment key={index}>
+                          <span>{item?.value}</span>
+                          <br />
+                        </React.Fragment>
+                      ))}
                     </span>
 
-                    <label className="mb-2 font-bold">Address:</label>
+                    {/* <label className="mb-2 font-bold">Address:</label> */}
                     <span>
-                      {caseInfo?.client?.addresses?.map((address) => {
-                        return (
-                          <div key={address?._id}>
-                            {`${address.houseNumber || "N/A"}, ${
-                              address.street || "N/A"
-                            }, ${address.city || "N/A"}, ${
-                              address.barangay || "N/A"
-                            }, ${address.zip || "N/A"}, ${
-                              address.region || "N/A"
-                            }, ${address.country || "N/A"}`}{" "}
-                            <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
-                              {address?.label}
-                            </span>{" "}
-                          </div>
-                        );
-                      })}
+                      {caseInfo?.client?.addresses?.map((address, index) => (
+                        <div key={index}>
+                          {`${address.houseNumber || "N/A"}, ${address.street || "N/A"
+                            }, ${address.city || "N/A"}, ${address.barangay || "N/A"
+                            }, ${address.zip || "N/A"}, ${address.region || "N/A"
+                            }, ${address.country || "N/A"}`}
+                          <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
+                            {address?.label}
+                          </span>
+                        </div>
+                      ))}
                     </span>
                   </div>
                 </div>
@@ -272,6 +269,32 @@ const CreateModal = ({
                       }}
                     />
                   </div>
+
+
+                  <div className="mb-4">
+
+                    <label htmlFor="title" className="form-label">
+                      Currency
+                    </label>
+                    <Select
+                      name="currency"
+                      options={config?.BILLING_CURRENCIES?.map((option: any) => {
+                        return {
+                          value: option,
+                          label: `${option}`,
+                        };
+                      })}
+                      className="basic-multi-select"
+                      menuPlacement="auto"
+                      classNamePrefix="Select2"
+                      placeholder="Select Currency"
+                      onChange={(e: any) =>
+                        setData({ ...data, currency: e.value })
+                      }
+                    />
+                  </div>
+
+
                   <div className="mb-4">
                     <label htmlFor="billNumber" className="form-label">
                       Bill Number
@@ -295,8 +318,9 @@ const CreateModal = ({
                       name="billingType"
                       options={[
                         { value: "oneTime", label: "One Time Billing" },
-                        { value: "milestone", label: "Stage Billing" },
-                        { value: "timeBased", label: "Based on time billing" },
+                        { value: "progressBased", label: "Progress Billing" },
+                        { value: "timeBased", label: "Time-Based Billing" },
+                        { value: "taskBased", label: "Task-Based Billing" },
                       ]}
                       className="basic-multi-select"
                       menuPlacement="auto"
@@ -393,7 +417,7 @@ const CreateModal = ({
                           Discount(%)
                         </th>
                         <th scope="col" className="text-start">
-                          VAT (%)
+                          VAT
                         </th>
                         <th scope="col" className="text-start">
                           Amount
@@ -472,7 +496,7 @@ const CreateModal = ({
                             />
                           </td>
                           <td>
-                            <input
+                            {/* <input
                               className="form-control me-2 h-[36.47px]"
                               type="number"
                               placeholder="VAT"
@@ -485,14 +509,46 @@ const CreateModal = ({
                                 )
                               }
                               disabled={data?.billingType == "timeBased"}
+                            /> */}
+
+                            <Select
+                              name="vatSetting"
+                              options={config?.VAT_SETTINGS?.map(
+                                (option: any) => {
+                                  return {
+                                    value: option,
+                                    label:
+                                      option.type === "percentage"
+                                        ? `${option.rate}%`
+                                        : `Flat Rate: ${option.rate} ${data?.currency ?? "PHP"
+                                        }`,
+                                  };
+                                }
+                              )}
+                              className="basic-multi-select"
+                              menuPlacement="auto"
+                              classNamePrefix="Select2"
+                              placeholder="Select VAT"
+                              onChange={(e: any) =>
+                                handleItemChange(index, "vat", e.value)
+                              }
+                              disabled={data?.billingType == "timeBased"}
                             />
                           </td>
                           <td>
                             {(
                               item.quantity *
                               item.price *
-                              (1 - item.discount / 100) *
-                              (1 + item.vat / 100)
+                              (1 - item.discount / 100)
+
+                              +
+                              (item.vat?.type == "percentage"
+                                ? item.quantity *
+                                item.price *
+                                (1 - item.discount / 100) * item?.vat?.rate / 100
+                                : item?.vat?.type == "flat"
+                                  ? item?.vat?.rate
+                                  : 0)
                             ).toFixed(2)}
                           </td>
                         </tr>

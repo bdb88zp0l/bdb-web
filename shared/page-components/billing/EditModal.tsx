@@ -2,12 +2,18 @@
 import { userPrivateRequest } from "@/config/axios.config";
 import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
 import Modal from "@/shared/modals/Modal";
-import { useConfig } from "@/shared/providers/ConfigProvider";
-import store from "@/shared/redux/store";
-import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import DatePicker from "react-datepicker";
+import CompanyForm from "../contacts/components/CompanyForm";
+import PhoneForm from "../contacts/components/PhoneForm";
+import AddressForm from "../contacts/components/AddressForm";
+import moment from "moment";
+import { useConfig } from "@/shared/providers/ConfigProvider";
+import { getImageUrl, toWordUpperCase } from "@/utils/utils";
+import store from "@/shared/redux/store";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
@@ -63,7 +69,12 @@ const EditModal = ({
     items.forEach((item) => {
       const itemTotal = item.quantity * item.price;
       const itemDiscount = itemTotal * (Number(item.discount) / 100);
-      const itemVat = (itemTotal - itemDiscount) * (Number(item.vat) / 100);
+      const itemVat =
+        (item.vat?.type == "percentage"
+          ? (itemTotal - itemDiscount) * item?.vat?.rate / 100
+          : item?.vat?.type == "flat"
+            ? item?.vat?.rate
+            : 0);
       item.amount = itemTotal;
       subtotal += itemTotal;
       totalDiscount += itemDiscount;
@@ -118,8 +129,9 @@ const EditModal = ({
 
   const billingTypeOptions = [
     { value: "oneTime", label: "One Time Billing" },
-    { value: "milestone", label: "Stage Billing" },
-    { value: "timeBased", label: "Based on time billing" },
+    { value: "progressBased", label: "Progress Billing" },
+    { value: "timeBased", label: "Time-Based Billing" },
+    { value: "taskBased", label: "Task-Based Billing" },
   ];
   return (
     <>
@@ -145,20 +157,18 @@ const EditModal = ({
             <div className="ti-modal-body px-4 overflow-y-auto">
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-4">
-                  <label className="mb-2 font-bold text-[16px]">
-                    Bill From:
-                  </label>
-                  <div className="col-span-12 grid grid-cols-2 gap-x-4">
-                    <label className="mb-2 font-bold">Name:</label>
+                  {/* <label className="mb-2 font-bold text-[16px]">Bill From:</label> */}
+                  <div className="col-span-12 flex flex-col gap-4">
+                    {/* <label className="mb-2 font-bold">Name:</label> */}
                     <span>{auth?.user?.defaultWorkspace?.name ?? ""}</span>
 
-                    <label className="mb-2 font-bold">Phone Number:</label>
+                    {/* <label className="mb-2 font-bold">Phone Number:</label> */}
                     <span>{auth?.user?.defaultWorkspace?.phone ?? ""}</span>
 
-                    <label className="mb-2 font-bold">Email:</label>
+                    {/* <label className="mb-2 font-bold">Email:</label> */}
                     <span>{auth?.user?.defaultWorkspace?.email ?? ""}</span>
 
-                    <label className="mb-2 font-bold">Address:</label>
+                    {/* <label className="mb-2 font-bold">Address:</label> */}
                     <span>
                       {auth?.user?.defaultWorkspace?.addressLine1 ?? ""}
                       <br />
@@ -167,50 +177,42 @@ const EditModal = ({
                   </div>
                 </div>
 
+
                 <div className="col-span-4">
-                  <label className="mb-2 font-bold text-[16px]">Bill To:</label>
-                  <div className="col-span-12 grid grid-cols-2 gap-x-4">
-                    <label className="mb-2 font-bold">Name:</label>
+                  {/* <label className="mb-2 font-bold text-[16px]">Bill To:</label> */}
+                  <div className="col-span-12 flex flex-col gap-4">
+                    {/* <label className="mb-2 font-bold">Name:</label> */}
                     <span>{caseInfo?.client?.companyName ?? ""}</span>
 
-                    <label className="mb-2 font-bold">Phone Number:</label>
+                    {/* <label className="mb-2 font-bold">Phone Number:</label> */}
                     <span>
-                      {caseInfo?.client?.phones?.map((item) => {
-                        return (
-                          <>
-                            <span>
-                              {item?.dialCode} {item?.phoneNumber}
-                            </span>
-                            <br />
-                          </>
-                        );
-                      })}
+                      {caseInfo?.client?.phones?.map((item, index) => (
+                        <React.Fragment key={index}>
+                          <span>{item?.dialCode} {item?.phoneNumber}</span>
+                          <br />
+                        </React.Fragment>
+                      ))}
                     </span>
 
-                    <label className="mb-2 font-bold">Email:</label>
+                    {/* <label className="mb-2 font-bold">Email:</label> */}
                     <span>
-                      {caseInfo?.client?.emails?.map((item) => {
-                        return (
-                          <>
-                            <span>{item?.value}</span>
-                            <br />
-                          </>
-                        );
-                      })}
+                      {caseInfo?.client?.emails?.map((item, index) => (
+                        <React.Fragment key={index}>
+                          <span>{item?.value}</span>
+                          <br />
+                        </React.Fragment>
+                      ))}
                     </span>
 
-                    <label className="mb-2 font-bold">Address:</label>
+                    {/* <label className="mb-2 font-bold">Address:</label> */}
                     <span>
                       {caseInfo?.client?.addresses?.map((address) => {
                         return (
                           <div key={address?._id}>
-                            {`${address.houseNumber || "N/A"}, ${
-                              address.street || "N/A"
-                            }, ${address.city || "N/A"}, ${
-                              address.barangay || "N/A"
-                            }, ${address.zip || "N/A"}, ${
-                              address.region || "N/A"
-                            }, ${address.country || "N/A"}`}{" "}
+                            {`${address.houseNumber || "N/A"}, ${address.street || "N/A"
+                              }, ${address.city || "N/A"}, ${address.barangay || "N/A"
+                              }, ${address.zip || "N/A"}, ${address.region || "N/A"
+                              }, ${address.country || "N/A"}`}{" "}
                             <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
                               {address?.label}
                             </span>{" "}
@@ -220,6 +222,8 @@ const EditModal = ({
                     </span>
                   </div>
                 </div>
+
+
 
                 <div className="col-span-4">
                   <div className="mb-4">
@@ -237,6 +241,45 @@ const EditModal = ({
                       }}
                     />
                   </div>
+
+                  <div className="mb-4">
+
+                    <label htmlFor="title" className="form-label">
+                      Currency
+                    </label>
+                    <Select
+                      name="currency"
+                      options={config?.BILLING_CURRENCIES?.map((option: any) => {
+                        return {
+                          value: option,
+                          label: `${option}`,
+                        };
+                      })}
+                      defaultValue={config?.BILLING_CURRENCIES?.map(
+                        (option: any) => ({
+                          value: option,
+                          label: option,
+                        })
+                      )?.find((option: any) => {
+                        return option.value === data?.currency;
+                      })}
+                      value={config?.BILLING_CURRENCIES?.map((option: any) => ({
+                        value: option,
+                        label: option,
+                      }))?.find((option: any) => {
+                        return option.value === data?.currency;
+                      })}
+                      className="basic-multi-select"
+                      menuPlacement="auto"
+                      classNamePrefix="Select2"
+                      placeholder="Select Currency"
+                      onChange={(e: any) =>
+                        setData({ ...data, currency: e.value })
+                      }
+                    />
+                  </div>
+
+
                   <div className="mb-4">
                     <label htmlFor="billNumber" className="form-label">
                       Bill Number
@@ -436,27 +479,91 @@ const EditModal = ({
                             />
                           </td>
                           <td>
-                            <input
-                              className="form-control me-2 h-[36.47px]"
-                              type="number"
-                              placeholder="VAT"
-                              value={item.vat}
-                              onChange={(e) =>
-                                handleItemChange(
-                                  index,
-                                  "vat",
-                                  parseFloat(e.target.value)
-                                )
-                              }
-                              disabled={data?.billingType == "timeBased"}
-                            />
+                            {data?.billingType == "timeBased" ?
+                              <input
+                                className="form-control me-2 h-[36.47px]"
+                                type="number"
+                                placeholder="VAT"
+                                value={item.vat}
+                                onChange={(e) =>
+                                  handleItemChange(
+                                    index,
+                                    "vat",
+                                    parseFloat(e.target.value)
+                                  )
+                                }
+                                disabled={data?.billingType == "timeBased"}
+                              />
+
+                              :
+                              <Select
+                                name="vat"
+                                options={config?.VAT_SETTINGS?.map((option: any) => {
+                                  return {
+                                    value: option,
+                                    label:
+                                      option.type === "percentage"
+                                        ? `${option.rate}%`
+                                        : `Flat Rate: ${option.rate} ${data?.currency ?? "PHP"
+                                        }`,
+                                  };
+                                })}
+                                value={config?.VAT_SETTINGS?.map((option: any) => ({
+                                  value: option,
+                                  label:
+                                    option.type === "percentage"
+                                      ? `${option.rate}%`
+                                      : `Flat Rate: ${option.rate} ${data?.currency ?? "PHP"
+                                      }`,
+                                }))?.find((option: any) => {
+                                  return (
+                                    JSON.stringify(option.value) ==
+                                    JSON.stringify(item?.vat)
+                                  );
+                                })}
+                                defaultValue={config?.VAT_SETTINGS?.map(
+                                  (option: any) => ({
+                                    value: option,
+                                    label:
+                                      option.type === "percentage"
+                                        ? `${option.rate}%`
+                                        : `Flat Rate: ${option.rate} ${data?.currency ?? "PHP"
+                                        }`,
+                                  })
+                                )?.find((option: any) => {
+
+                                  console.log("Is true", data?.vat?.rate, (
+                                    JSON.stringify(option.value) ==
+                                    JSON.stringify(item?.vat)
+                                  ))
+                                  return (
+                                    JSON.stringify(option.value) ==
+                                    JSON.stringify(item?.vat)
+                                  );
+                                })}
+                                className="basic-multi-select"
+                                menuPlacement="auto"
+                                classNamePrefix="Select2"
+                                placeholder="Select VAT"
+                                onChange={(e: any) =>
+                                  handleItemChange(index, "vat", e.value)
+                                }
+                              />
+                            }
                           </td>
                           <td>
                             {(
                               item.quantity *
                               item.price *
-                              (1 - item.discount / 100) *
-                              (1 + item.vat / 100)
+                              (1 - item.discount / 100)
+                              +
+                              (item.vat?.type == "percentage"
+                                ? item.quantity *
+                                item.price *
+                                (1 - item.discount / 100) * item?.vat?.rate / 100
+                                : item?.vat?.type == "flat"
+                                  ? item?.vat?.rate
+                                  : 0)
                             ).toFixed(2)}
                           </td>
                         </tr>

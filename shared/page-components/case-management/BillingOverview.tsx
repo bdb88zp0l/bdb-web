@@ -11,7 +11,8 @@ import { toast } from "react-toastify";
 import CreateModal from "../billing/CreateModal";
 import EditModal from "../billing/EditModal";
 import ViewBilling from "../billing/ViewBilling";
-import BillingReceipt from "./BillingReceipt";
+import Pagination from "@/shared/common-components/Pagination";
+import BillingReceipt from "../billing/BillingReceipt";
 
 // Dynamically import react-select to avoid SSR issues
 const Select = dynamic(() => import("react-select"), { ssr: false });
@@ -59,6 +60,15 @@ const BillingOverview = ({ caseInfo }: any) => {
       })
       .then((res) => {
         setData(res.data.data ?? {});
+
+        if (selectedBilling) {
+          let temporary = res.data.data?.docs ?? [];
+          setSelectedBilling(
+            temporary.find((i) => {
+              return i._id == selectedBilling?._id;
+            })
+          );
+        }
       })
       .catch((error: any) => {
         toast.error(
@@ -166,7 +176,14 @@ const BillingOverview = ({ caseInfo }: any) => {
                     >
                       Search
                     </button>
-                    <button className="text-info !py-1 !px-4 !text-[0.75rem] !m-0 h-[36.47px] content-center text-nowrap">
+                    <button
+                      onClick={() => {
+                        setTemporaryKeyword("");
+                        setSearch("");
+                        setPage(1);
+                      }}
+                      className="text-info !py-1 !px-4 !text-[0.75rem] !m-0 h-[36.47px] content-center text-nowrap"
+                    >
                       Clear Search Results
                     </button>
                   </div>
@@ -186,6 +203,7 @@ const BillingOverview = ({ caseInfo }: any) => {
                   selectedBilling={selectedBilling}
                   fetchBillings={fetchBillings}
                   caseInfo={caseInfo}
+                  downloadPDF={downloadPDF}
                 />
                 <EditModal
                   editModalOpen={editModalOpen}
@@ -195,12 +213,10 @@ const BillingOverview = ({ caseInfo }: any) => {
                   caseInfo={caseInfo}
                 />
 
-                {/* <BillingPdfDownload
-                  setDownloadModalOpen={setDownloadModalOpen}
-                  downloadModalOpen={downloadModalOpen}
+                <BillingReceipt
                   selectedBilling={selectedBilling}
-                /> */}
-
+                  caseInfo={caseInfo}
+                />
                 <div className="box-body !p-0">
                   <div className="table-responsive">
                     <table className="table whitespace-nowrap min-w-full">
@@ -252,7 +268,14 @@ const BillingOverview = ({ caseInfo }: any) => {
                               >
                                 <td>{item?.billNumber}</td>
                                 <td>{item?.title}</td>
-                                <td>{item?.billingType}</td>
+                                <td>
+                                  {item?.billingType == "oneTime"
+                                    ? "One Time Billing"
+                                    : item?.billingType == "progressBased"
+                                      ? "Progress Billing" :
+                                      item?.billingType == "taskBased" ? "Task-Based Billing"
+                                        : "Time-Based Billing"}
+                                </td>
                                 <td>{item?.clientData?.companyName ?? ""}</td>
                                 <td>{formatDate(item?.billingStart)}</td>
                                 <td>{formatAmount(item?.grandTotal)}</td>
@@ -279,16 +302,18 @@ const BillingOverview = ({ caseInfo }: any) => {
                                     >
                                       <i className="ri-download-line"></i>
                                     </button>
+                                    {item.status !== "paid" && (
+                                      <button
+                                        className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon"
+                                        onClick={() => {
+                                          setSelectedBilling(item);
+                                          setEditModalOpen(true);
+                                        }}
+                                      >
+                                        <i className="ri-pencil-line"></i>
+                                      </button>
+                                    )}
 
-                                    <button
-                                      className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon"
-                                      onClick={() => {
-                                        setSelectedBilling(item);
-                                        setEditModalOpen(true);
-                                      }}
-                                    >
-                                      <i className="ri-pencil-line"></i>
-                                    </button>
                                     <button
                                       aria-label="button"
                                       type="button"
@@ -314,13 +339,27 @@ const BillingOverview = ({ caseInfo }: any) => {
                     </table>
                   </div>
                 </div>
+
+                <Pagination
+                  limit={limit}
+                  page={page}
+                  totalRow={data?.totalDocs ?? 0}
+                  handlePageChange={(
+                    limit: number,
+                    newOffset: number,
+                    page: number
+                  ) => {
+                    setPage(page);
+                  }}
+                  handleLimitChange={(updatedLimit: number) => {
+                    setLimit(updatedLimit);
+                  }}
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <BillingReceipt selectedBilling={selectedBilling} caseInfo={caseInfo} />
     </>
   );
 };

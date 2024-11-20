@@ -525,7 +525,7 @@ const UpdateModal = ({
                 className="hs-dropdown-toggle ti-btn  ti-btn-light align-middle"
                 onClick={closeModal}
               >
-                Close
+                Cancel
               </button>
               {!isDisabled ? (
                 <button

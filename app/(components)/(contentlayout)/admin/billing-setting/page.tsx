@@ -17,16 +17,15 @@ import ServiceTypeSetting from "@/shared/page-components/case-setting/ServiceTyp
 const CaseSetting = () => {
   return (
     <Fragment>
-      <Seo title={"Case Setting"} />
+      <Seo title={"Billing Setting"} />
       <Pageheader
-        currentpage="Case Setting"
+        currentpage="Billing Setting"
         activepage="Admin"
-        mainpage="Case Setting"
+        mainpage="Billing Setting"
       />
       <div className="grid grid-cols-12 gap-6">
-        <CaseStatusSetup />
-        <CaseTeamDesignationSetup />
-        <ServiceTypeSetting />
+        <CurrencySetting />
+        <VatSetup />
       </div>
     </Fragment>
   );

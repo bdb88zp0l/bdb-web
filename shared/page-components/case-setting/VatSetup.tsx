@@ -22,7 +22,7 @@ export default function VatSetup() {
         {
           records: [
             {
-              name: "CASE_VAT_SETTINGS",
+              name: "VAT_SETTINGS",
               value: values,
             },
           ],
@@ -42,8 +42,8 @@ export default function VatSetup() {
   };
 
   useEffect(() => {
-    setValues(config?.CASE_VAT_SETTINGS ?? []);
-  }, [config?.CASE_VAT_SETTINGS]);
+    setValues(config?.VAT_SETTINGS ?? []);
+  }, [config?.VAT_SETTINGS]);
 
   // Handle rate input change
   const handleRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {

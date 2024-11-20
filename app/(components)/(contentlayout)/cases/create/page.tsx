@@ -170,13 +170,13 @@ const CreateCase = () => {
                 </div>
                 <div className="xl:col-span-4 col-span-12">
                   <label htmlFor="input-label" className="form-label">
-                    Title :
+                    Matter :
                   </label>
                   <input
                     type="text"
                     className="form-control"
                     id="input-label"
-                    placeholder="Enter Title"
+                    placeholder="Enter Matter"
                     onChange={(e) => {
                       setData({
                         ...data,
@@ -304,7 +304,7 @@ const CreateCase = () => {
                     onChange={(e: any) => setData({ ...data, team: e.value })}
                   />
                 </div> */}
-                <div className="xl:col-span-12 col-span-12">
+                <div className="xl:col-span-12 col-span-12 hidden">
                   <label
                     htmlFor="text-area"
                     className="text-[1rem] font-semibold"
@@ -312,78 +312,8 @@ const CreateCase = () => {
                     Billing Information
                   </label>
                 </div>
-                <div className="xl:col-span-4 col-span-12">
-                  <label htmlFor="input-label1" className="form-label">
-                    Billing Type :
-                  </label>
-
-                  <Select
-                    name="defaultBillingType"
-                    options={config?.CASE_BILLING_TYPES?.map((option: any) => {
-                      return {
-                        value: option,
-                        label: `${option}`,
-                      };
-                    })}
-                    className="basic-multi-select"
-                    menuPlacement="auto"
-                    classNamePrefix="Select2"
-                    placeholder="Select Billing Type"
-                    onChange={(e: any) =>
-                      setData({ ...data, defaultBillingType: e.value })
-                    }
-                  />
-                </div>
-                <div className="xl:col-span-4 col-span-12">
-                  <label htmlFor="input-label2" className="form-label">
-                    Currency :
-                  </label>
-
-                  <Select
-                    name="currency"
-                    options={config?.CASE_CURRENCIES?.map((option: any) => {
-                      return {
-                        value: option,
-                        label: `${option}`,
-                      };
-                    })}
-                    className="basic-multi-select"
-                    menuPlacement="auto"
-                    classNamePrefix="Select2"
-                    placeholder="Select Currency"
-                    onChange={(e: any) =>
-                      setData({ ...data, currency: e.value })
-                    }
-                  />
-                </div>
-                <div className="xl:col-span-4 col-span-12">
-                  <label htmlFor="input-label2" className="form-label">
-                    VAT Setting :
-                  </label>
-
-                  <Select
-                    name="vatSetting"
-                    options={config?.CASE_VAT_SETTINGS?.map((option: any) => {
-                      return {
-                        value: option,
-                        label:
-                          option.type === "percentage"
-                            ? `${option.rate}%`
-                            : `Flat Rate: ${option.rate} ${
-                                data?.currency ?? "PHP"
-                              }`,
-                      };
-                    })}
-                    className="basic-multi-select"
-                    menuPlacement="auto"
-                    classNamePrefix="Select2"
-                    placeholder="Select VAT Setting"
-                    onChange={(e: any) =>
-                      setData({ ...data, vatSetting: e.value })
-                    }
-                  />
-                </div>
-                <div className="xl:col-span-4 col-span-12">
+                
+                <div className="xl:col-span-4 col-span-12 hidden">
                   <label className="form-label">Billing Start At :</label>
                   <div className="form-group">
                     <div className="input-group">
@@ -401,7 +331,7 @@ const CreateCase = () => {
                     </div>
                   </div>
                 </div>
-                <div className="xl:col-span-4 col-span-12">
+                <div className="xl:col-span-4 col-span-12 hidden">
                   <label className="form-label">Billing End At :</label>
                   <div className="form-group">
                     <div className="input-group">

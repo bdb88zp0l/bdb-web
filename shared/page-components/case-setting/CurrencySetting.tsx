@@ -21,7 +21,7 @@ export default function CurrencySetting() {
         {
           records: [
             {
-              name: "CASE_CURRENCIES",
+              name: "BILLING_CURRENCIES",
               value: values,
             },
           ],
@@ -40,8 +40,8 @@ export default function CurrencySetting() {
       });
   };
   useEffect(() => {
-    setValues(config?.CASE_CURRENCIES ?? []);
-  }, [config?.CASE_CURRENCIES]);
+    setValues(config?.BILLING_CURRENCIES ?? []);
+  }, [config?.BILLING_CURRENCIES]);
 
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
