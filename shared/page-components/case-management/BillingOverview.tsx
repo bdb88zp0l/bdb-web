@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import CreateModal from "../billing/CreateModal";
 import EditModal from "../billing/EditModal";
 import ViewBilling from "../billing/ViewBilling";
-import BillingReceipt from "./BillingReceipt";
+import BillingReceipt from "../billing/BillingReceipt";
 
 // Dynamically import react-select to avoid SSR issues
 const Select = dynamic(() => import("react-select"), { ssr: false });
@@ -186,6 +186,7 @@ const BillingOverview = ({ caseInfo }: any) => {
                   selectedBilling={selectedBilling}
                   fetchBillings={fetchBillings}
                   caseInfo={caseInfo}
+                  downloadPDF={downloadPDF}
                 />
                 <EditModal
                   editModalOpen={editModalOpen}
@@ -195,12 +196,10 @@ const BillingOverview = ({ caseInfo }: any) => {
                   caseInfo={caseInfo}
                 />
 
-                {/* <BillingPdfDownload
-                  setDownloadModalOpen={setDownloadModalOpen}
-                  downloadModalOpen={downloadModalOpen}
+                <BillingReceipt
                   selectedBilling={selectedBilling}
-                /> */}
-
+                  caseInfo={caseInfo}
+                />
                 <div className="box-body !p-0">
                   <div className="table-responsive">
                     <table className="table whitespace-nowrap min-w-full">
@@ -252,7 +251,13 @@ const BillingOverview = ({ caseInfo }: any) => {
                               >
                                 <td>{item?.billNumber}</td>
                                 <td>{item?.title}</td>
-                                <td>{item?.billingType}</td>
+                                <td>
+                                  {item?.billingType == "oneTime"
+                                    ? "One Time"
+                                    : item?.billingType == "milestone"
+                                    ? "Stage"
+                                    : "Time Based"}
+                                </td>
                                 <td>{item?.clientData?.companyName ?? ""}</td>
                                 <td>{formatDate(item?.billingStart)}</td>
                                 <td>{formatAmount(item?.grandTotal)}</td>
@@ -319,8 +324,6 @@ const BillingOverview = ({ caseInfo }: any) => {
           </div>
         </div>
       </div>
-
-      <BillingReceipt selectedBilling={selectedBilling} caseInfo={caseInfo} />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { formatDate } from "@/utils/utils";
@@ -14,6 +14,11 @@ const BillingReceipt: React.FC<BillingReceiptProps> = ({
   caseInfo,
 }) => {
   const { auth } = store.getState();
+  const [workspace, setWorkspace] = useState<any>({});
+
+  useEffect(() => {
+    setWorkspace(auth?.user?.defaultWorkspace ?? {});
+  }, [auth?.user?.defaultWorkspace]);
 
   return (
     <div
@@ -23,27 +28,28 @@ const BillingReceipt: React.FC<BillingReceiptProps> = ({
     >
       <div className="flex justify-between gap-12 mb-8">
         <div className="flex flex-col space-y-2">
-          <h4 className="text-xl font-semibold">
-            GLOBAL TRANSFER PRICING RESOURCE CENTER INC
-          </h4>
-          <p className="text-black">
-            20th Floor Chatham House V.A. Rufino cor. Valero St.,
-          </p>
-          <p className="text-black">
-            Salcedo Village Bel-Air, 1209 City of Makati
-          </p>
-          <p className="text-black">NCR Fourth District Philippines</p>
+          <h4 className="text-xl font-semibold">{workspace?.name}</h4>
+          <p className="text-black">{workspace?.addressLine1}</p>
+          <p className="text-black">{workspace?.addressLine2}</p>
           <p className="text-black">VAT Reg. TIN: 010-768-534-00000</p>
         </div>
 
         <div className="flex flex-col space-y-2 text-right">
           <h4 className="text-xl font-semibold">BILLING INVOICE</h4>
-          <p className="text-black">Invoice No: {selectedBilling?.title}</p>
+          <p className="text-black">Title: {selectedBilling?.title}</p>
           <p className="text-black">
-            Date: {formatDate(selectedBilling?.date)}
+            Invoice No: #{selectedBilling?.billNumber}
           </p>
           <p className="text-black">
-            Our Ref: {formatDate(selectedBilling?.dueDate)}
+            Date:{" "}
+            {selectedBilling?.billingType == "timeBased"
+              ? `${formatDate(selectedBilling?.billingStart)} - ${formatDate(
+                  selectedBilling?.billingEnd
+                )}`
+              : formatDate(selectedBilling?.date)}
+          </p>
+          <p className="text-black">
+            Due Date: {formatDate(selectedBilling?.dueDate)}
           </p>
         </div>
       </div>
@@ -52,10 +58,31 @@ const BillingReceipt: React.FC<BillingReceiptProps> = ({
         <div className="border border-black p-4">
           <h4 className="text-lg font-semibold text-black">SOLD TO:</h4>
           <div className="space-y-3 pl-4">
-            <p className="text-black">Name: {selectedBilling?.title}</p>
-            <p className="text-black">Attention:</p>
-            <p className="text-black">Address:</p>
-            <p className="text-black">TIN:</p>
+            <p className="text-black">
+              Name: {caseInfo?.client?.companyName ?? ""}
+            </p>
+            <p className="text-black">
+              Attention: {caseInfo?.client?.contact?.firstName ?? ""}{" "}
+              {caseInfo?.client?.contact?.lastName ?? ""}
+            </p>
+            <p className="text-black">
+              Address: {caseInfo?.client?.addresses?.[0]?.houseNumber ?? ""},{" "}
+              {caseInfo?.client?.addresses?.[0]?.street
+                ? `${caseInfo?.client?.addresses?.[0]?.street}, `
+                : ""}{" "}
+              {caseInfo?.client?.addresses?.[0]?.city
+                ? `${caseInfo?.client?.addresses?.[0]?.city}, `
+                : ""}{" "}
+              {caseInfo?.client?.addresses?.[0]?.barangay
+                ? `${caseInfo?.client?.addresses?.[0]?.barangay}, `
+                : ""}{" "}
+              {caseInfo?.client?.addresses?.[0]?.zip
+                ? `${caseInfo?.client?.addresses?.[0]?.zip}, `
+                : ""}{" "}
+              {caseInfo?.client?.addresses?.[0]?.region ?? ""},{" "}
+              {caseInfo?.client?.addresses?.[0]?.country ?? ""}
+            </p>
+            <p className="text-black">TIN: {workspace?.tin ?? ""}</p>
           </div>
         </div>
       </div>
