@@ -62,7 +62,13 @@ const CreateModal = ({
     items.forEach((item) => {
       const itemTotal = item.quantity * item.price;
       const itemDiscount = itemTotal * (Number(item.discount) / 100);
-      const itemVat = (itemTotal - itemDiscount) * (Number(item.vat) / 100);
+      const itemVat =
+
+        (item.vat?.type == "percentage"
+          ? (itemTotal - itemDiscount) * item?.vat?.rate / 100
+          : item?.vat?.type == "flat"
+            ? item?.vat?.rate
+            : 0);
       item.amount = itemTotal;
       subtotal += itemTotal;
       totalDiscount += itemDiscount;
@@ -156,6 +162,8 @@ const CreateModal = ({
   const config = useConfig();
 
   const { auth } = store.getState();
+
+  console.log(items);
   return (
     <>
       <Modal isOpen={modalOpen} close={closeModal}>
@@ -200,7 +208,6 @@ const CreateModal = ({
                   </div>
                 </div>
 
-
                 <div className="col-span-4">
                   {/* <label className="mb-2 font-bold text-[16px]">Bill To:</label> */}
                   <div className="col-span-12 flex flex-col gap-4">
@@ -233,7 +240,10 @@ const CreateModal = ({
                     <span>
                       {caseInfo?.client?.addresses?.map((address, index) => (
                         <div key={index}>
-                          {`${address.houseNumber || "N/A"}, ${address.street || "N/A"}, ${address.city || "N/A"}, ${address.barangay || "N/A"}, ${address.zip || "N/A"}, ${address.region || "N/A"}, ${address.country || "N/A"}`}
+                          {`${address.houseNumber || "N/A"}, ${address.street || "N/A"
+                            }, ${address.city || "N/A"}, ${address.barangay || "N/A"
+                            }, ${address.zip || "N/A"}, ${address.region || "N/A"
+                            }, ${address.country || "N/A"}`}
                           <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
                             {address?.label}
                           </span>
@@ -242,7 +252,6 @@ const CreateModal = ({
                     </span>
                   </div>
                 </div>
-
 
                 <div className="col-span-4">
                   <div className="mb-4">
@@ -260,6 +269,32 @@ const CreateModal = ({
                       }}
                     />
                   </div>
+
+
+                  <div className="mb-4">
+
+                    <label htmlFor="title" className="form-label">
+                      Currency
+                    </label>
+                    <Select
+                      name="currency"
+                      options={config?.BILLING_CURRENCIES?.map((option: any) => {
+                        return {
+                          value: option,
+                          label: `${option}`,
+                        };
+                      })}
+                      className="basic-multi-select"
+                      menuPlacement="auto"
+                      classNamePrefix="Select2"
+                      placeholder="Select Currency"
+                      onChange={(e: any) =>
+                        setData({ ...data, currency: e.value })
+                      }
+                    />
+                  </div>
+
+
                   <div className="mb-4">
                     <label htmlFor="billNumber" className="form-label">
                       Bill Number
@@ -382,7 +417,7 @@ const CreateModal = ({
                           Discount(%)
                         </th>
                         <th scope="col" className="text-start">
-                          VAT (%)
+                          VAT
                         </th>
                         <th scope="col" className="text-start">
                           Amount
@@ -461,7 +496,7 @@ const CreateModal = ({
                             />
                           </td>
                           <td>
-                            <input
+                            {/* <input
                               className="form-control me-2 h-[36.47px]"
                               type="number"
                               placeholder="VAT"
@@ -474,14 +509,46 @@ const CreateModal = ({
                                 )
                               }
                               disabled={data?.billingType == "timeBased"}
+                            /> */}
+
+                            <Select
+                              name="vatSetting"
+                              options={config?.VAT_SETTINGS?.map(
+                                (option: any) => {
+                                  return {
+                                    value: option,
+                                    label:
+                                      option.type === "percentage"
+                                        ? `${option.rate}%`
+                                        : `Flat Rate: ${option.rate} ${data?.currency ?? "PHP"
+                                        }`,
+                                  };
+                                }
+                              )}
+                              className="basic-multi-select"
+                              menuPlacement="auto"
+                              classNamePrefix="Select2"
+                              placeholder="Select VAT"
+                              onChange={(e: any) =>
+                                handleItemChange(index, "vat", e.value)
+                              }
+                              disabled={data?.billingType == "timeBased"}
                             />
                           </td>
                           <td>
                             {(
                               item.quantity *
                               item.price *
-                              (1 - item.discount / 100) *
-                              (1 + item.vat / 100)
+                              (1 - item.discount / 100)
+
+                              +
+                              (item.vat?.type == "percentage"
+                                ? item.quantity *
+                                item.price *
+                                (1 - item.discount / 100) * item?.vat?.rate / 100
+                                : item?.vat?.type == "flat"
+                                  ? item?.vat?.rate
+                                  : 0)
                             ).toFixed(2)}
                           </td>
                         </tr>

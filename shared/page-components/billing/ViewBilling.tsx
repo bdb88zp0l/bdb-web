@@ -235,7 +235,17 @@ const ViewBilling = ({
                               <td className="p-3">{billing.quantity}</td>
                               <td className="p-3">{billing.price}</td>
                               <td className="p-3">{billing.discount}</td>
-                              <td className="p-3">{billing.vat}</td>
+                              <td className="p-3">
+                                {/* {billing.vat?.} */}
+
+                                {(billing.vat?.type == "percentage"
+                                  ? billing.quantity *
+                                  billing.price *
+                                  (1 - billing.discount / 100) * billing?.vat?.rate / 100
+                                  : billing?.vat?.type == "flat"
+                                    ? billing?.vat?.rate
+                                    : 0)}
+                              </td>
                               <td className="p-3">{billing.amount}</td>
                             </tr>
                           ))
@@ -392,24 +402,6 @@ const ViewBilling = ({
               >
                 Cancel
               </button>
-              <button
-                onClick={() => {
-                  downloadPDF(selectedBilling);
-                }}
-                className="ti-btn ti-btn-primary-full py-2 px-4"
-              >
-                Download
-              </button>
-
-              {selectedBilling?.status !== "paid" && (
-                <button
-                  onClick={() => setAddPaymentModal(true)}
-                  className="ti-btn ti-btn-primary-full py-2 px-4"
-                // disabled={selectedBilling?.status === "paid"}
-                >
-                  Add Payment
-                </button>
-              )}
             </div>
           </div>
         </div>

@@ -69,7 +69,12 @@ const EditModal = ({
     items.forEach((item) => {
       const itemTotal = item.quantity * item.price;
       const itemDiscount = itemTotal * (Number(item.discount) / 100);
-      const itemVat = (itemTotal - itemDiscount) * (Number(item.vat) / 100);
+      const itemVat =
+        (item.vat?.type == "percentage"
+          ? (itemTotal - itemDiscount) * item?.vat?.rate / 100
+          : item?.vat?.type == "flat"
+            ? item?.vat?.rate
+            : 0);
       item.amount = itemTotal;
       subtotal += itemTotal;
       totalDiscount += itemDiscount;
@@ -236,6 +241,45 @@ const EditModal = ({
                       }}
                     />
                   </div>
+
+                  <div className="mb-4">
+
+                    <label htmlFor="title" className="form-label">
+                      Currency
+                    </label>
+                    <Select
+                      name="currency"
+                      options={config?.BILLING_CURRENCIES?.map((option: any) => {
+                        return {
+                          value: option,
+                          label: `${option}`,
+                        };
+                      })}
+                      defaultValue={config?.BILLING_CURRENCIES?.map(
+                        (option: any) => ({
+                          value: option,
+                          label: option,
+                        })
+                      )?.find((option: any) => {
+                        return option.value === data?.currency;
+                      })}
+                      value={config?.BILLING_CURRENCIES?.map((option: any) => ({
+                        value: option,
+                        label: option,
+                      }))?.find((option: any) => {
+                        return option.value === data?.currency;
+                      })}
+                      className="basic-multi-select"
+                      menuPlacement="auto"
+                      classNamePrefix="Select2"
+                      placeholder="Select Currency"
+                      onChange={(e: any) =>
+                        setData({ ...data, currency: e.value })
+                      }
+                    />
+                  </div>
+
+
                   <div className="mb-4">
                     <label htmlFor="billNumber" className="form-label">
                       Bill Number
@@ -435,27 +479,91 @@ const EditModal = ({
                             />
                           </td>
                           <td>
-                            <input
-                              className="form-control me-2 h-[36.47px]"
-                              type="number"
-                              placeholder="VAT"
-                              value={item.vat}
-                              onChange={(e) =>
-                                handleItemChange(
-                                  index,
-                                  "vat",
-                                  parseFloat(e.target.value)
-                                )
-                              }
-                              disabled={data?.billingType == "timeBased"}
-                            />
+                            {data?.billingType == "timeBased" ?
+                              <input
+                                className="form-control me-2 h-[36.47px]"
+                                type="number"
+                                placeholder="VAT"
+                                value={item.vat}
+                                onChange={(e) =>
+                                  handleItemChange(
+                                    index,
+                                    "vat",
+                                    parseFloat(e.target.value)
+                                  )
+                                }
+                                disabled={data?.billingType == "timeBased"}
+                              />
+
+                              :
+                              <Select
+                                name="vat"
+                                options={config?.VAT_SETTINGS?.map((option: any) => {
+                                  return {
+                                    value: option,
+                                    label:
+                                      option.type === "percentage"
+                                        ? `${option.rate}%`
+                                        : `Flat Rate: ${option.rate} ${data?.currency ?? "PHP"
+                                        }`,
+                                  };
+                                })}
+                                value={config?.VAT_SETTINGS?.map((option: any) => ({
+                                  value: option,
+                                  label:
+                                    option.type === "percentage"
+                                      ? `${option.rate}%`
+                                      : `Flat Rate: ${option.rate} ${data?.currency ?? "PHP"
+                                      }`,
+                                }))?.find((option: any) => {
+                                  return (
+                                    JSON.stringify(option.value) ==
+                                    JSON.stringify(item?.vat)
+                                  );
+                                })}
+                                defaultValue={config?.VAT_SETTINGS?.map(
+                                  (option: any) => ({
+                                    value: option,
+                                    label:
+                                      option.type === "percentage"
+                                        ? `${option.rate}%`
+                                        : `Flat Rate: ${option.rate} ${data?.currency ?? "PHP"
+                                        }`,
+                                  })
+                                )?.find((option: any) => {
+
+                                  console.log("Is true", data?.vat?.rate, (
+                                    JSON.stringify(option.value) ==
+                                    JSON.stringify(item?.vat)
+                                  ))
+                                  return (
+                                    JSON.stringify(option.value) ==
+                                    JSON.stringify(item?.vat)
+                                  );
+                                })}
+                                className="basic-multi-select"
+                                menuPlacement="auto"
+                                classNamePrefix="Select2"
+                                placeholder="Select VAT"
+                                onChange={(e: any) =>
+                                  handleItemChange(index, "vat", e.value)
+                                }
+                              />
+                            }
                           </td>
                           <td>
                             {(
                               item.quantity *
                               item.price *
-                              (1 - item.discount / 100) *
-                              (1 + item.vat / 100)
+                              (1 - item.discount / 100)
+                              +
+                              (item.vat?.type == "percentage"
+                                ? item.quantity *
+                                item.price *
+                                (1 - item.discount / 100) * item?.vat?.rate / 100
+                                : item?.vat?.type == "flat"
+                                  ? item?.vat?.rate
+                                  : 0)
                             ).toFixed(2)}
                           </td>
                         </tr>
