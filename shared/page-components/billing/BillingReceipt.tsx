@@ -46,7 +46,7 @@ const BillingReceipt: React.FC<BillingReceiptProps> = ({
               ? `${formatDate(selectedBilling?.billingStart)} - ${formatDate(
                   selectedBilling?.billingEnd
                 )}`
-              : formatDate(selectedBilling?.date)}
+              : formatDate(selectedBilling?.billingStart)}
           </p>
           <p className="text-black">
             Due Date: {formatDate(selectedBilling?.dueDate)}

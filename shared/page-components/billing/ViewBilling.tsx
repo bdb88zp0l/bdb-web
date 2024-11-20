@@ -1,14 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import dynamic from "next/dynamic";
-
-import { useConfig } from "@/shared/providers/ConfigProvider";
-import Modal from "@/shared/modals/Modal";
-import AddPaymentModal from "./AddPaymentModal";
 import { userPrivateRequest } from "@/config/axios.config";
-import { formatAmount, formatDate } from "@/utils/utils";
+import Modal from "@/shared/modals/Modal";
+import { useConfig } from "@/shared/providers/ConfigProvider";
 import store from "@/shared/redux/store";
+import { formatAmount, formatDate } from "@/utils/utils";
+import AddPaymentModal from "./AddPaymentModal";
 
 const ViewBilling = ({
   showModalOpen,
@@ -56,13 +54,15 @@ const ViewBilling = ({
   return (
     <>
       <Modal isOpen={showModalOpen} close={() => setShowModalOpen(false)}>
-        <AddPaymentModal
-          addPaymentModal={addPaymentModal}
-          setAddPaymentModal={setAddPaymentModal}
-          fetchPayments={fetchPayments}
-          selectedBilling={selectedBilling}
-          fetchBillings={fetchBillings}
-        />
+        {addPaymentModal && (
+          <AddPaymentModal
+            addPaymentModal={addPaymentModal}
+            setAddPaymentModal={setAddPaymentModal}
+            fetchPayments={fetchPayments}
+            selectedBilling={selectedBilling}
+            fetchBillings={fetchBillings}
+          />
+        )}
 
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center  min-w-[calc(100%-3.5rem)]">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">
@@ -97,20 +97,18 @@ const ViewBilling = ({
 
                 <div className="grid grid-cols-12 gap-4">
                   <div className="col-span-4">
-                    <label className="mb-2 font-bold text-[16px]">
-                      Bill From:
-                    </label>
-                    <div className="col-span-12 grid grid-cols-2 gap-x-4">
-                      <label className="mb-2 font-bold">Name:</label>
+                    {/* <label className="mb-2 font-bold text-[16px]">Bill From:</label> */}
+                    <div className="col-span-12 flex flex-col gap-4">
+                      {/* <label className="mb-2 font-bold">Name:</label> */}
                       <span>{auth?.user?.defaultWorkspace?.name ?? ""}</span>
 
-                      <label className="mb-2 font-bold">Phone Number:</label>
+                      {/* <label className="mb-2 font-bold">Phone Number:</label> */}
                       <span>{auth?.user?.defaultWorkspace?.phone ?? ""}</span>
 
-                      <label className="mb-2 font-bold">Email:</label>
+                      {/* <label className="mb-2 font-bold">Email:</label> */}
                       <span>{auth?.user?.defaultWorkspace?.email ?? ""}</span>
 
-                      <label className="mb-2 font-bold">Address:</label>
+                      {/* <label className="mb-2 font-bold">Address:</label> */}
                       <span>
                         {auth?.user?.defaultWorkspace?.addressLine1 ?? ""}
                         <br />
@@ -120,57 +118,47 @@ const ViewBilling = ({
                   </div>
 
                   <div className="col-span-4">
-                    <label className="mb-2 font-bold text-[16px]">
-                      Bill To:
-                    </label>
-                    <div className="col-span-12 grid grid-cols-2 gap-x-4">
-                      <label className="mb-2 font-bold">Name:</label>
+                    {/* <label className="mb-2 font-bold text-[16px]">Bill To:</label> */}
+                    <div className="col-span-12 flex flex-col gap-4">
+                      {/* <label className="mb-2 font-bold">Name:</label> */}
                       <span>{caseInfo?.client?.companyName ?? ""}</span>
 
-                      <label className="mb-2 font-bold">Phone Number:</label>
+                      {/* <label className="mb-2 font-bold">Phone Number:</label> */}
                       <span>
-                        {caseInfo?.client?.phones?.map((item) => {
-                          return (
-                            <>
-                              <span>
-                                {item?.dialCode} {item?.phoneNumber}
-                              </span>
-                              <br />
-                            </>
-                          );
-                        })}
+                        {caseInfo?.client?.phones?.map((item, index) => (
+                          <div key={index}>
+                            <span>
+                              {item?.dialCode} {item?.phoneNumber}
+                            </span>
+                            <br />
+                          </div>
+                        ))}
                       </span>
 
-                      <label className="mb-2 font-bold">Email:</label>
+                      {/* <label className="mb-2 font-bold">Email:</label> */}
                       <span>
-                        {caseInfo?.client?.emails?.map((item) => {
-                          return (
-                            <>
-                              <span>{item?.value}</span>
-                              <br />
-                            </>
-                          );
-                        })}
+                        {caseInfo?.client?.emails?.map((item, index) => (
+                          <div key={index}>
+                            <span>{item?.value}</span>
+                            <br />
+                          </div>
+                        ))}
                       </span>
 
-                      <label className="mb-2 font-bold">Address:</label>
+                      {/* <label className="mb-2 font-bold">Address:</label> */}
                       <span>
-                        {caseInfo?.client?.addresses?.map((address) => {
-                          return (
-                            <div key={address?._id}>
-                              {`${address.houseNumber || "N/A"}, ${
-                                address.street || "N/A"
-                              }, ${address.city || "N/A"}, ${
-                                address.barangay || "N/A"
-                              }, ${address.zip || "N/A"}, ${
-                                address.region || "N/A"
-                              }, ${address.country || "N/A"}`}{" "}
-                              <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
-                                {address?.label}
-                              </span>{" "}
-                            </div>
-                          );
-                        })}
+                        {caseInfo?.client?.addresses?.map((address, index) => (
+                          <div key={index}>
+                            {`${address.houseNumber || "N/A"}, ${address.street || "N/A"
+                              }, 
+          ${address.city || "N/A"}, ${address.barangay || "N/A"}, 
+          ${address.zip || "N/A"}, ${address.region || "N/A"}, 
+          ${address.country || "N/A"}`}
+                            <span className="badge bg-light text-[#8c9097] dark:text-white/50 m-1">
+                              {address?.label}
+                            </span>
+                          </div>
+                        ))}
                       </span>
                     </div>
                   </div>
@@ -228,7 +216,7 @@ const ViewBilling = ({
                       </thead>
                       <tbody>
                         {selectedBilling?.items &&
-                        selectedBilling.items.length > 0 ? (
+                          selectedBilling.items.length > 0 ? (
                           selectedBilling.items.map((billing, index) => (
                             <tr className="border-b" key={billing._id}>
                               <td className="p-3">{index + 1}</td>
@@ -381,7 +369,7 @@ const ViewBilling = ({
                 <button
                   onClick={() => setAddPaymentModal(true)}
                   className="ti-btn ti-btn-primary-full py-2 px-4"
-                  // disabled={selectedBilling?.status === "paid"}
+                // disabled={selectedBilling?.status === "paid"}
                 >
                   Add Payment
                 </button>
@@ -393,6 +381,24 @@ const ViewBilling = ({
               >
                 Cancel
               </button>
+              <button
+                onClick={() => {
+                  downloadPDF(selectedBilling);
+                }}
+                className="ti-btn ti-btn-primary-full py-2 px-4"
+              >
+                Download
+              </button>
+
+              {selectedBilling?.status !== "paid" && (
+                <button
+                  onClick={() => setAddPaymentModal(true)}
+                  className="ti-btn ti-btn-primary-full py-2 px-4"
+                // disabled={selectedBilling?.status === "paid"}
+                >
+                  Add Payment
+                </button>
+              )}
             </div>
           </div>
         </div>

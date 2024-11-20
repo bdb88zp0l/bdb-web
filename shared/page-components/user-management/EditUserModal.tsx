@@ -9,15 +9,17 @@
  * @returns {React.ReactElement} The rendered modal component for editing a user.
  */
 
-import React, { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
-import { toast } from "react-toastify";
 import { userPrivateRequest } from "@/config/axios.config";
 import ButtonSpinner from "@/shared/layout-components/loader/ButtonSpinner";
 import Modal from "@/shared/modals/Modal";
-import { useSelector } from "react-redux";
 import TwoFASetupModal from "@/shared/modals/TwoFASetupModal";
-import { toWordUpperCase } from "@/utils/utils";
+import ResetPasswordModal from "@/shared/page-components/user-management/ResetPasswordModal";
+import { formatDate, toWordUpperCase } from "@/utils/utils";
+import { letterSpacing } from "html2canvas/dist/types/css/property-descriptors/letter-spacing";
+import dynamic from "next/dynamic";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 // Dynamically import react-select to avoid SSR issues
 const Select = dynamic(() => import("react-select"), { ssr: false });
@@ -36,11 +38,12 @@ const EditUserModal = ({
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [edit, setEdit] = useState(false);
+  const [resetPasswordShowModal, setResetPasswordShowModal] = useState(false);
 
-  // const handleEdit = () => {
-  //   setEdit(!edit);
-  // };
-  console.log(mode, "mode");
+  let handlePasswordEdit = () => {
+    setResetPasswordShowModal(true);
+  };
+
   useEffect(() => {
     setData(user);
   }, [user]);
@@ -66,50 +69,8 @@ const EditUserModal = ({
   const [isAuthenticatorModalOpen, setIsAuthenticatorModalOpen] =
     useState(false);
 
-  const [changePasswordData, setChangePasswordData] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmNewPassword: "",
-  });
-
-  const [changePasswordLoading, setChangePasswordLoading] = useState(false);
-  const handleChangePassword = async (e: React.FormEvent) => {};
-  // Handle form submission
   const handleSubmit = async () => {
     try {
-      setIsSubmitting(true);
-      // e.preventDefault();
-      setChangePasswordLoading(true);
-      const { currentPassword, newPassword, confirmNewPassword } =
-        changePasswordData;
-      if (newPassword !== confirmNewPassword) {
-        toast.error(
-          "The new password and confirmation do not match. Please try again."
-        );
-        return;
-      }
-      userPrivateRequest
-        .post("/api/security/changePassword/" + data?._id, {
-          currentPassword,
-          newPassword,
-          confirmNewPassword,
-          sourcePage: "user-management",
-        })
-        .then((res) => {
-          // toast.success("Your password has been changed successfully.");
-          setChangePasswordData({
-            currentPassword: "",
-            newPassword: "",
-            confirmNewPassword: "",
-          });
-        })
-        .catch((err) => {
-          toast.error(err.response.data.message);
-        })
-        .finally(() => {
-          setChangePasswordLoading(false);
-        });
-      // Create a FormData object to handle file uploads and other data
       const formData = new FormData();
       formData.append("firstName", data.firstName);
       formData.append("lastName", data.lastName);
@@ -357,7 +318,7 @@ const EditUserModal = ({
                     className="form-control"
                     id="createdat"
                     placeholder="Created At"
-                    value={data?.createdAt || ""}
+                    value={formatDate(data?.createdAt || "")}
                     onChange={(e) =>
                       setData({ ...data, createdAt: e.target.value })
                     }
@@ -415,112 +376,8 @@ const EditUserModal = ({
                       </div>
                     </div>
                   </div>
-                  {/* <div className="xl:col-span-2 col-span-12"></div> */}
-
-                  {mode == "edit" && (
-                    <div className="xl:col-span-6 col-span-12">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-[0.875rem] mb-1 font-semibold">
-                            Reset Password
-                          </p>
-                          <p className="text-[0.75rem] text-[#8c9097] dark:text-white/50">
-                            Password should be min of{" "}
-                            <b className="text-success">
-                              8 digits<sup>*</sup>
-                            </b>
-                            ,atleast{" "}
-                            <b className="text-success">
-                              One Capital letter<sup>*</sup>
-                            </b>{" "}
-                            and{" "}
-                            <b className="text-success">
-                              One Special Character<sup>*</sup>
-                            </b>{" "}
-                            included.
-                          </p>
-                          {/* <div className="mb-2">
-                            <label
-                              htmlFor="current-password"
-                              className="form-label"
-                            >
-                              Current Password
-                            </label>
-                            <input
-                              type="password"
-                              className="form-control w-full !rounded-md"
-                              id="current-password"
-                              placeholder="Current Password"
-                              value={changePasswordData.currentPassword}
-                              onChange={(e) => {
-                                setChangePasswordData({
-                                  ...changePasswordData,
-                                  currentPassword: e.target.value,
-                                });
-                              }}
-                            />
-                          </div> */}
-                          <div className="mb-2">
-                            <label
-                              htmlFor="new-password"
-                              className="form-label"
-                            >
-                              New Password
-                            </label>
-                            <input
-                              type="password"
-                              className="form-control w-full !rounded-md"
-                              id="new-password"
-                              placeholder="New Password"
-                              value={changePasswordData.newPassword}
-                              onChange={(e) => {
-                                setChangePasswordData({
-                                  ...changePasswordData,
-                                  newPassword: e.target.value,
-                                });
-                              }}
-                            />
-                          </div>
-                          <div className="mb-0">
-                            <label
-                              htmlFor="confirm-password"
-                              className="form-label"
-                            >
-                              Confirm Password
-                            </label>
-                            <input
-                              type="password"
-                              className="form-control w-full !rounded-md"
-                              id="confirm-password"
-                              placeholder="Confirm Password"
-                              value={changePasswordData.confirmNewPassword}
-                              onChange={(e) => {
-                                setChangePasswordData({
-                                  ...changePasswordData,
-                                  confirmNewPassword: e.target.value,
-                                });
-                              }}
-                            />
-                          </div>
-
-                          {/* <div className="ltr:float-right rtl:float-left mt-4">
-                          <button
-                            type="button"
-                            className="ti-btn bg-primary text-white"
-                            onClick={handleChangePassword}
-                          >
-                            {changePasswordLoading ? (
-                              <ButtonSpinner text="Saving" />
-                            ) : (
-                              "Save Changes"
-                            )}
-                          </button>
-                        </div> */}
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
+                {/* password */}
               </div>
             </div>
 
@@ -533,16 +390,27 @@ const EditUserModal = ({
               >
                 Cancel
               </button>
-              {mode == "show" ? (
+              {mode == "edit" && (
                 <button
                   type="button"
                   className="ti-btn bg-primary text-white !font-medium"
+                  data-hs-overlay="#todo-compose"
+                  onClick={handlePasswordEdit}
+                >
+                  Reset Password
+                </button>
+              )}
+
+              {mode == "show" ? (
+                <button
+                  type="button"
+                  className="ti-btn bg-primary text-white !font-medium ti-btn-secondary-full btn-wave"
                   data-hs-overlay="#todo-compose"
                   onClick={(e) => {
                     setMode("edit");
                   }}
                 >
-                  Edit
+                  Edit User
                 </button>
               ) : (
                 <button
@@ -569,6 +437,13 @@ const EditUserModal = ({
         user={data}
         sourcePage="user-management"
       />
+      {resetPasswordShowModal && (
+        <ResetPasswordModal
+          resetPasswordShowModal={resetPasswordShowModal}
+          setResetPasswordShowModal={setResetPasswordShowModal}
+          user={data}
+        />
+      )}
     </>
   );
 };

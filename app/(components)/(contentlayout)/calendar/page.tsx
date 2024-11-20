@@ -321,7 +321,7 @@ const Fullcalendar = () => {
                 >
                   {filteredEvents
                     ?.sort((a: any, b: any) => {
-                      return new Date(a.start) - new Date(b.start);
+                      return new Date(a.start).getTime() - new Date(b.start).getTime();
                     })
                     .map((event) => {
                       return (
@@ -378,7 +378,7 @@ const Fullcalendar = () => {
                     center: "title",
                     right: "dayGridMonth,timeGridWeek,timeGridDay",
                   }}
-                  initialView="dayGridMonth"
+                  initialView="timeGridWeek"
                   editable={true}
                   selectable={true}
                   selectMirror={true}

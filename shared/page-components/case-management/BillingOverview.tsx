@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import CreateModal from "../billing/CreateModal";
 import EditModal from "../billing/EditModal";
 import ViewBilling from "../billing/ViewBilling";
+import Pagination from "@/shared/common-components/Pagination";
 import BillingReceipt from "../billing/BillingReceipt";
 
 // Dynamically import react-select to avoid SSR issues
@@ -59,6 +60,15 @@ const BillingOverview = ({ caseInfo }: any) => {
       })
       .then((res) => {
         setData(res.data.data ?? {});
+
+        if (selectedBilling) {
+          let temporary = res.data.data?.docs ?? [];
+          setSelectedBilling(
+            temporary.find((i) => {
+              return i._id == selectedBilling?._id;
+            })
+          );
+        }
       })
       .catch((error: any) => {
         toast.error(
@@ -166,7 +176,14 @@ const BillingOverview = ({ caseInfo }: any) => {
                     >
                       Search
                     </button>
-                    <button className="text-info !py-1 !px-4 !text-[0.75rem] !m-0 h-[36.47px] content-center text-nowrap">
+                    <button
+                      onClick={() => {
+                        setTemporaryKeyword("");
+                        setSearch("");
+                        setPage(1);
+                      }}
+                      className="text-info !py-1 !px-4 !text-[0.75rem] !m-0 h-[36.47px] content-center text-nowrap"
+                    >
                       Clear Search Results
                     </button>
                   </div>
@@ -215,7 +232,7 @@ const BillingOverview = ({ caseInfo }: any) => {
                             Bill Type
                           </th>
                           <th scope="col" className="text-start">
-                            Bill From
+                            Bill To
                           </th>
                           <th scope="col" className="text-start">
                             Date Of Reciept
@@ -285,16 +302,18 @@ const BillingOverview = ({ caseInfo }: any) => {
                                     >
                                       <i className="ri-download-line"></i>
                                     </button>
+                                    {item.status !== "paid" && (
+                                      <button
+                                        className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon"
+                                        onClick={() => {
+                                          setSelectedBilling(item);
+                                          setEditModalOpen(true);
+                                        }}
+                                      >
+                                        <i className="ri-pencil-line"></i>
+                                      </button>
+                                    )}
 
-                                    <button
-                                      className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon"
-                                      onClick={() => {
-                                        setSelectedBilling(item);
-                                        setEditModalOpen(true);
-                                      }}
-                                    >
-                                      <i className="ri-pencil-line"></i>
-                                    </button>
                                     <button
                                       aria-label="button"
                                       type="button"
@@ -320,6 +339,22 @@ const BillingOverview = ({ caseInfo }: any) => {
                     </table>
                   </div>
                 </div>
+
+                <Pagination
+                  limit={limit}
+                  page={page}
+                  totalRow={data?.totalDocs ?? 0}
+                  handlePageChange={(
+                    limit: number,
+                    newOffset: number,
+                    page: number
+                  ) => {
+                    setPage(page);
+                  }}
+                  handleLimitChange={(updatedLimit: number) => {
+                    setLimit(updatedLimit);
+                  }}
+                />
               </div>
             </div>
           </div>
