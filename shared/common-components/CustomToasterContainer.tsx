@@ -31,6 +31,7 @@ function CustomToasterContainer({}: any) {
     <>
       <ToastContainer
         // autoClose={300000}
+        style={{ zIndex: 999999 }}
         position="bottom-right"
         hideProgressBar={true}
         toastClassName={(instance: any) => {
@@ -44,10 +45,10 @@ function CustomToasterContainer({}: any) {
           //   : type.includes("info")
           //   ? "flex p-4 ti-toast bg-info/10 text-sm text-info  bg-[#EAF5FD]"
           //         : "";
-          return type.includes("success")
+          return type === "success"
             ? // ? "flex p-4 ti-toast bg-success/10 text-sm text-success"
               "flex p-4 ti-toast bg-[#FDEAE7] text-sm text-success"
-            : type.includes("error")
+            : type === "error"
             ? "flex p-4 ti-toast bg-[#FDEAE7] text-sm text-danger"
             : type.includes("warning")
             ? "flex p-4 ti-toast bg-warning/10 text-sm text-warning"

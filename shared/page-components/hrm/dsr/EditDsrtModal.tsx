@@ -47,7 +47,7 @@ const EditEventModal = ({ isOpen, onClose, pageData, onUpdate, event }) => {
   };
   const casesOptions = pageData?.cases?.map((caseInfo) => ({
     value: caseInfo._id,
-    label: caseInfo.title,
+    label: caseInfo.task,
   }));
 
   console.log("formData", formData);
@@ -99,7 +99,7 @@ const EditEventModal = ({ isOpen, onClose, pageData, onUpdate, event }) => {
                   name="task"
                   className="form-control"
                   placeholder="Task"
-                  value={formData.title}
+                  value={formData.task}
                   onChange={handleInputChange}
                   required
                 />

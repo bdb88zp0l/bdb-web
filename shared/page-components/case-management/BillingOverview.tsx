@@ -272,9 +272,10 @@ const BillingOverview = ({ caseInfo }: any) => {
                                   {item?.billingType == "oneTime"
                                     ? "One Time Billing"
                                     : item?.billingType == "progressBased"
-                                      ? "Progress Billing" :
-                                      item?.billingType == "taskBased" ? "Task-Based Billing"
-                                        : "Time-Based Billing"}
+                                    ? "Progress Billing"
+                                    : item?.billingType == "taskBased"
+                                    ? "Task-Based Billing"
+                                    : "Time-Based Billing"}
                                 </td>
                                 <td>{item?.clientData?.companyName ?? ""}</td>
                                 <td>{formatDate(item?.billingStart)}</td>
@@ -302,17 +303,16 @@ const BillingOverview = ({ caseInfo }: any) => {
                                     >
                                       <i className="ri-download-line"></i>
                                     </button>
-                                    {item.status !== "paid" && (
-                                      <button
-                                        className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon"
-                                        onClick={() => {
-                                          setSelectedBilling(item);
-                                          setEditModalOpen(true);
-                                        }}
-                                      >
-                                        <i className="ri-pencil-line"></i>
-                                      </button>
-                                    )}
+
+                                    <button
+                                      className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon"
+                                      onClick={() => {
+                                        setSelectedBilling(item);
+                                        setEditModalOpen(true);
+                                      }}
+                                    >
+                                      <i className="ri-pencil-line"></i>
+                                    </button>
 
                                     <button
                                       aria-label="button"
