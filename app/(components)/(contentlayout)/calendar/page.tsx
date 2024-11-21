@@ -113,7 +113,7 @@ const Fullcalendar = () => {
 
   useEffect(() => {
     fetchCalendars();
-    
+
     // Call the function every 5 minutes (300,000 milliseconds)
     const intervalId = setInterval(() => {
       fetchCalendars();
@@ -321,7 +321,10 @@ const Fullcalendar = () => {
                 >
                   {filteredEvents
                     ?.sort((a: any, b: any) => {
-                      return new Date(a.start).getTime() - new Date(b.start).getTime();
+                      return (
+                        new Date(a.start).getTime() -
+                        new Date(b.start).getTime()
+                      );
                     })
                     .map((event) => {
                       return (
@@ -358,9 +361,9 @@ const Fullcalendar = () => {
                     })}
                 </ul>
               </div>
-              <div className="p-4">
+              {/* <div className="p-4">
                 <img src="../../assets/images/media/media-83.svg" alt="" />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -378,7 +381,7 @@ const Fullcalendar = () => {
                     center: "title",
                     right: "dayGridMonth,timeGridWeek,timeGridDay",
                   }}
-                  initialView="timeGridWeek"
+                  initialView="timeGridDay"
                   editable={true}
                   selectable={true}
                   selectMirror={true}

@@ -96,7 +96,7 @@ const Contacts = () => {
     { label: "Latest", value: "createdAt" },
   ];
 
-  console.log("data", search, temporaryKeyword);
+  console.log("data", temporaryKeyword);
 
   return (
     <Fragment>
@@ -140,6 +140,12 @@ const Contacts = () => {
                     setTemporaryKeyword(""); // Clear the temporary keyword
                     setSearch(""); // Clear the search results
                     setPage(1);
+                  }}
+                  onKeyDown={(e) => {
+                    e.preventDefault();
+                    if (e.key === "Enter") {
+                      setSearch(temporaryKeyword);
+                    }
                   }}
                 >
                   Clear Search Results

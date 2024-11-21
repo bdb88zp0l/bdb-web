@@ -135,6 +135,11 @@ const Contacts = () => {
                   onChange={(e) => {
                     setTemporaryKeyword(e.target.value);
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      setSearch(temporaryKeyword);
+                    }
+                  }}
                 />
                 <button
                   className="ti-btn ti-btn-light !py-1 !px-2 !text-[0.75rem] !m-0 h-[36.47px]"

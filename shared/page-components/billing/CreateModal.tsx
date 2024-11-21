@@ -26,7 +26,7 @@ const CreateModal = ({
 }: any) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [data, setData] = useState<any>({
-    title: "",
+    // title: "",
     case: caseInfo?._id,
     billingType: "oneTime",
     currency: "PHP",
@@ -256,7 +256,7 @@ const CreateModal = ({
                 </div>
 
                 <div className="col-span-4">
-                  <div className="mb-4">
+                  {/* <div className="mb-4">
                     <label htmlFor="title" className="form-label">
                       Title
                     </label>
@@ -270,10 +270,10 @@ const CreateModal = ({
                         setData({ ...data, title: e.target.value });
                       }}
                     />
-                  </div>
+                  </div> */}
 
                   <div className="mb-4">
-                    <label htmlFor="title" className="form-label">
+                    <label htmlFor="currency" className="form-label">
                       Currency
                     </label>
                     <Select
@@ -290,6 +290,14 @@ const CreateModal = ({
                       menuPlacement="auto"
                       classNamePrefix="Select2"
                       placeholder="Select Currency"
+                      value={
+                        config?.BILLING_CURRENCIES?.map((option: any) => ({
+                          value: option,
+                          label: `${option}`,
+                        }))?.find(
+                          (option: any) => option.value === data?.currency
+                        ) || null
+                      }
                       onChange={(e: any) =>
                         setData({ ...data, currency: e.value })
                       }
@@ -445,7 +453,7 @@ const CreateModal = ({
                                   e.target.value
                                 )
                               }
-                              disabled={data?.billingType == "timeBased"}
+                              // disabled={data?.billingType == "timeBased"}
                             />
                           </td>
                           <td>
@@ -461,7 +469,7 @@ const CreateModal = ({
                                   parseFloat(e.target.value)
                                 )
                               }
-                              disabled={data?.billingType == "timeBased"}
+                              // disabled={data?.billingType == "timeBased"}
                             />
                           </td>
                           <td>
@@ -477,7 +485,7 @@ const CreateModal = ({
                                   parseFloat(e.target.value)
                                 )
                               }
-                              disabled={data?.billingType == "timeBased"}
+                              // disabled={data?.billingType == "timeBased"}
                             />
                           </td>
                           <td>
@@ -493,7 +501,7 @@ const CreateModal = ({
                                   parseFloat(e.target.value)
                                 )
                               }
-                              disabled={data?.billingType == "timeBased"}
+                              // disabled={data?.billingType == "timeBased"}
                             />
                           </td>
                           <td>
@@ -534,7 +542,7 @@ const CreateModal = ({
                               onChange={(e: any) =>
                                 handleItemChange(index, "vat", e.value)
                               }
-                              disabled={data?.billingType == "timeBased"}
+                              isDisabled={data?.billingType == "timeBased"}
                             />
                           </td>
                           <td>

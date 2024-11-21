@@ -63,7 +63,7 @@ const CaseManagement = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const openModal = (row) => {
-    setIsEditModalOpen(true)
+    setIsEditModalOpen(true);
     setSelectedClient(row);
   };
   const closeModal = () => setIsEditModalOpen(false);
@@ -89,6 +89,11 @@ const CaseManagement = () => {
                   value={temporaryKeyword}
                   onChange={(e) => {
                     setTemporaryKeyword(e.target.value);
+                  }}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      setSearch(temporaryKeyword);
+                    }
                   }}
                 />
                 <button
@@ -221,7 +226,8 @@ const CaseManagement = () => {
                             onClick={() => {
                               openModal(row);
                             }}
-                            className="font-semibold cursor-pointer">
+                            className="font-semibold cursor-pointer"
+                          >
                             {row?.companyName}
                           </td>
                           <td>{row?.clientNumber}</td>
@@ -288,7 +294,7 @@ const CaseManagement = () => {
                                   type="button"
                                   className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
                                   onClick={() => {
-                                    openModal(row)
+                                    openModal(row);
                                   }}
                                 >
                                   <i className="ri-pencil-line"></i>

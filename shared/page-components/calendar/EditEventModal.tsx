@@ -116,12 +116,12 @@ const EditEventModal = ({
                 />
               </div>
               <div className="xl:col-span-12 col-span-12">
-                <label className="form-label">Title</label>
+                <label className="form-label">Matter</label>
                 <input
                   type="text"
                   name="title"
                   className="form-control"
-                  placeholder="Event Title"
+                  placeholder="Matter"
                   value={formData.title}
                   onChange={handleInputChange}
                   required
