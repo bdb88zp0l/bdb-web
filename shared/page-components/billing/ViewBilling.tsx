@@ -149,8 +149,9 @@ const ViewBilling = ({
                       <span>
                         {caseInfo?.client?.addresses?.map((address, index) => (
                           <div key={index}>
-                            {`${address.houseNumber || "N/A"}, ${address.street || "N/A"
-                              }, 
+                            {`${address.houseNumber || "N/A"}, ${
+                              address.street || "N/A"
+                            }, 
           ${address.city || "N/A"}, ${address.barangay || "N/A"}, 
           ${address.zip || "N/A"}, ${address.region || "N/A"}, 
           ${address.country || "N/A"}`}
@@ -170,16 +171,17 @@ const ViewBilling = ({
                     <div className="col-span-12 grid grid-cols-2 gap-x-4">
                       <label className="mb-2 font-bold">Currency:</label>
 
-                      <span>{selectedBilling?.currency}
-                      </span>
+                      <span>{selectedBilling?.currency}</span>
                       <label className="mb-2 font-bold">Billing Type:</label>
 
-                      <span>{selectedBilling?.billingType == "oneTime"
-                        ? "One Time Billing"
-                        : selectedBilling?.billingType == "progressBased"
-                          ? "Progress Billing" :
-                          selectedBilling?.billingType == "taskBased" ? "Task-Based Billing"
-                            : "Time-Based Billing"}
+                      <span>
+                        {selectedBilling?.billingType == "oneTime"
+                          ? "One Time Billing"
+                          : selectedBilling?.billingType == "progressBased"
+                          ? "Progress Billing"
+                          : selectedBilling?.billingType == "taskBased"
+                          ? "Task-Based Billing"
+                          : "Time-Based Billing"}
                       </span>
                       <label className="mb-2 font-bold">Billing Date:</label>
                       <span>
@@ -211,7 +213,7 @@ const ViewBilling = ({
                   <div className="overflow-x-auto mb-6">
                     <table className="min-w-full table-auto border border-defaultborder crm-contact">
                       <thead>
-                        <tr className="bg-gray-100">
+                        <tr className="">
                           <th className="p-3 text-left font-bold">#</th>
                           <th className="p-3 text-left font-bold">
                             Particulars
@@ -227,9 +229,12 @@ const ViewBilling = ({
                       </thead>
                       <tbody>
                         {selectedBilling?.items &&
-                          selectedBilling.items.length > 0 ? (
+                        selectedBilling.items.length > 0 ? (
                           selectedBilling.items.map((billing, index) => (
-                            <tr className="border-b" key={billing._id}>
+                            <tr
+                              className="border-b border border-defaultborder"
+                              key={billing._id}
+                            >
                               <td className="p-3">{index + 1}</td>
                               <td className="p-3">{billing.particulars}</td>
                               <td className="p-3">{billing.quantity}</td>
@@ -238,13 +243,15 @@ const ViewBilling = ({
                               <td className="p-3">
                                 {/* {billing.vat?.} */}
 
-                                {(billing.vat?.type == "percentage"
-                                  ? billing.quantity *
-                                  billing.price *
-                                  (1 - billing.discount / 100) * billing?.vat?.rate / 100
+                                {billing.vat?.type == "percentage"
+                                  ? (billing.quantity *
+                                      billing.price *
+                                      (1 - billing.discount / 100) *
+                                      billing?.vat?.rate) /
+                                    100
                                   : billing?.vat?.type == "flat"
-                                    ? billing?.vat?.rate
-                                    : 0)}
+                                  ? billing?.vat?.rate
+                                  : 0}
                               </td>
                               <td className="p-3">{billing.amount}</td>
                             </tr>
@@ -257,33 +264,33 @@ const ViewBilling = ({
                           </tr>
                         )}
 
-                        <tr className="border-b">
+                        <tr className="border-b border border-defaultborder">
                           <td colSpan={5}></td>
                           <td className="p-3 font-bold">Sub Total</td>
                           <td className="p-3">{selectedBilling?.subTotal}</td>
                         </tr>
-                        <tr className="border-b">
+                        <tr className="border-b border border-defaultborder">
                           <td colSpan={5}></td>
                           <td className="p-3 font-bold">Total Tax</td>
                           <td className="p-3">
                             {selectedBilling?.tax.toFixed(2)}
                           </td>
                         </tr>
-                        <tr className="border-b">
+                        <tr className="border-b border border-defaultborder">
                           <td colSpan={5}></td>
                           <td className="p-3 font-bold">Total Discount</td>
                           <td className="p-3">
                             {selectedBilling?.discount.toFixed(2)}
                           </td>
                         </tr>
-                        <tr className="border-b">
+                        <tr className="border-b border border-defaultborder">
                           <td colSpan={5}></td>
                           <td className="p-3 font-bold">Total Amount</td>
                           <td className="p-3">
                             {selectedBilling?.grandTotal.toFixed(2)}
                           </td>
                         </tr>
-                        <tr className="border-b">
+                        <tr className="border-b border border-defaultborder">
                           <td colSpan={5}></td>
                           <td className="p-3 font-bold">Due Amount</td>
                           <td className="p-3">
@@ -309,8 +316,8 @@ const ViewBilling = ({
                   </div>
                   <div className="table-responsive">
                     <table className="table whitespace-nowrap min-w-full">
-                      <thead className="border border-defaultborder crm-contact">
-                        <tr>
+                      <thead className="">
+                        <tr className="border border-defaultborder">
                           <th scope="col" className="text-start">
                             Date
                           </th>
@@ -390,7 +397,7 @@ const ViewBilling = ({
                 <button
                   onClick={() => setAddPaymentModal(true)}
                   className="ti-btn ti-btn-primary-full py-2 px-4"
-                // disabled={selectedBilling?.status === "paid"}
+                  // disabled={selectedBilling?.status === "paid"}
                 >
                   Add Payment
                 </button>
@@ -405,7 +412,7 @@ const ViewBilling = ({
             </div>
           </div>
         </div>
-      </Modal >
+      </Modal>
     </>
   );
 };
