@@ -23,6 +23,7 @@ import SortBy from "@/shared/common-components/SortBy";
 const Contacts = () => {
   const [startDate, setStartDate] = useState(new Date());
   const handleDelete = (id: number) => {
+    return;
     userPrivateRequest
       .delete(`/api/contacts/${id}`)
       .then((res) => {
@@ -122,6 +123,11 @@ const Contacts = () => {
                   onChange={(e) => {
                     setTemporaryKeyword(e.target.value);
                   }}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      setSearch(temporaryKeyword);
+                    }
+                  }}
                 />
                 <button
                   className="ti-btn ti-btn-light !py-1 !px-2 !text-[0.75rem] !m-0 h-[36.47px]"
@@ -140,12 +146,6 @@ const Contacts = () => {
                     setTemporaryKeyword(""); // Clear the temporary keyword
                     setSearch(""); // Clear the search results
                     setPage(1);
-                  }}
-                  onKeyDown={(e) => {
-                    e.preventDefault();
-                    if (e.key === "Enter") {
-                      setSearch(temporaryKeyword);
-                    }
                   }}
                 >
                   Clear Search Results

@@ -31,6 +31,7 @@ const EventDetailsModal = ({
   };
 
   const handleDelete = (id: number) => {
+    return;
     userPrivateRequest
       .delete(`/api/hrm/dsr/${id}`)
       .then((res) => {

@@ -18,6 +18,7 @@ import SortBy from "@/shared/common-components/SortBy";
 
 const Contacts = () => {
   const handleDelete = (id: number) => {
+    return;
     userPrivateRequest
       .delete(`/api/team/${id}`)
       .then((res: any) => {

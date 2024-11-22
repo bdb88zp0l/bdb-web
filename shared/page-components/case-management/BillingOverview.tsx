@@ -84,6 +84,7 @@ const BillingOverview = ({ caseInfo }: any) => {
   }, [caseInfo, page, limit, sortBy, sortOrder, search]);
 
   const handleDelete = async (id: string) => {
+    return;
     await userPrivateRequest.delete(`/api/billing/${id}`).then((res) => {
       toast.success("Billing deleted successfully");
       fetchBillings();
@@ -225,9 +226,9 @@ const BillingOverview = ({ caseInfo }: any) => {
                           <th scope="col" className="text-start">
                             Bill Number
                           </th>
-                          <th scope="col" className="text-start">
+                          {/* <th scope="col" className="text-start">
                             Title
-                          </th>
+                          </th> */}
                           <th scope="col" className="text-start">
                             Bill Type
                           </th>
@@ -267,7 +268,7 @@ const BillingOverview = ({ caseInfo }: any) => {
                                 key={Math.random()}
                               >
                                 <td>{item?.billNumber}</td>
-                                <td>{item?.title}</td>
+                                {/* <td>{item?.title}</td> */}
                                 <td>
                                   {item?.billingType == "oneTime"
                                     ? "One Time Billing"

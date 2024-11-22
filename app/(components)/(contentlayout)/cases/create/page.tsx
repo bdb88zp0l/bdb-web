@@ -92,7 +92,7 @@ const CreateCase = () => {
             .then((res) => {
               setIsSubmitting(false);
               toast.success(res.data?.message);
-              router.push("/cases/list/");
+              router.push(`/cases/overview/`);
             })
             .catch((err) => {
               toast.error(err.response?.data?.message);
@@ -103,7 +103,7 @@ const CreateCase = () => {
         } else {
           setIsSubmitting(false);
           toast.success("Case created successfully");
-          router.push("/cases/list/");
+          router.push(`/cases/overview/${caseDetails._id}`);
         }
         // toast.success(res.data?.message);
       })
@@ -312,7 +312,6 @@ const CreateCase = () => {
                     Billing Information
                   </label>
                 </div>
-                
                 <div className="xl:col-span-4 col-span-12 hidden">
                   <label className="form-label">Billing Start At :</label>
                   <div className="form-group">

@@ -39,6 +39,7 @@ const Contacts = () => {
 
   const [startDate, setStartDate] = useState(new Date());
   const handleDelete = (id: number) => {
+    return;
     userPrivateRequest
       .delete(`/api/users/${id}`)
       .then((res) => {

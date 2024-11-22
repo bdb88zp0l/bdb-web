@@ -37,6 +37,7 @@ const Contacts = () => {
   const [temporaryKeyword, setTemporaryKeyword] = useState("");
 
   const fetchRoles = async () => {
+    return;
     setIsFetching(true);
     const res = await userPrivateRequest
       .get(`/api/roles`)

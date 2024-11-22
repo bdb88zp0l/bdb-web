@@ -30,6 +30,7 @@ const EventDetailsModal = ({
   };
 
   const handleDelete = (id: number) => {
+    return;
     userPrivateRequest
       .delete(`/api/events/${id}`)
       .then((res) => {

@@ -27,7 +27,7 @@ const EditModal = ({
 }: any) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [data, setData] = useState<any>({
-    title: "",
+    // title: "",
     case: caseInfo?._id,
     billingType: "oneTime",
     currency: "USD",
@@ -228,7 +228,7 @@ const EditModal = ({
                 </div>
 
                 <div className="col-span-4">
-                  <div className="mb-4">
+                  {/* <div className="mb-4">
                     <label htmlFor="title" className="form-label">
                       Title
                     </label>
@@ -242,10 +242,10 @@ const EditModal = ({
                         setData({ ...data, title: e.target.value });
                       }}
                     />
-                  </div>
+                  </div> */}
 
                   <div className="mb-4">
-                    <label htmlFor="title" className="form-label">
+                    <label htmlFor="currency" className="form-label">
                       Currency
                     </label>
                     <Select

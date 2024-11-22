@@ -25,6 +25,7 @@ const CaseManagement = () => {
   const [data, setData] = useState<any>({});
 
   const handleDelete = (id: number) => {
+    return;
     userPrivateRequest
       .delete(`/api/clients/${id}`)
       .then((res) => {
