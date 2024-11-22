@@ -273,7 +273,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
 
                     <>
                       <span className="block text-[.875rem] font-semibold">
-                        {`${data?.client?.supervisingPartner?.firstName ?? ""}`} {`${data?.client?.supervisingPartner?.lastName ?? ""}`}
+                        {`${data?.client?.supervisingPartner?.firstName ?? ""}`}{" "}
+                        {`${data?.client?.supervisingPartner?.lastName ?? ""}`}
                       </span>
                     </>
                   </div>
@@ -284,7 +285,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
 
                     <>
                       <span className="block text-[.875rem] font-semibold">
-                        {`${data?.client?.referredBy?.firstName ?? ""}`} {`${data?.client?.referredBy?.lastName ?? ""}`}
+                        {`${data?.client?.referredBy?.firstName ?? ""}`}{" "}
+                        {`${data?.client?.referredBy?.lastName ?? ""}`}
                       </span>
                     </>
                   </div>
@@ -314,9 +316,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                       <span className="block text-[.875rem] font-semibold">
                         {data?.startDate
                           ? moment
-                            .utc(data.startDate)
-                            .format("DD,MMM YYYY")
-                            ?.toString()
+                              .utc(data.startDate)
+                              .format("DD,MMM YYYY")
+                              ?.toString()
                           : "N/A"}
                       </span>
                     )}
@@ -347,9 +349,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                       <span className="block text-[.875rem] font-semibold">
                         {data?.endDate
                           ? moment
-                            .utc(data.endDate)
-                            .format("DD,MMM YYYY")
-                            ?.toString()
+                              .utc(data.endDate)
+                              .format("DD,MMM YYYY")
+                              ?.toString()
                           : "N/A"}
                       </span>
                     )}
@@ -380,8 +382,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                             {/* Tooltip */}
                             {team.user?.firstName && (
                               <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                                {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
-                                  }`}
+                                {`${team.user?.firstName ?? ""} ${
+                                  team.user?.lastName ?? ""
+                                }`}
                               </div>
                             )}
                           </div>
@@ -408,8 +411,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                             {/* Tooltip */}
                             {team.user?.firstName && (
                               <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                                {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
-                                  }`}
+                                {`${team.user?.firstName ?? ""} ${
+                                  team.user?.lastName ?? ""
+                                }`}
                               </div>
                             )}
                           </div>
@@ -477,6 +481,188 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                     </span>
                   </span>
                 </div> */}
+                  <div className="xl:col-span-4 col-span-12">
+                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
+                      Nature Of Work
+                    </span>
+                    {isEdit ? (
+                      <>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="input-label"
+                          placeholder=" Nature Of Work"
+                          value={data?.natureOfWork}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              natureOfWork: e.target.value,
+                            });
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <span className="block text-[.875rem] font-semibold">
+                        {data?.natureOfWork ?? ""}
+                      </span>
+                    )}
+                  </div>
+                  <div className="xl:col-span-4 col-span-12">
+                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
+                      Fixed Fee
+                    </span>
+                    {isEdit ? (
+                      <>
+                        <input
+                          type="number"
+                          className="form-control"
+                          id="input-label"
+                          placeholder="Fixed Fee"
+                          value={data?.fixedFee}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              fixedFee: e.target.value,
+                            });
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <span className="block text-[.875rem] font-semibold">
+                        {data?.fixedFee ?? ""}
+                      </span>
+                    )}
+                  </div>
+                  <div className="xl:col-span-4 col-span-12">
+                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
+                      Acceptance Fee
+                    </span>
+                    {isEdit ? (
+                      <>
+                        <input
+                          type="number"
+                          className="form-control"
+                          id="input-label"
+                          placeholder="Acceptance Fee :"
+                          value={data?.acceptanceFee}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              acceptanceFee: e.target.value,
+                            });
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <span className="block text-[.875rem] font-semibold">
+                        {data?.acceptanceFee ?? ""}
+                      </span>
+                    )}
+                  </div>
+                  <div className="xl:col-span-4 col-span-12">
+                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
+                      Success Fee
+                    </span>
+                    {isEdit ? (
+                      <>
+                        <input
+                          type="number"
+                          className="form-control"
+                          id="input-label"
+                          placeholder="Success Fee"
+                          value={data?.successFee}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              successFee: e.target.value,
+                            });
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <span className="block text-[.875rem] font-semibold">
+                        {data?.successFee ?? ""}
+                      </span>
+                    )}
+                  </div>
+                  <div className="xl:col-span-4 col-span-12">
+                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
+                      Cap Fee
+                    </span>
+                    {isEdit ? (
+                      <>
+                        <input
+                          type="number"
+                          className="form-control"
+                          id="input-label"
+                          placeholder="Cap Fee"
+                          value={data?.capFee}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              capFee: e.target.value,
+                            });
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <span className="block text-[.875rem] font-semibold">
+                        {data?.capFee ?? ""}
+                      </span>
+                    )}
+                  </div>
+                  <div className="xl:col-span-4 col-span-12">
+                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
+                      Fixed Ope
+                    </span>
+                    {isEdit ? (
+                      <>
+                        <input
+                          type="number"
+                          className="form-control"
+                          id="input-label"
+                          placeholder="Fixed Ope"
+                          value={data?.fixedOpe}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              fixedOpe: e.target.value,
+                            });
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <span className="block text-[.875rem] font-semibold">
+                        {data?.fixedOpe ?? ""}
+                      </span>
+                    )}
+                  </div>
+                  <div className="xl:col-span-4 col-span-12">
+                    <span className="block text-[#8c9097] dark:text-white/50 text-[0.75rem]">
+                      Non Fixed Ope
+                    </span>
+                    {isEdit ? (
+                      <>
+                        <input
+                          type="number"
+                          className="form-control"
+                          id="input-label"
+                          placeholder="Non Fixed Ope"
+                          value={data?.nonFixedOpe}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              nonFixedOpe: e.target.value,
+                            });
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <span className="block text-[.875rem] font-semibold">
+                        {data?.nonFixedOpe ?? ""}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -504,7 +690,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           <p className="mb-2">
                             <b>
                               {auth.user?.email?.toString() ==
-                                history?.updatedBy?.email?.toString()
+                              history?.updatedBy?.email?.toString()
                                 ? "You"
                                 : history?.updatedBy?.firstName}
                             </b>{" "}
@@ -600,16 +786,12 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
             {/* billing overview */}
             {data && <BillingOverview caseInfo={data} />}
 
-
             {Object.keys(data?.metaData ?? {}).length > 0 && (
               <div className="box custom-box">
                 <div className="box-header">
                   <div className="box-title">Meta Data</div>
                 </div>
                 <div className="box-body">
-
-
-
                   {Object.keys(data?.metaData ?? {}).length > 0 && (
                     <JsonPreview data={data?.metaData ?? {}} />
                   )}

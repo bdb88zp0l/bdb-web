@@ -23,6 +23,7 @@ import SortBy from "@/shared/common-components/SortBy";
 const Contacts = () => {
   const [startDate, setStartDate] = useState(new Date());
   const handleDelete = (id: number) => {
+    return;
     userPrivateRequest
       .delete(`/api/contacts/${id}`)
       .then((res) => {
@@ -96,7 +97,7 @@ const Contacts = () => {
     { label: "Latest", value: "createdAt" },
   ];
 
-  console.log("data", search, temporaryKeyword);
+  console.log("data", temporaryKeyword);
 
   return (
     <Fragment>
@@ -121,6 +122,11 @@ const Contacts = () => {
                   value={temporaryKeyword}
                   onChange={(e) => {
                     setTemporaryKeyword(e.target.value);
+                  }}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      setSearch(temporaryKeyword);
+                    }
                   }}
                 />
                 <button

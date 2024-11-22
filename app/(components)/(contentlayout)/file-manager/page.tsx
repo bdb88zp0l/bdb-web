@@ -98,6 +98,7 @@ const Filemanager = () => {
   }, []);
 
   const handleDeleteDocument = async (ids: string[], actionType = "soft") => {
+    return;
     await userPrivateRequest
       .delete("/api/file/deleteNodes", { data: { ids, actionType } })
       .then((response) => {

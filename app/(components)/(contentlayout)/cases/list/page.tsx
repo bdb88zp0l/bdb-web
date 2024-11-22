@@ -29,6 +29,7 @@ const CaseList = () => {
   const [data, setData] = useState<any>({});
 
   const handleDelete = (id: number) => {
+    return;
     userPrivateRequest
       .delete(`/api/cases/${id}`)
       .then((res) => {
@@ -85,6 +86,11 @@ const CaseList = () => {
                   value={temporaryKeyword}
                   onChange={(e) => {
                     setTemporaryKeyword(e.target.value);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      setSearch(temporaryKeyword);
+                    }
                   }}
                 />
                 <button
@@ -247,13 +253,15 @@ const CaseList = () => {
                                     {/* Tooltip */}
                                     {user?.firstName && (
                                       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                                        {`${user?.firstName ?? ""} ${user?.lastName ?? ""
-                                          }`}
+                                        {`${user?.firstName ?? ""} ${
+                                          user?.lastName ?? ""
+                                        }`}
                                       </div>
                                     )}
                                   </div>
                                 )
-                              )}{item?.members?.map(
+                              )}
+                              {item?.members?.map(
                                 (
                                   user: {
                                     photo: any;
@@ -277,8 +285,9 @@ const CaseList = () => {
                                     {/* Tooltip */}
                                     {user?.firstName && (
                                       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                                        {`${user?.firstName ?? ""} ${user?.lastName ?? ""
-                                          }`}
+                                        {`${user?.firstName ?? ""} ${
+                                          user?.lastName ?? ""
+                                        }`}
                                       </div>
                                     )}
                                   </div>

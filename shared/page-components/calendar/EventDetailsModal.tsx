@@ -30,12 +30,13 @@ const EventDetailsModal = ({
   };
 
   const handleDelete = (id: number) => {
+    return;
     userPrivateRequest
       .delete(`/api/events/${id}`)
       .then((res) => {
         toast.success("Event deleted successfully");
-        fetchCalendars();
         onClose();
+        fetchCalendars();
       })
       .catch((err) => {
         toast.error(err.response.data.message);
@@ -66,7 +67,7 @@ const EventDetailsModal = ({
 
             <div className="ti-modal-body space-y-4 overflow-y-auto">
               <div>
-                <strong>Title:</strong>
+                <strong>Matter:</strong>
                 <p>{title}</p>
               </div>
 

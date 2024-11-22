@@ -89,7 +89,7 @@ export const MenuItems: any = [
     active: false,
     selected: false,
     dirchange: false,
-    title: "Knowledge Base",
+    title: "Document Management",
     icon: FolIcon,
     permission: "file_manager.read",
   },

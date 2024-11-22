@@ -49,7 +49,7 @@ const AddPaymentModal = ({
 
   const closeModal = () => {
     setAddPaymentModal(false);
-    console.log('closeModal')
+    console.log("closeModal");
     // Reset form
     setData({
       billingId: selectedBilling?._id,
@@ -78,29 +78,35 @@ const AddPaymentModal = ({
       transactionId: data?.transactionId || "",
     };
 
-    await userPrivateRequest.post("/api/payments", payload).then(response => {
-
-      toast.success("Payment added successfully", {
-        style: {
-          zIndex: 9999
-        }
+    await userPrivateRequest
+      .post("/api/payments", payload)
+      .then((response) => {
+        toast.success("Payment added successfully", {
+          style: {
+            zIndex: 9999,
+          },
+        });
+        closeModal();
+        fetchPayments();
+        fetchBillings();
+      })
+      .catch((error) => {
+        console.log(error?.message);
+        toast.error(error?.message);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+        setAddPaymentModal(false);
       });
-      closeModal();
-      fetchPayments();
-      fetchBillings();
-    }).catch(error => {
-      console.log(error?.message)
-      toast.error(error?.message)
-    }).finally(() => {
-      setIsSubmitting(false)
-      setAddPaymentModal(false)
-    });
   };
 
   return (
-    <Modal isOpen={addPaymentModal} close={() => {
-      setAddPaymentModal
-    }}>
+    <Modal
+      isOpen={addPaymentModal}
+      close={() => {
+        setAddPaymentModal;
+      }}
+    >
       <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
         <div className="max-h-full w-full overflow-hidden ti-modal-content">
           <div className="ti-modal-header">
@@ -111,7 +117,7 @@ const AddPaymentModal = ({
               type="button"
               className="hs-dropdown-toggle !text-[1rem] !font-semibold !text-defaulttextcolor"
               onClick={() => {
-                closeModal()
+                closeModal();
               }}
             >
               <span className="sr-only">Close</span>
@@ -122,7 +128,7 @@ const AddPaymentModal = ({
           <div className="ti-modal-body px-4 overflow-y-auto">
             <div className="grid grid-cols-12 gap-4">
               {/* Payment Summary */}
-              <div className="xl:col-span-12 col-span-12 bg-gray-50 p-4 rounded-md">
+              <div className="xl:col-span-12 col-span-12 p-4 rounded-md">
                 <div className="flex justify-between mb-2">
                   <span>Total Amount:</span>
                   <span>{formatAmount(selectedBilling?.grandTotal)}</span>

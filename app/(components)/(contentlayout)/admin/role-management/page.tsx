@@ -37,6 +37,7 @@ const Contacts = () => {
   const [temporaryKeyword, setTemporaryKeyword] = useState("");
 
   const fetchRoles = async () => {
+    return;
     setIsFetching(true);
     const res = await userPrivateRequest
       .get(`/api/roles`)
@@ -76,6 +77,11 @@ const Contacts = () => {
                   value={temporaryKeyword}
                   onChange={(e) => {
                     setTemporaryKeyword(e.target.value);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      setSearch(temporaryKeyword);
+                    }
                   }}
                 />
                 <button

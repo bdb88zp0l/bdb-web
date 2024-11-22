@@ -35,7 +35,7 @@ const ResetPasswordModal = ({
         toast.error(
           "The new password and confirmation do not match. Please try again."
         );
-        setChangePasswordLoading(true);
+        setChangePasswordLoading(false);
         return;
       }
       userPrivateRequest

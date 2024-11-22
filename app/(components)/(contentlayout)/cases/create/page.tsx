@@ -92,7 +92,7 @@ const CreateCase = () => {
             .then((res) => {
               setIsSubmitting(false);
               toast.success(res.data?.message);
-              router.push("/cases/list/");
+              router.push(`/cases/overview/`);
             })
             .catch((err) => {
               toast.error(err.response?.data?.message);
@@ -103,7 +103,7 @@ const CreateCase = () => {
         } else {
           setIsSubmitting(false);
           toast.success("Case created successfully");
-          router.push("/cases/list/");
+          router.push(`/cases/overview/${caseDetails._id}`);
         }
         // toast.success(res.data?.message);
       })
@@ -304,6 +304,125 @@ const CreateCase = () => {
                     onChange={(e: any) => setData({ ...data, team: e.value })}
                   />
                 </div> */}
+                <div className="xl:col-span-4 col-span-12">
+                  <label htmlFor="input-label" className="form-label">
+                    Nature Of Work :
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-label"
+                    placeholder="Nature Of Work"
+                    onChange={(e) => {
+                      setData({
+                        ...data,
+                        natureOfWork: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="xl:col-span-4 col-span-12">
+                  <label htmlFor="input-label" className="form-label">
+                    Fixed Fee :
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="input-label"
+                    placeholder="Fixed Fee"
+                    onChange={(e) => {
+                      setData({
+                        ...data,
+                        fixedFee: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="xl:col-span-4 col-span-12">
+                  <label htmlFor="input-label" className="form-label">
+                    Acceptance Fee :
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="input-label"
+                    placeholder="Acceptance Fee"
+                    onChange={(e) => {
+                      setData({
+                        ...data,
+                        acceptanceFee: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="xl:col-span-4 col-span-12">
+                  <label htmlFor="input-label" className="form-label">
+                    Success Fee :
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="input-label"
+                    placeholder="Success Fee"
+                    onChange={(e) => {
+                      setData({
+                        ...data,
+                        successFee: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="xl:col-span-4 col-span-12">
+                  <label htmlFor="input-label" className="form-label">
+                    Cap Fee :
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="input-label"
+                    placeholder="Cap Fee"
+                    onChange={(e) => {
+                      setData({
+                        ...data,
+                        capFee: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="xl:col-span-4 col-span-12">
+                  <label htmlFor="input-label" className="form-label">
+                    Fixed Ope :
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="input-label"
+                    placeholder="Fixed Ope"
+                    onChange={(e) => {
+                      setData({
+                        ...data,
+                        fixedOpe: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="xl:col-span-4 col-span-12">
+                  <label htmlFor="input-label" className="form-label">
+                    Non Fixed Ope :
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="input-label"
+                    placeholder="Non Fixed Ope"
+                    onChange={(e) => {
+                      setData({
+                        ...data,
+                        nonFixedOpe: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
                 <div className="xl:col-span-12 col-span-12 hidden">
                   <label
                     htmlFor="text-area"
@@ -312,7 +431,6 @@ const CreateCase = () => {
                     Billing Information
                   </label>
                 </div>
-                
                 <div className="xl:col-span-4 col-span-12 hidden">
                   <label className="form-label">Billing Start At :</label>
                   <div className="form-group">
