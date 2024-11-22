@@ -60,8 +60,10 @@ const FileExplorer = ({
 
     try {
       const response = await userPrivateRequest.get(
-        `/api/file/getPaginatedDocumentNodes/${!serviceType ? parentId : ""
-        }?page=${pageNumber}&limit=${limit}${serviceType ? `&serviceType=${serviceType}` : ""
+        `/api/file/getPaginatedDocumentNodes/${
+          !serviceType ? parentId : ""
+        }?page=${pageNumber}&limit=${limit}${
+          serviceType ? `&serviceType=${serviceType}` : ""
         }${filter ? `&filter=${filter}` : ""}`
       );
 
@@ -92,9 +94,9 @@ const FileExplorer = ({
   };
 
   useEffect(() => {
-    setNodeData([]);
-    setPage(1);
-    setHasMore(true);
+    setNodeData([]); 
+    setPage(1); 
+    setHasMore(true); 
     fetchNode(1, true);
   }, [parentId, serviceType, filter]);
 
@@ -191,49 +193,21 @@ const FileExplorer = ({
 
           <div className="grid grid-cols-12 gap-x-6 mb-4">
             {nodeData?.length === 0 ? (
-              <NoFileFolder />
+              <NoFileFolder /> 
             ) : (
-              <div className="xl:col-span-12 col-span-12">
-                <div className="table-responsive border border-bottom-0 dark:border-defaultborder/10">
-                  <table className="table whitespace-nowrap table-hover min-w-full">
-                    <thead>
-                      <tr>
-                        <th scope="col" className="text-start">
-                          Name
-                        </th>
-                        <th scope="col" className="text-start">
-                          Location
-                        </th>
-                        <th scope="col" className="text-start">
-                          Size
-                        </th>
-
-                        <th scope="col" className="text-start">
-                          Date Created
-                        </th>
-                        <th scope="col" className="text-start">
-                          Action
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="files-list">{
-                      nodeData.map((item) => (
-                        <NodeView
-                          key={item.id}
-                          item={item}
-                          setParentId={setParentId}
-                          setSelectedDocumentId={setSelectedDocumentId}
-                          setScreen={setScreen}
-                          handleDeleteDocument={handleDeleteDocument}
-                          toggleFavourite={toggleFavourite}
-                          setSingleFileDetail={setSingleFileDetail}
-                          fetchNode={fetchNode}
-                        />))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
+              nodeData.map((item) => (
+                <NodeView
+                  key={item.id}
+                  item={item}
+                  setParentId={setParentId}
+                  setSelectedDocumentId={setSelectedDocumentId}
+                  setScreen={setScreen}
+                  handleDeleteDocument={handleDeleteDocument}
+                  toggleFavourite={toggleFavourite}
+                  setSingleFileDetail={setSingleFileDetail}
+                  fetchNode={fetchNode}
+                />
+              ))
             )}
           </div>
 

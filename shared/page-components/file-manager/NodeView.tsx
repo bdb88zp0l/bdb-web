@@ -18,6 +18,7 @@ import { useProtectedJpg } from "@/utils/protectedImage";
 import { hasPermission } from "@/utils/utils";
 const Select = dynamic(() => import("react-select"), { ssr: false });
 import Pusher from "pusher-js";
+import moment from "moment";
 
 const NodeView = ({
   item,
@@ -27,7 +28,7 @@ const NodeView = ({
   handleDeleteDocument,
   toggleFavourite,
   fetchNode,
-  setSingleFileDetail,
+  setSingleFileDetail, filter,
 }: any) => {
   const [data, setData] = useState(item);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -68,201 +69,206 @@ const NodeView = ({
 
   return (
     <>
-      <div
-        className="xxl:col-span-3 xl:col-span-6 lg:col-span-6 md:col-span-6 col-span-12"
-        key={Math.random()}
-        onDoubleClick={(e) => {
-          if (data.ctype === "document") {
-            setSelectedDocumentId(data.id);
-            setScreen("viewer");
-          } else if (data.ctype === "folder") {
-            setParentId(data.id);
-            setScreen("explorer");
-          }
-        }}
-        onClick={(e) => {
-          e.preventDefault();
-          setSingleFileDetail(item);
-        }}
+      <tr
+        className={
+          "border border-inherit border-solid border-x-0 hover:bg-gray-100 dark:border-defaultborder/10 dark:hover:bg-light"
+        }
+        // key={Math.random()}
+        // onDoubleClick={(e) => {
+        //   if (data.ctype === "document") {
+        //     setSelectedDocumentId(data.id);
+        //     setScreen("viewer");
+        //   } else if (data.ctype === "folder") {
+        //     setParentId(data.id);
+        //     setScreen("explorer");
+        //   }
+        // }}
+        // onClick={(e) => {
+        //   e.preventDefault();
+        //   setSingleFileDetail(item);
+        // }}
       >
-        <div className="box border dark:border-defaultborder/10  !shadow-none">
-          <div className={`box-body bg-primary/10`}>
-            <div className="mb-4 folder-svg-container flex flex-wrap justify-between items-start h-[100px]">
-              {data.ctype === "folder" ? (
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="fill-primary !h-[100px] !w-auto"
-                    data-name="Layer 1"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      opacity="1"
-                      d="M19.97586,10V9a3,3,0,0,0-3-3H10.69678l-.31622-.94868A3,3,0,0,0,7.53451,3H3.97586a3,3,0,0,0-3,3V19a2,2,0,0,0,2,2H3.3067a2,2,0,0,0,1.96774-1.64223l1.40283-7.71554A2,2,0,0,1,8.645,10Z"
-                    />
-                    <path
-                      opacity="0.3"
-                      d="M22.02386,10H8.645a2,2,0,0,0-1.96777,1.64221L5.27441,19.35773A2,2,0,0,1,3.3067,21H19.55292a2,2,0,0,0,1.96771-1.64227l1.48712-8.17884A1,1,0,0,0,22.02386,10Z"
-                    />
-                  </svg>
-                </div>
-              ) : (
-                <div className="transform scale-y-75 origin-top">
-                  <div className="">{protected_image.data}</div>
-                </div>
-              )}
-              <div>
-                <div className="hs-dropdown ti-dropdown ltr:[--placement:left-top] rtl:[--placement:right-top]">
-                  <button
-                    className={`ti-btn ti-btn-sm ti-btn-primary`}
-                    aria-label="button"
-                    type="button"
-                    aria-expanded={isDropdownOpen}
-                    onClick={toggleDropdown}
-                  >
-                    <i className="ri-more-2-fill"></i>
-                  </button>
-
-                  {/* Dynamically show/hide the dropdown */}
-                  <ul
-                    className={`ti-dropdown-menu ${
-                      isDropdownOpen ? "block" : "hidden"
-                    } fixed bg-dropdown bg-white`}
-                    style={{
-                      zIndex: 99,
-                      opacity: 1,
-                      marginTop: "2rem",
-                    }}
-                  >
-                    {hasPermission("file_manager.delete") && (
-                      <li>
-                        <Link
-                          className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium"
-                          href="#!"
-                          scroll={false}
-                          onClick={async (e) => {
-                            e.preventDefault();
-                            if (
-                              window.confirm(
-                                "Are you sure you want to delete this item?"
-                              )
-                            ) {
-                              await handleDeleteDocument([data.id], "soft");
-                              await fetchNode();
-                            }
-                          }}
-                        >
-                          Delete
-                        </Link>
-                      </li>
-                    )}
-                    <li>
-                      <Link
-                        className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium"
-                        href="#!"
-                        scroll={false}
-                        onClick={async (e) => {
-                          e.preventDefault();
-                          await toggleFavourite(data._id);
-                          await fetchNode();
-                        }}
-                      >
-                        {item?.isFavourited ? "Unfavourite" : "Favourite"}
-                      </Link>
-                    </li>
-                    {/* <li>
-                      <Link
-                        className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium"
-                        href="#!"
-                        scroll={false}
-                      >
-                        Rename
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="ti-dropdown-item !py-2 !px-[0.9375rem] !text-[0.8125rem] !font-medium"
-                        href="#!"
-                        scroll={false}
-                      >
-                        Hide Folder
-                      </Link>
-                    </li> */}
-                  </ul>
-                </div>
-
-                {data.ctype == "document" && (
-                  <>
-                    {data?.ocr_status === "UNKNOWN" ? (
-                      <div style={{ width: "10px" }}>
-                        <div key={data._id} className="relative group">
-                          <div
-                            className="ti-spinner text-warning"
-                            role="status"
-                          >
-                            <span className="sr-only">Loading...</span>
-                          </div>
-                          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                            OCR is Processing
-                          </div>
-                        </div>
-                      </div>
-                    ) : data.ocr_status == "SUCCESS" ? (
-                      <div style={{ width: "10px" }}>
-                        <div key={data._id} className="relative group">
-                          <div className=" text-warning" role="status">
-                            <i
-                              className="ri-checkbox-circle-fill"
-                              style={{ fontSize: "30px" }}
-                            ></i>
-                          </div>
-                          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                            OCR Processed
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div style={{ width: "10px" }}>
-                        <div key={data._id} className="relative group">
-                          <div className=" text-danger" role="status">
-                            <i
-                              className="ri-error-warning-fill"
-                              style={{ fontSize: "30px" }}
-                            ></i>
-                          </div>
-                          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                            OCR Processing Failed
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </>
-                )}
+        <th scope="row">
+          <div className="flex items-center">
+            {data.ctype === "folder" ? (
+              <div className="me-2">
+                <span className="avatar avatar-xs">
+                  <img
+                    src="../../assets/images/media/file-manager/1.png"
+                    alt=""
+                  />
+                </span>
               </div>
-            </div>
-            <p className="text-[.875rem] font-semibold mb-1 leading-none">
+            ) : (
+              <div className="transform scale-y-75 origin-top">
+                <div className="">{protected_image.data}</div>
+              </div>
+            )}
+
+            <div className="text-[.875rem] font-semibold mb-1 leading-none">
               <Link href="#!" scroll={false}>
                 {item?.title}
               </Link>
-            </p>
-            <div className="flex items-center justify-between flex-wrap">
-              {item?.ctype == "folder" ? (
-                <div>
-                  <span className="text-[#8c9097] dark:text-white/50 text-[.75rem]">
-                    {data.childrenCount} files
-                  </span>
-                </div>
-              ) : (
-                <div>
-                  <span className="text-default font-semibold">
-                    {(Number(item?.size ?? 0) / 1000).toFixed(2)} MB
-                  </span>
-                </div>
-              )}
             </div>
           </div>
-        </div>
-      </div>
+          {data.ctype == "document" && (
+            <>
+              {data?.ocr_status === "UNKNOWN" ? (
+                <div style={{ width: "10px" }}>
+                  <div key={data._id} className="relative group">
+                    <div
+                      className="ti-spinner text-warning"
+                      role="status"
+                    >
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                    <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
+                      OCR is Processing
+                    </div>
+                  </div>
+                </div>
+              ) : data.ocr_status == "SUCCESS" ? (
+                <div style={{ width: "10px" }}>
+                  <div key={data._id} className="relative group">
+                    <div className=" text-warning" role="status">
+                      <i
+                        className="ri-checkbox-circle-fill"
+                        style={{ fontSize: "30px" }}
+                      ></i>
+                    </div>
+                    <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
+                      OCR Processed
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ width: "10px" }}>
+                  <div key={data._id} className="relative group">
+                    <div className=" text-danger" role="status">
+                      <i
+                        className="ri-error-warning-fill"
+                        style={{ fontSize: "30px" }}
+                      ></i>
+                    </div>
+                    <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
+                      OCR Processing Failed
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </th>
+        <td>
+          {item.breadcrumb
+            ?.slice(0, -1)
+            ?.map((breadcrumb: any) => {
+              // Capitalize the first letter for 'home'
+              if (breadcrumb[1] === ".home") {
+                return "Home";
+              }
+              return breadcrumb[1];
+            })
+            .join(" > ")}
+        </td>
+        <td>
+          {item?.ctype == "folder" ? (
+            <span className="text-[#8c9097] dark:text-white/50 text-[.75rem]">
+              {data.childrenCount} files
+            </span>
+          ) : (
+            <span className="text-default font-semibold">
+              {(Number(item?.size ?? 0) / 1000).toFixed(2)} MB
+            </span>
+          )}
+        </td>
+        {filter == "recycleBin" ? (
+          <>
+            <td>
+              {item.deletedBy?.firstName ?? ""}{" "}
+              {item.deletedBy?.lastName ?? ""}
+            </td>
+            <td>
+              {moment
+                .utc(item.deletedAt)
+                .format("DD MMM YYYY")
+                .toString()}
+            </td>
+          </>
+        ) : (
+          <>
+            <td>
+              {moment
+                .utc(item.createdAt)
+                .format("DD MMM YYYY")
+                .toString()}
+            </td>
+            <td>
+              <div className="flex flex-row items-center !gap-2 text-[0.9375rem]">
+                <Link
+                  aria-label="anchor"
+                  href="#!"
+                  scroll={false}
+                  className="ti-btn ti-btn-icon ti-btn-wave !rounded-full !border-info/10 !gap-0 !m-0 !h-[1.75rem] !w-[1.75rem] text-[0.8rem] bg-info/10 text-info hover:bg-info hover:text-white hover:border-info"
+                  onClick={(e) => {
+                    if (data.ctype === "document") {
+                      setSelectedDocumentId(data.id);
+                      setScreen("viewer");
+                    } else if (data.ctype === "folder") {
+                      setParentId(data.id);
+                      setScreen("explorer");
+                    }
+                    e.preventDefault();
+                    setSingleFileDetail(item);
+                  }}
+                >
+                  <i className="ri-eye-line"></i>
+                </Link>
+                <Link
+                  aria-label="anchor"
+                  href="#!"
+                  scroll={false}
+                  className="ti-btn ti-btn-icon ti-btn-wave !rounded-full !border-info/10 !gap-0 !m-0 !h-[1.75rem] !w-[1.75rem] text-[0.8rem] bg-info/10 text-info hover:bg-info hover:text-white hover:border-info"
+                  onClick={async (e) => {
+                    e.preventDefault();
+
+                    await toggleFavourite(item._id);
+                    await fetchNode();
+                  }}
+                >
+                  <i
+                    className={`ri-heart-${item.isFavourited ? "fill" : "line"
+                      }`}
+                  ></i>
+                </Link>
+
+                {hasPermission("file_manager.delete") && (
+                  <Link
+                    aria-label="anchor"
+                    href="#!"
+                    scroll={false}
+                    className="ti-btn ti-btn-icon ti-btn-wave !rounded-full !border-danger/10 !gap-0 !m-0 !h-[1.75rem] !w-[1.75rem] text-[0.8rem] bg-danger/10 text-danger hover:bg-danger hover:text-white hover:border-danger"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      if (
+                        window.confirm(
+                          "Are you sure you want to delete this item?"
+                        )
+                      ) {
+                        await handleDeleteDocument([data.id], "soft");
+                        await fetchNode();
+                      }
+                    }}
+                  >
+                    <i className="ri-delete-bin-line"></i>
+                  </Link>
+                )}
+
+              </div>
+            </td>
+          </>
+        )}
+      </tr>
     </>
   );
 };
