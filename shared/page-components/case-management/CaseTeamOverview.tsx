@@ -49,15 +49,26 @@ const CaseTeamOverview = ({
   };
 
   const handleSubmit = async () => {
+    if (!addMemberData?.designation) {
+      toast.error("Designation is required");
+      return null;
+    } else if (!addMemberData?.user) {
+      toast.error("User is required");
+      return null;
+    }
     setIsSubmittingMember(true);
 
     try {
       let existingTeams = data?.members
-        ? data?.members?.map((team) => ({
-            user: team.user._id,
-            designation: team.designation._id,
-            rate: team.rate,
-          }))
+        ? data?.members
+            .filter((team) => {
+              return team?.user?._id;
+            })
+            ?.map((team) => ({
+              user: team.user._id,
+              designation: team.designation._id,
+              rate: team.rate,
+            }))
         : [];
 
       if (editMode && editIndex !== null) {
