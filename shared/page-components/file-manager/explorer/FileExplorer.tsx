@@ -39,6 +39,7 @@ const FileExplorer = ({
   const [isFetchingNode, setIsFetchingNode] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isRequesting, setIsRequesting] = useState<boolean>(false);
+  const [isFetching, setIsFetching] = useState<boolean>(true);
 
   const config = useConfig();
 
@@ -54,7 +55,7 @@ const FileExplorer = ({
 
   const fetchNode = async (pageNumber: number, append: boolean = true) => {
     if (!parentId || isRequesting || !hasMore) return;
-
+    setIsFetching(true);
     setIsFetchingNode(true);
     setIsRequesting(true);
 
@@ -86,6 +87,7 @@ const FileExplorer = ({
     } catch (error) {
       console.error(error.message);
     } finally {
+      setIsFetching(false);
       setIsFetchingNode(false);
       setIsRequesting(false);
     }
@@ -190,51 +192,62 @@ const FileExplorer = ({
           <div ref={topRef} className="h-12"></div>
 
           <div className="grid grid-cols-12 gap-x-6 mb-4">
-            {nodeData?.length === 0 ? (
-              <NoFileFolder />
-            ) : (
-              <div className="xl:col-span-12 col-span-12">
-                <div className="table-responsive border border-bottom-0 dark:border-defaultborder/10">
-                  <table className="table whitespace-nowrap table-hover min-w-full">
-                    <thead>
-                      <tr>
-                        <th scope="col" className="text-start">
-                          Name
-                        </th>
-                        <th scope="col" className="text-start">
-                          Location
-                        </th>
-                        <th scope="col" className="text-start">
-                          Size
-                        </th>
-
-                        <th scope="col" className="text-start">
-                          Date Created
-                        </th>
-                        <th scope="col" className="text-start">
-                          Action
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="files-list">{
-                      nodeData.map((item) => (
-                        <NodeView
-                          key={item.id}
-                          item={item}
-                          setParentId={setParentId}
-                          setSelectedDocumentId={setSelectedDocumentId}
-                          setScreen={setScreen}
-                          handleDeleteDocument={handleDeleteDocument}
-                          toggleFavourite={toggleFavourite}
-                          setSingleFileDetail={setSingleFileDetail}
-                          fetchNode={fetchNode}
-                        />))}
-                    </tbody>
-                  </table>
+            {isFetching ? (
+              <>
+                <div className="col-span-12" key={Math.random()}>
+                  <div className="flex justify-center mb-6">
+                    <div className="ti-spinner" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </>
+            )
+              : nodeData?.length <= 0 ? (
+                <NoFileFolder />
+              ) : (
+                <div className="xl:col-span-12 col-span-12">
+                  <div className="table-responsive border border-bottom-0 dark:border-defaultborder/10">
+                    <table className="table whitespace-nowrap table-hover min-w-full">
+                      <thead>
+                        <tr>
+                          <th scope="col" className="text-start">
+                            Name
+                          </th>
+                          <th scope="col" className="text-start">
+                            Location
+                          </th>
+                          <th scope="col" className="text-start">
+                            Size
+                          </th>
 
-            )}
+                          <th scope="col" className="text-start">
+                            Date Created
+                          </th>
+                          <th scope="col" className="text-start">
+                            Action
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="files-list">{
+                        nodeData.map((item) => (
+                          <NodeView
+                            key={item.id}
+                            item={item}
+                            setParentId={setParentId}
+                            setSelectedDocumentId={setSelectedDocumentId}
+                            setScreen={setScreen}
+                            handleDeleteDocument={handleDeleteDocument}
+                            toggleFavourite={toggleFavourite}
+                            setSingleFileDetail={setSingleFileDetail}
+                            fetchNode={fetchNode}
+                          />))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              )}
           </div>
 
           <div ref={bottomRef} className="h-12"></div>

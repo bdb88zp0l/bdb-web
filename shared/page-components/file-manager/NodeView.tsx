@@ -73,20 +73,20 @@ const NodeView = ({
         className={
           "border border-inherit border-solid border-x-0 hover:bg-gray-100 dark:border-defaultborder/10 dark:hover:bg-light"
         }
-        // key={Math.random()}
-        // onDoubleClick={(e) => {
-        //   if (data.ctype === "document") {
-        //     setSelectedDocumentId(data.id);
-        //     setScreen("viewer");
-        //   } else if (data.ctype === "folder") {
-        //     setParentId(data.id);
-        //     setScreen("explorer");
-        //   }
-        // }}
-        // onClick={(e) => {
-        //   e.preventDefault();
-        //   setSingleFileDetail(item);
-        // }}
+      // key={Math.random()}
+      // onDoubleClick={(e) => {
+      //   if (data.ctype === "document") {
+      //     setSelectedDocumentId(data.id);
+      //     setScreen("viewer");
+      //   } else if (data.ctype === "folder") {
+      //     setParentId(data.id);
+      //     setScreen("explorer");
+      //   }
+      // }}
+      // onClick={(e) => {
+      //   e.preventDefault();
+      //   setSingleFileDetail(item);
+      // }}
       >
         <th scope="row">
           <div className="flex items-center">
@@ -105,11 +105,8 @@ const NodeView = ({
               </div>
             )}
 
-            <div className="text-[.875rem] font-semibold mb-1 leading-none">
-              <Link href="#!" scroll={false}>
-                {item?.title}
-              </Link>
-            </div>
+            {item?.title}
+            
           </div>
           {data.ctype == "document" && (
             <>
@@ -191,7 +188,7 @@ const NodeView = ({
             <td>
               {moment
                 .utc(item.deletedAt)
-                .format("DD MMM YYYY")
+                .format("DD MMM YYYY HH:mm")
                 .toString()}
             </td>
           </>
@@ -200,7 +197,7 @@ const NodeView = ({
             <td>
               {moment
                 .utc(item.createdAt)
-                .format("DD MMM YYYY")
+                .format("DD MMM YYYY HH:mm")
                 .toString()}
             </td>
             <td>
