@@ -542,7 +542,7 @@ const CreateModal = ({
                               onChange={(e: any) =>
                                 handleItemChange(index, "vat", e.value)
                               }
-                              isDisabled={data?.billingType == "timeBased"}
+                              // isDisabled={data?.billingType == "timeBased"}
                             />
                           </td>
                           <td>

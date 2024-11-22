@@ -125,7 +125,7 @@ const CaseTeamOverview = ({
           <div>
             <button
               type="button"
-              className="ti-btn ti-btn-light !py-1 !px-2 !text-[0.75rem] hs-dropdown-toggle "
+              className="hs-dropdown-toggle ti-btn ti-btn-primary-full !py-1 !px-2 !text-[0.75rem] me-2"
               onClick={(e) => openModal(e)}
             >
               <i className="ri-add-line align-middle me-1 font-semibold"></i>
