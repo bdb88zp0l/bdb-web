@@ -18,6 +18,7 @@ import { ChangeEvent, Fragment, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import CreateModal from "@/shared/page-components/billing/CreateModal";
 import BillingOverview from "@/shared/page-components/case-management/BillingOverview";
+import AddFileModal from "@/shared/page-components/file-manager/AddFileModal";
 const Select = dynamic(() => import("react-select"), { ssr: false });
 export default function CaseOverview({ params }: { params: { id: string } }) {
   const { auth } = store.getState();
@@ -871,6 +872,18 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
             <div className="box custom-box overflow-hidden">
               <div className="box-header justify-between">
                 <div className="box-title">Case Documents</div>
+
+
+
+                {hasPermission("file_manager.createFolder") && (
+                  <AddFileModal
+                    parentId={data?.paperMergeNodeId}
+                    fetchNode={() => {
+                      fetchData();
+                    }}
+                    users={[]}
+                  />
+                )}
                 <Link
                   href={
                     "/file-manager/?mode=explorer&id=" + data?.paperMergeNodeId

@@ -112,8 +112,8 @@ export const formatMonth = (yearMonth: string) => {
 };
 
 export const chartColors = [
-  "#ff6666",
   "#ffcc99",
+  "#ff6666",
   "#99cc00",
   "#3366cc",
   "#cccc00",
