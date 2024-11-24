@@ -112,8 +112,8 @@ export const formatMonth = (yearMonth: string) => {
 };
 
 export const chartColors = [
-  "#ff6666",
   "#ffcc99",
+  "#ff6666",
   "#99cc00",
   "#3366cc",
   "#cccc00",
@@ -123,7 +123,14 @@ export const chartColors = [
 export const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("en-US", {
     year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
+    month: "short",
+    day: "numeric",
+  });
+};
+
+// Extract file name and extension
+export const getFileNameAndExtension = (url) => {
+  const fileName = url.substring(url.lastIndexOf('/') + 1); // Get everything after the last '/'
+  const fileExtension = fileName.split('.').pop(); // Get the extension after the last '.'
+  return { name: fileName, extension: fileExtension };
+};

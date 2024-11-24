@@ -63,7 +63,7 @@ const AddFileModal = ({ parentId, fetchNode, users }: any) => {
         <Link
           href="#!"
           scroll={false}
-          className="hs-dropdown-toggle ti-btn !gap-0 !py-1 !px-2 !text-[0.75rem] !font-medium bg-secondary text-white flex items-center justify-center"
+          className="ti-btn ti-btn-primary-full !py-1 !px-2 !text-[0.75rem] me-2 flex items-center justify-center"
           onClick={openModal}
         >
           <i className="ri-add-circle-line align-middle !me-1"></i>

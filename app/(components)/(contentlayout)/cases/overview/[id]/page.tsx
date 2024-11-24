@@ -10,14 +10,15 @@ import CaseTeamOverview from "@/shared/page-components/case-management/CaseTeamO
 import FileRow from "@/shared/page-components/case-management/FileRow";
 import { useConfig } from "@/shared/providers/ConfigProvider";
 import store from "@/shared/redux/store";
-import { getImageUrl, hasPermission, toWordUpperCase } from "@/utils/utils";
+import { getFileNameAndExtension, getImageUrl, hasPermission, toWordUpperCase } from "@/utils/utils";
 import moment from "moment";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
+import { ChangeEvent, Fragment, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import CreateModal from "@/shared/page-components/billing/CreateModal";
 import BillingOverview from "@/shared/page-components/case-management/BillingOverview";
+import AddFileModal from "@/shared/page-components/file-manager/AddFileModal";
 const Select = dynamic(() => import("react-select"), { ssr: false });
 export default function CaseOverview({ params }: { params: { id: string } }) {
   const { auth } = store.getState();
@@ -47,12 +48,23 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
     fetchData();
   }, []);
 
+  const [files, setFiles] = useState<FileList | null>(null);
+
   const submitStatus = async (id: any) => {
     setUpdatingStatus(true);
+
+    let formData = new FormData();
+    formData.append("status", statusFormData.status);
+    formData.append("description", statusFormData.description);
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        formData.append("files", files[i]);
+      }
+    }
     try {
       const res = await userPrivateRequest.patch(
         `/api/cases/${id}/status`,
-        statusFormData
+        formData
       );
       setStatusFormData({ status: "", description: "" });
       fetchData();
@@ -98,7 +110,22 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
     }
   };
 
-  console.log(data);
+  // Handle file change and update preview image
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const tempFiles = e.target.files && e.target.files;
+
+    setFiles(tempFiles);
+
+    console.log(tempFiles);
+  };
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const openFileInput = () => {
+    if (fileInputRef.current) {
+      console.log("lets open", fileInputRef.current);
+      fileInputRef.current.click();
+    }
+  };
   return (
     <Fragment>
       <>
@@ -316,9 +343,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                       <span className="block text-[.875rem] font-semibold">
                         {data?.startDate
                           ? moment
-                              .utc(data.startDate)
-                              .format("DD,MMM YYYY")
-                              ?.toString()
+                            .utc(data.startDate)
+                            .format("DD,MMM YYYY")
+                            ?.toString()
                           : "N/A"}
                       </span>
                     )}
@@ -349,9 +376,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                       <span className="block text-[.875rem] font-semibold">
                         {data?.endDate
                           ? moment
-                              .utc(data.endDate)
-                              .format("DD,MMM YYYY")
-                              ?.toString()
+                            .utc(data.endDate)
+                            .format("DD,MMM YYYY")
+                            ?.toString()
                           : "N/A"}
                       </span>
                     )}
@@ -382,9 +409,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                             {/* Tooltip */}
                             {team.user?.firstName && (
                               <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                                {`${team.user?.firstName ?? ""} ${
-                                  team.user?.lastName ?? ""
-                                }`}
+                                {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
+                                  }`}
                               </div>
                             )}
                           </div>
@@ -411,9 +437,8 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                             {/* Tooltip */}
                             {team.user?.firstName && (
                               <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                                {`${team.user?.firstName ?? ""} ${
-                                  team.user?.lastName ?? ""
-                                }`}
+                                {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
+                                  }`}
                               </div>
                             )}
                           </div>
@@ -690,7 +715,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           <p className="mb-2">
                             <b>
                               {auth.user?.email?.toString() ==
-                              history?.updatedBy?.email?.toString()
+                                history?.updatedBy?.email?.toString()
                                 ? "You"
                                 : history?.updatedBy?.firstName}
                             </b>{" "}
@@ -709,6 +734,25 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                               }}
                             />
                           </p>
+
+                          {history?.files?.map(fileInfo => {
+                            return <>
+                              <Link href={fileInfo?.Location ?? "#"} target="_blank" >
+                                <div className=" mb-2 flex items-center space-x-4 p-4 border rounded-lg shadow-md bg-white max-w-md">
+
+                                  <div className="flex items-center justify-center w-16 h-16 bg-gray-200 text-gray-700 text-lg font-bold rounded-md">
+                                    {getFileNameAndExtension(fileInfo?.Location ?? "")?.extension ? (getFileNameAndExtension(fileInfo?.Location ?? "")?.extension).toUpperCase() : "N/A"}
+                                  </div>
+
+                                  <div className="flex flex-col">
+                                    <span className="text-sm font-medium text-gray-800 truncate">
+                                      {getFileNameAndExtension(fileInfo?.Location ?? "")?.name ?? ""}
+                                    </span>
+                                  </div>
+                                </div></Link>
+                            </>
+                          })}
+
                         </div>
                       </li>
                     );
@@ -766,6 +810,24 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           }}
                         />
 
+                        <input
+                          type="file"
+                          name="photo"
+                          ref={fileInputRef}
+                          onChange={handleImageChange}
+                          style={{ display: "none" }}
+                          className="opacity-0"
+                          id="profile-image"
+                          multiple={true}
+                        />
+                        <button
+                          aria-label="button"
+                          type="button"
+                          onClick={openFileInput}
+                          className="!hidden sm:!flex ti-btn ti-btn-light !rounded-none !mb-0"
+                        >
+                          <i className="bi bi-paperclip"></i>
+                        </button>
                         <button
                           className="ti-btn bg-primary text-white !mb-0 !rounded-s-none"
                           type="button"
@@ -810,6 +872,18 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
             <div className="box custom-box overflow-hidden">
               <div className="box-header justify-between">
                 <div className="box-title">Case Documents</div>
+
+
+
+                {hasPermission("file_manager.createFolder") && (
+                  <AddFileModal
+                    parentId={data?.paperMergeNodeId}
+                    fetchNode={() => {
+                      fetchData();
+                    }}
+                    users={[]}
+                  />
+                )}
                 <Link
                   href={
                     "/file-manager/?mode=explorer&id=" + data?.paperMergeNodeId
