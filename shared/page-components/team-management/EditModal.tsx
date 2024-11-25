@@ -17,11 +17,9 @@ const EditModal = ({ team, fetchTeams, pageData }: any) => {
     if (team) {
       // Initialize users based on existing team data
       setUsers(
-        team?.users?.map((user: any) => ({
-          user: user.user?._id,
-          designation: user.designation._id,
-          _id: user._id,
-        }))
+        team?.users?.map((user: any) => {
+          return user._id;
+        })
       );
     }
   }, [team]);
@@ -46,6 +44,8 @@ const EditModal = ({ team, fetchTeams, pageData }: any) => {
       setIsSubmitting(false);
     }
   };
+
+  console.log("selected users", users);
 
   return (
     <>
@@ -109,71 +109,56 @@ const EditModal = ({ team, fetchTeams, pageData }: any) => {
 
                 <div className="xl:col-span-12 col-span-12">
                   <label htmlFor="text-area" className="form-label">
-                    Teams
+                    Users
                   </label>
+
+                  <Select
+                    name="users"
+                    options={pageData?.users?.map((option: any) => ({
+                      value: option._id,
+                      label: `${option?.firstName ?? ""} ${
+                        option?.lastName ?? ""
+                      }`,
+                    }))}
+                    isMulti
+                    // value={data?.users
+                    //   .filter((user: any) => users?.indexOf(user._id) !== -1)
+                    //   .map((selected: any) => {
+                    //     console.log("Selected: ", selected);
+                    //     return {
+                    //       value: selected._id,
+
+                    //       label: `${selected?.firstName ?? ""} ${
+                    //         selected?.lastName ?? ""
+                    //       }`,
+                    //     };
+                    //   })}
+                    defaultValue={data?.users
+                      .filter((user: any) => users?.indexOf(user._id) !== -1)
+                      .map((selected: any) => {
+                        console.log("Selected: ", selected);
+                        return {
+                          value: selected._id,
+
+                          label: `${selected?.firstName ?? ""} ${
+                            selected?.lastName ?? ""
+                          }`,
+                        };
+                      })}
+                    className="basic-multi-select"
+                    menuPlacement="auto"
+                    classNamePrefix="Select2"
+                    placeholder="Select Users"
+                    onChange={(selectedOptions: any) => {
+                      console.log("selectedOptions", selectedOptions);
+                      setUsers(
+                        selectedOptions.map((selectedOption: any) => {
+                          return selectedOption.value;
+                        })
+                      );
+                    }}
+                  />
                 </div>
-
-                {pageData.designations?.map((item: any) => {
-                  const selectedUser = users.find(
-                    (teamMember: any) => teamMember.designation === item._id
-                  );
-
-                  return (
-                    <>
-                      <div className="col-span-6 content-center">
-                        <label htmlFor="input-label2" className="form-label">
-                          {item.name}:
-                        </label>
-                      </div>
-
-                      <div className="col-span-6">
-                        <label htmlFor="input-label2" className="form-label">
-                          User
-                        </label>
-
-                        <Select
-                          name="designation"
-                          options={pageData?.users?.map((option: any) => ({
-                            value: option._id,
-                            label: `${option?.firstName ?? ""} ${
-                              option?.lastName ?? ""
-                            }`,
-                          }))}
-                          value={
-                            selectedUser
-                              ? {
-                                  value: selectedUser.user,
-                                  label: pageData?.users.find(
-                                    (user: any) =>
-                                      user._id === selectedUser.user
-                                  )?.firstName,
-                                }
-                              : null
-                          }
-                          className="basic-multi-select"
-                          menuPlacement="auto"
-                          classNamePrefix="Select2"
-                          placeholder="Select User"
-                          onChange={(e: any) => {
-                            const userIndex = users.findIndex(
-                              (obj: any) => obj.designation === item._id
-                            );
-                            const tempTeams = [...users];
-                            if (userIndex === -1) {
-                              tempTeams.push({
-                                designation: item._id,
-                                user: e.value,
-                              });
-                            } else {
-                              tempTeams[userIndex].user = e.value;
-                            }
-                            setUsers(tempTeams);
-                          }}
-                        />
-                      </div>
-                    </>
-                  );
-                })}
               </div>
             </div>
 

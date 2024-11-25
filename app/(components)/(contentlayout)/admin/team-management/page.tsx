@@ -213,8 +213,7 @@ const Contacts = () => {
                           <td>{team.description}</td>
                           <td>
                             {team.users
-                              ?.map((item: any) => {
-                                let user = item?.user ?? {};
+                              ?.map((user: any) => {
                                 return `${user?.firstName ?? ""}  ${
                                   user?.lastName ?? ""
                                 }`;

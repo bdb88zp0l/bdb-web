@@ -21,8 +21,6 @@ const CreateModal = ({ fetchTeams, pageData }: any) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [data, setData] = useState<any>({});
 
-  const [users, setUsers] = useState<any>([]);
-
   const openModal = (e: any) => {
     e.preventDefault();
     setModalOpen(true);
@@ -32,7 +30,7 @@ const CreateModal = ({ fetchTeams, pageData }: any) => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     userPrivateRequest
-      .post(`/api/team`, { ...data, users })
+      .post(`/api/team`, { ...data })
       .then((res) => {
         setIsSubmitting(false);
         toast.success(res.data?.message);
@@ -121,58 +119,32 @@ const CreateModal = ({ fetchTeams, pageData }: any) => {
                 </div>
                 <div className="xl:col-span-12 col-span-12">
                   <label htmlFor="text-area" className="form-label">
-                    Teams
+                    Users
                   </label>
+
+                  <Select
+                    name="users"
+                    options={pageData?.users?.map((option: any) => ({
+                      value: option._id,
+                      label: `${option?.firstName ?? ""} ${
+                        option?.lastName ?? ""
+                      }`,
+                    }))}
+                    isMulti
+                    className="basic-multi-select"
+                    menuPlacement="auto"
+                    classNamePrefix="Select2"
+                    placeholder="Select Users"
+                    onChange={(selectedOptions: any) => {
+                      setData({
+                        ...data,
+                        users: selectedOptions.map(
+                          (selectedOption: any) => selectedOption.value
+                        ),
+                      });
+                    }}
+                  />
                 </div>
-                {pageData.designations?.map((item: any) => {
-                  return (
-                    <>
-                      <div className=" col-span-6 content-center">
-                        <label htmlFor="input-label2" className="form-label">
-                          {item.name}:
-                        </label>
-                      </div>
-                      <div className=" col-span-6">
-                        <label htmlFor="input-label2" className="form-label">
-                          User
-                        </label>
-                        <Select
-                          name="designation"
-                          options={pageData?.users?.map((option: any) => {
-                            return {
-                              value: option._id,
-                              label: `${option?.firstName ?? ""}  ${
-                                option?.lastName ?? ""
-                              }`,
-                            };
-                          })}
-                          className="basic-multi-select"
-                          menuPlacement="auto"
-                          classNamePrefix="Select2"
-                          placeholder="Select User"
-                          onChange={(e: any) => {
-                            let ss = users.findIndex(
-                              (obj: any) => obj.designation === item._id
-                            );
-                            let temporaryTeams = users;
-                            if (ss == -1) {
-                              setUsers([
-                                ...temporaryTeams,
-                                {
-                                  designation: item._id,
-                                  user: e.value,
-                                },
-                              ]);
-                            } else {
-                              temporaryTeams[ss].user = e.value;
-                              setUsers([...temporaryTeams]);
-                            }
-                          }}
-                        />
-                      </div>
-                    </>
-                  );
-                })}
               </div>
             </div>
             <div className="ti-modal-footer">
