@@ -44,8 +44,8 @@ const BillingReceipt: React.FC<BillingReceiptProps> = ({
             Date:{" "}
             {selectedBilling?.billingType == "timeBased"
               ? `${formatDate(selectedBilling?.billingStart)} - ${formatDate(
-                  selectedBilling?.billingEnd
-                )}`
+                selectedBilling?.billingEnd
+              )}`
               : formatDate(selectedBilling?.billingStart)}
           </p>
           <p className="text-black">
@@ -114,7 +114,14 @@ const BillingReceipt: React.FC<BillingReceiptProps> = ({
 
           <tbody>
             <tr>
-              <td className="p-2 align-top border-r border-black"></td>
+              <td className="p-2 align-top border-r border-black">
+                {selectedBilling?.items?.map((item: any, index: number) => (
+                  <p key={index} className="py-1">
+                    {item.particulars}
+                  </p>
+                ))}
+
+              </td>
               <td className="p-2 space-y-2 border-r border-black">
                 <div>VATable Sales</div>
                 <div>VATable Out of Pocket Expenses (OPEs)</div>
@@ -131,25 +138,20 @@ const BillingReceipt: React.FC<BillingReceiptProps> = ({
                 <div className="font-bold">TOTAL AMOUNT DUE</div>
               </td>
               <td className="p-2 border-l space-y-2 align-top border-black">
-                {selectedBilling?.items?.map((item: any, index: number) => (
-                  <div key={index} className="py-1">
-                    {item.amount ? item.amount.toFixed(2) : "-"}
-                  </div>
-                ))}
 
-                <div>VATable Sales</div>
-                <div>VATable Out of Pocket Expenses (OPEs)</div>
-                <div>VAT</div>
-                <div>VAT Exempt Sales</div>
-                <div>Zero-Rated Sales</div>
-                <div>Total Sales (VAT Inclusive)</div>
-                <div>Less: VAT</div>
-                <div>Amount: Net of VAT</div>
-                <div>Less: Discount</div>
-                <div>Add: VAT</div>
-                <div>Less: Withholding Tax</div>
-                <div>Add: Non-VATable OPES</div>
-                <div className="font-bold">TOTAL AMOUNT DUE</div>
+                <div>{Number(selectedBilling?.subTotal - selectedBilling?.discount ?? 0).toFixed()}</div>
+                <div>0.00</div>
+                <div>0.00</div>
+                <div>0.00</div>
+                <div>0.00</div>
+                <div>0.00</div>
+                <div>0.00</div>
+                <div>{Number(selectedBilling?.subTotal ?? 0).toFixed(2)}</div>
+                <div> {Number(selectedBilling?.discount ?? 0).toFixed(2)}</div>
+                <div>{Number(selectedBilling?.tax ?? 0).toFixed(2)}</div>
+                <div>0.00</div>
+                <div>0.00</div>
+                <div className="font-bold">{Number(selectedBilling?.dueAmount ?? 0).toFixed()}</div>
               </td>
             </tr>
           </tbody>
