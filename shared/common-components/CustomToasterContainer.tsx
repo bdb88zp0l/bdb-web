@@ -47,13 +47,13 @@ function CustomToasterContainer({}: any) {
           //         : "";
           return type === "success"
             ? // ? "flex p-4 ti-toast bg-success/10 text-sm text-success"
-              "flex p-4 ti-toast bg-[#FDEAE7] text-sm text-success"
+              "flex p-4 ti-toast bg-[#4CAF50] !font-medium text-[1rem] !border-0 text-white"
             : type === "error"
-            ? "flex p-4 ti-toast bg-[#FDEAE7] text-sm text-danger"
+            ? "flex p-4 ti-toast bg-primary !font-medium text-[1rem] !border-0 text-white"
             : type.includes("warning")
-            ? "flex p-4 ti-toast bg-warning/10 text-sm text-warning"
+            ? "flex p-4 ti-toast bg-[#FF9800] !font-medium text-[1rem] !border-0 text-white"
             : type.includes("info")
-            ? "flex p-4 ti-toast bg-info/10 text-sm text-info"
+            ? "flex p-4 ti-toast bg-[#17a2b8] !font-medium text-[1rem] !border-0 text-white"
             : "";
         }}
         theme="dark"
