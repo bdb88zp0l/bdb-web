@@ -356,16 +356,24 @@ const EditUserModal = ({
                                 {/* onnnn */}
                               </>
                             ) : (
-                              <input
-                                id="two-step"
-                                name="authenticatorOff"
-                                type="checkbox"
-                                defaultChecked={false}
-                                disabled={mode == "show"}
-                                onChange={(e) => {
-                                  setIsAuthenticatorModalOpen(true);
-                                }}
-                              />
+                              <>
+                                {auth?.user?.googleAuthenticator}
+
+                                <input
+                                  id="two-step"
+                                  name="authenticatorOff"
+                                  type="checkbox"
+                                  defaultChecked={false}
+                                  // disabled={mode == "show"}
+                                  onChange={(e) => {
+                                    console.log(
+                                      "object is not",
+                                      e.target.checked
+                                    );
+                                    setIsAuthenticatorModalOpen(true);
+                                  }}
+                                />
+                              </>
                             )}
                             <label
                               htmlFor="two-step"
@@ -430,7 +438,7 @@ const EditUserModal = ({
         </div>
       </Modal>
       <TwoFASetupModal
-        isOpen={isAuthenticatorModalOpen}
+        isOpen={true}
         onClose={() => {
           setIsAuthenticatorModalOpen(false);
         }}

@@ -31,7 +31,6 @@ const CaseTeamOverview = ({
       setEditIndex(index);
       setAddMemberData({
         user: team.user._id,
-        designation: team.designation._id,
         rate: team.rate,
       });
     } else {
@@ -49,10 +48,7 @@ const CaseTeamOverview = ({
   };
 
   const handleSubmit = async () => {
-    if (!addMemberData?.designation) {
-      toast.error("Designation is required");
-      return null;
-    } else if (!addMemberData?.user) {
+    if (!addMemberData?.user) {
       toast.error("User is required");
       return null;
     }
@@ -66,7 +62,6 @@ const CaseTeamOverview = ({
             })
             ?.map((team) => ({
               user: team.user._id,
-              designation: team.designation._id,
               rate: team.rate,
             }))
         : [];
@@ -253,7 +248,9 @@ const CaseTeamOverview = ({
                     </td>
                     <td>
                       <span className="badge bg-primary/10 text-primary">
-                        {team?.designation?.name ?? ""}
+                        {team?.user?.roleType === "superAdmin"
+                          ? "Super Admin"
+                          : team?.user?.role?.name ?? ""}
                       </span>
                     </td>
                     <td>
@@ -309,7 +306,7 @@ const CaseTeamOverview = ({
             </div>
             <div className="ti-modal-body px-4">
               <div className="grid grid-cols-12 gap-4">
-                <div className="col-span-12">
+                {/* <div className="col-span-12">
                   <label className="form-label">Designation</label>
                   <Select
                     name="designation"
@@ -337,7 +334,7 @@ const CaseTeamOverview = ({
                       });
                     }}
                   />
-                </div>
+                </div> */}
 
                 <div className="col-span-12">
                   <label className="form-label">User</label>
@@ -373,6 +370,25 @@ const CaseTeamOverview = ({
                         ...addMemberData,
                         user: e.value,
                         rate: selectedUserInfo?.hourlyRate ?? 0,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="xl:col-span-12 col-span-12 mt-2">
+                  <label htmlFor="company-lead-score" className="form-label">
+                    Rate{" "}
+                    {data.defaultBillingType && `(${data.defaultBillingType})`}
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="company-lead-score"
+                    placeholder="Rate"
+                    value={addMemberData?.rate}
+                    onChange={(e: any) => {
+                      setAddMemberData({
+                        ...addMemberData,
+                        rate: Number(e.target.value),
                       });
                     }}
                   />
