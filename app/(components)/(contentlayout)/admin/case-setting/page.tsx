@@ -25,7 +25,7 @@ const CaseSetting = () => {
       />
       <div className="grid grid-cols-12 gap-6">
         <CaseStatusSetup />
-        <CaseTeamDesignationSetup />
+        {/* <CaseTeamDesignationSetup /> */}
         <ServiceTypeSetting />
       </div>
     </Fragment>
