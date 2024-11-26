@@ -640,7 +640,7 @@ const EditModal = ({
                 onClick={handleSubmit}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? <ButtonSpinner text="Creating" /> : "Create"}
+                {isSubmitting ? <ButtonSpinner text="Updating" /> : "Update"}
               </button>
             </div>
           </div>

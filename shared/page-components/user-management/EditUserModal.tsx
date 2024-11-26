@@ -347,29 +347,26 @@ const EditUserModal = ({
                                   id="two-step"
                                   name="authenticatorOn"
                                   type="checkbox"
+                                  checked={isAuthenticatorModalOpen}
                                   defaultChecked={true}
-                                  disabled={mode == "show"}
+                                  // disabled={mode == "show"}
                                   onChange={(e) => {
+                                    console.log("onChange event check");
                                     setIsAuthenticatorModalOpen(true);
                                   }}
                                 />
-                                {/* onnnn */}
                               </>
                             ) : (
                               <>
-                                {auth?.user?.googleAuthenticator}
-
                                 <input
                                   id="two-step"
                                   name="authenticatorOff"
                                   type="checkbox"
                                   defaultChecked={false}
                                   // disabled={mode == "show"}
+                                  checked={isAuthenticatorModalOpen}
                                   onChange={(e) => {
-                                    console.log(
-                                      "object is not",
-                                      e.target.checked
-                                    );
+                                    console.log("onChange event check");
                                     setIsAuthenticatorModalOpen(true);
                                   }}
                                 />
@@ -385,7 +382,6 @@ const EditUserModal = ({
                     </div>
                   </div>
                 </div>
-                {/* password */}
               </div>
             </div>
 
@@ -437,14 +433,15 @@ const EditUserModal = ({
           </div>
         </div>
       </Modal>
-      <TwoFASetupModal
-        isOpen={true}
-        onClose={() => {
-          setIsAuthenticatorModalOpen(false);
-        }}
-        user={data}
-        sourcePage="user-management"
-      />
+      {isAuthenticatorModalOpen && (
+        <TwoFASetupModal
+          isAuthenticatorModalOpen={isAuthenticatorModalOpen}
+          setIsAuthenticatorModalOpen={setIsAuthenticatorModalOpen}
+          user={data}
+          sourcePage="user-management"
+        />
+      )}
+
       {resetPasswordShowModal && (
         <ResetPasswordModal
           resetPasswordShowModal={resetPasswordShowModal}

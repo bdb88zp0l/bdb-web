@@ -23,6 +23,7 @@ const CalendarDetailsModal = ({
   };
 
   const handleDelete = (id: number) => {
+    return;
     userPrivateRequest
       .delete(`/api/calendars/${id}`)
       .then((res) => {

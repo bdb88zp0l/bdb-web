@@ -3,13 +3,20 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import ButtonSpinner from "../layout-components/loader/ButtonSpinner";
 import { toast } from "react-toastify";
+import Modal from "@/shared/modals/Modal";
 
-const TwoFASetupModal = ({ isOpen, onClose, user, sourcePage }: any) => {
+const TwoFASetupModal = ({
+  isAuthenticatorModalOpen,
+  setIsAuthenticatorModalOpen,
+  user,
+  sourcePage,
+}: any) => {
   const auth = useSelector((state: any) => state.auth);
   const [secret, setSecret] = useState<string>("");
   const [qrCode, setQrcode] = useState<string>("");
   const [otp, setOtp] = useState<string>("");
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
+  console.log(onclose, "onclose");
 
   useEffect(() => {
     console.log("user", user);
@@ -41,7 +48,7 @@ const TwoFASetupModal = ({ isOpen, onClose, user, sourcePage }: any) => {
       )
       .then((res) => {
         toast.success(res.data.message);
-        onClose();
+        setIsAuthenticatorModalOpen();
       })
       .catch((err) => {
         console.log(err);
@@ -55,14 +62,21 @@ const TwoFASetupModal = ({ isOpen, onClose, user, sourcePage }: any) => {
 
   return (
     <>
-      {isOpen ? (
+      <Modal
+        isOpen={isAuthenticatorModalOpen}
+        close={() => {
+          setIsAuthenticatorModalOpen;
+        }}
+      >
         <div
           id="hs-vertically-centered-scrollable-modal"
-          className={`class="hs-overlay ti-modal [--overlay-backdrop:static] open opened`}
+          className={`class="hs-overlay ti-modal [--overlay-backdrop:static] open opened z-50`}
         >
           <div
             className="absolute inset-0 bg-black opacity-50"
-            onClick={onClose} // Close modal on overlay click
+            onClick={() => {
+              setIsAuthenticatorModalOpen(false);
+            }} // Close modal on overlay click
           ></div>
           <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] relative flex items-center">
             <div className="max-h-full overflow-hidden ti-modal-content bg-white ">
@@ -76,7 +90,9 @@ const TwoFASetupModal = ({ isOpen, onClose, user, sourcePage }: any) => {
                 <button
                   type="button"
                   className="hs-dropdown-toggle ti-modal-close-btn"
-                  onClick={onClose}
+                  onClick={() => {
+                    setIsAuthenticatorModalOpen(false);
+                  }}
                 >
                   <span className="sr-only">Close</span>
                   <svg
@@ -172,9 +188,7 @@ const TwoFASetupModal = ({ isOpen, onClose, user, sourcePage }: any) => {
             </div>
           </div>
         </div>
-      ) : (
-        ""
-      )}
+      </Modal>
     </>
   );
 };
