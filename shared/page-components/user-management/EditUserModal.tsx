@@ -114,14 +114,6 @@ const EditUserModal = ({
 
   return (
     <>
-      <button
-        aria-label="button"
-        type="button"
-        className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
-        onClick={openModal}
-      >
-        <i className="ri-pencil-line"></i>
-      </button>
       <Modal isOpen={showModal} close={closeModal}>
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">

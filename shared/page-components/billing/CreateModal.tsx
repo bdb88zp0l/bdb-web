@@ -396,7 +396,7 @@ const CreateModal = ({
                 </div>
               </div>
 
-              <div className="co-span-12 border border-defaultborder crm-contact p-2">
+              <div className="co-span-12 border dark:border-defaultborder/10 border-defaultborder crm-contact p-2">
                 {data?.billingType !== "timeBased" && (
                   <div className="flex justify-end">
                     <button
@@ -595,6 +595,7 @@ const CreateModal = ({
                       <tr className="border border-defaultborder crm-contact">
                         <td colSpan={6}>
                           <textarea
+                            className="form-control"
                             placeholder="Description"
                             value={data.note}
                             onChange={(e) =>

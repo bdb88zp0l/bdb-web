@@ -10,7 +10,12 @@ import CaseTeamOverview from "@/shared/page-components/case-management/CaseTeamO
 import FileRow from "@/shared/page-components/case-management/FileRow";
 import { useConfig } from "@/shared/providers/ConfigProvider";
 import store from "@/shared/redux/store";
-import { getFileNameAndExtension, getImageUrl, hasPermission, toWordUpperCase } from "@/utils/utils";
+import {
+  getFileNameAndExtension,
+  getImageUrl,
+  hasPermission,
+  toWordUpperCase,
+} from "@/utils/utils";
 import moment from "moment";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -343,9 +348,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                       <span className="block text-[.875rem] font-semibold">
                         {data?.startDate
                           ? moment
-                            .utc(data.startDate)
-                            .format("DD,MMM YYYY")
-                            ?.toString()
+                              .utc(data.startDate)
+                              .format("DD,MMM YYYY")
+                              ?.toString()
                           : "N/A"}
                       </span>
                     )}
@@ -376,9 +381,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                       <span className="block text-[.875rem] font-semibold">
                         {data?.endDate
                           ? moment
-                            .utc(data.endDate)
-                            .format("DD,MMM YYYY")
-                            ?.toString()
+                              .utc(data.endDate)
+                              .format("DD,MMM YYYY")
+                              ?.toString()
                           : "N/A"}
                       </span>
                     )}
@@ -409,8 +414,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                             {/* Tooltip */}
                             {team.user?.firstName && (
                               <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                                {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
-                                  }`}
+                                {`${team.user?.firstName ?? ""} ${
+                                  team.user?.lastName ?? ""
+                                }`}
                               </div>
                             )}
                           </div>
@@ -437,8 +443,9 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                             {/* Tooltip */}
                             {team.user?.firstName && (
                               <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible bg-black text-white text-xs rounded py-1 px-2 z-10">
-                                {`${team.user?.firstName ?? ""} ${team.user?.lastName ?? ""
-                                  }`}
+                                {`${team.user?.firstName ?? ""} ${
+                                  team.user?.lastName ?? ""
+                                }`}
                               </div>
                             )}
                           </div>
@@ -715,7 +722,7 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                           <p className="mb-2">
                             <b>
                               {auth.user?.email?.toString() ==
-                                history?.updatedBy?.email?.toString()
+                              history?.updatedBy?.email?.toString()
                                 ? "You"
                                 : history?.updatedBy?.firstName}
                             </b>{" "}
@@ -735,24 +742,36 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
                             />
                           </p>
 
-                          {history?.files?.map(fileInfo => {
-                            return <>
-                              <Link href={fileInfo?.Location ?? "#"} target="_blank" >
-                                <div className=" mb-2 flex items-center space-x-4 p-4 border rounded-lg shadow-md bg-white max-w-md">
+                          {history?.files?.map((fileInfo) => {
+                            return (
+                              <>
+                                <Link
+                                  href={fileInfo?.Location ?? "#"}
+                                  target="_blank"
+                                >
+                                  <div className=" mb-2 flex items-center space-x-4 p-4 dark:border-defaultborder rounded-lg shadow-md bg-white dark:!bg-bodybg max-w-md">
+                                    <div className="flex items-center justify-center w-16 h-16 bg-gray-200 text-gray-700 text-lg font-bold rounded-md">
+                                      {getFileNameAndExtension(
+                                        fileInfo?.Location ?? ""
+                                      )?.extension
+                                        ? getFileNameAndExtension(
+                                            fileInfo?.Location ?? ""
+                                          )?.extension.toUpperCase()
+                                        : "N/A"}
+                                    </div>
 
-                                  <div className="flex items-center justify-center w-16 h-16 bg-gray-200 text-gray-700 text-lg font-bold rounded-md">
-                                    {getFileNameAndExtension(fileInfo?.Location ?? "")?.extension ? (getFileNameAndExtension(fileInfo?.Location ?? "")?.extension).toUpperCase() : "N/A"}
+                                    <div className="flex flex-col">
+                                      <span className="text-sm font-medium text-gray-800 truncate">
+                                        {getFileNameAndExtension(
+                                          fileInfo?.Location ?? ""
+                                        )?.name ?? ""}
+                                      </span>
+                                    </div>
                                   </div>
-
-                                  <div className="flex flex-col">
-                                    <span className="text-sm font-medium text-gray-800 truncate">
-                                      {getFileNameAndExtension(fileInfo?.Location ?? "")?.name ?? ""}
-                                    </span>
-                                  </div>
-                                </div></Link>
-                            </>
+                                </Link>
+                              </>
+                            );
                           })}
-
                         </div>
                       </li>
                     );
@@ -872,8 +891,6 @@ export default function CaseOverview({ params }: { params: { id: string } }) {
             <div className="box custom-box overflow-hidden">
               <div className="box-header justify-between">
                 <div className="box-title">Case Documents</div>
-
-
 
                 {hasPermission("file_manager.createFolder") && (
                   <AddFileModal
