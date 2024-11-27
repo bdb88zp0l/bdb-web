@@ -44,7 +44,9 @@ const Contacts = () => {
   const fetchTeams = async () => {
     setIsFetching(true);
     const res = await userPrivateRequest
-      .get(`/api/team`)
+      .get(
+        `/api/team?page=${page}&limit=${limit}&search=${search}&sortBy=${sortBy}&sortOrder=${sortOrder}`
+      )
       .then((res) => {
         setData(res.data?.data ?? {});
       })

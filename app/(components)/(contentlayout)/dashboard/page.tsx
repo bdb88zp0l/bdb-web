@@ -12,33 +12,32 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 import store from "@/shared/redux/store";
-import { formatAmount, formatMonth, formatNumber, getImageUrl } from "@/utils/utils";
+import {
+  formatAmount,
+  formatMonth,
+  formatNumber,
+  getImageUrl,
+} from "@/utils/utils";
 
 const Crm = () => {
-
-
-
   const { auth } = store.getState();
   const config = useConfig();
 
   const getAnnouncement = config?.ANNOUNCEMENT_SETTINGS;
   const [data, setData] = useState<any>({
-    caseStatusStatistics: []
-  })
+    caseStatusStatistics: [],
+  });
 
   const fetchDashboardData = async () => {
-    const res = await userPrivateRequest.get(`api/dashboard`)
-    setData(res.data?.data ?? {})
-  }
+    const res = await userPrivateRequest.get(`api/dashboard`);
+    setData(res.data?.data ?? {});
+  };
 
   useEffect(() => {
-    fetchDashboardData()
-
+    fetchDashboardData();
   }, []);
 
-
-
-  console.log("Crmdata.Sourcedata.series", auth?.user)
+  console.log("Crmdata.Sourcedata.series", auth?.user);
   return (
     <Fragment>
       <Seo title={"Crm"} />
@@ -72,7 +71,7 @@ const Crm = () => {
         <div className="xxl:col-span-9 xl:col-span-12  col-span-12">
           <div className="grid grid-cols-12 gap-x-6">
             <div className="xxl:col-span-4 xl:col-span-4  col-span-12">
-              {getAnnouncement &&
+              {getAnnouncement && (
                 <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
                   <div className="box crm-highlight-card">
                     <div className="box-body">
@@ -106,7 +105,8 @@ const Crm = () => {
                       </div>
                     </div>
                   </div>
-                </div>}
+                </div>
+              )}
               <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
                 <div className="box">
                   <div className="box-header flex justify-between">
@@ -154,19 +154,18 @@ const Crm = () => {
                   </div>
                   <div className="box-body">
                     <ul className="list-none crm-top-deals mb-0">
-
                       {data?.latestClients?.map((item: any, index: number) => (
                         <li className="mb-[0.9rem]">
                           <div className="flex items-start flex-wrap">
                             <div className="me-2">
                               <span className=" inline-flex items-center justify-center">
-
                                 <span className="avatar avatar-rounded avatar-sm">
                                   {getImageUrl(item?.logo) ? (
                                     <img
-                                      src={`  ${getImageUrl(item?.logo) ||
+                                      src={`  ${
+                                        getImageUrl(item?.logo) ||
                                         "../../assets/images/user-circle.png"
-                                        }`}
+                                      }`}
                                       alt=""
                                       style={{ objectFit: "cover" }}
                                     />
@@ -182,8 +181,8 @@ const Crm = () => {
                               </p>
                               <p className="text-[#8c9097] dark:text-white/50 text-[0.75rem]">
                                 {/* {item?.emails?.length > 0 ? item?.emails?.[0]?.value : ""} */}
-
-                                {item?.contactInfo?.firstName} {item?.contactInfo?.lastName}
+                                {item?.contactInfo?.firstName}{" "}
+                                {item?.contactInfo?.lastName}
                               </p>
                             </div>
 
@@ -194,7 +193,8 @@ const Crm = () => {
                               {moment.utc(item?.engagedAt).format("MMM DD, YYYY")}
                             </div> */}
                           </div>
-                        </li>))}
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -279,7 +279,10 @@ const Crm = () => {
                                 Total Client
                               </p>
                               <h4 className="font-semibold  text-[1.5rem] !mb-2 ">
-                                {formatNumber(data?.clientMonthlyData?.active?.totalCount ?? 0)}
+                                {formatNumber(
+                                  data?.clientMonthlyData?.active?.totalCount ??
+                                    0
+                                )}
                               </h4>
                             </div>
                             <div id="crm-total-customers">
@@ -287,10 +290,18 @@ const Crm = () => {
                                 options={Crmdata.Customers.options}
                                 // series={Crmdata.Customers.series}
 
-                                series={[{
-                                  name: "Value",
-                                  data: data?.clientMonthlyData?.active?.monthlyData?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
-                                },]}
+                                series={[
+                                  {
+                                    name: "Value",
+                                    data: data?.clientMonthlyData?.active?.monthlyData?.map(
+                                      (item: any) => {
+                                        return item?.growthPercentage < 0
+                                          ? 0
+                                          : item?.growthPercentage;
+                                      }
+                                    ),
+                                  },
+                                ]}
                                 type="line"
                                 height={40}
                                 width={100}
@@ -309,9 +320,23 @@ const Crm = () => {
                               </Link>
                             </div>
                             <div className="text-end">
-                              <p className={`mb-0 text-[0.813rem] font-semibold ${data?.clientMonthlyData?.active?.latestGrowth > 0 ? "text-success" : "text-danger"}`}>
-                                {data?.clientMonthlyData?.active?.latestGrowth > 0 ? "+" : "-"}
-                                {(data?.clientMonthlyData?.active?.latestGrowth ?? 0).toFixed(2)}%
+                              <p
+                                className={`mb-0 text-[0.813rem] font-semibold ${
+                                  data?.clientMonthlyData?.active
+                                    ?.latestGrowth > 0
+                                    ? "text-success"
+                                    : "text-danger"
+                                }`}
+                              >
+                                {data?.clientMonthlyData?.active?.latestGrowth >
+                                0
+                                  ? "+"
+                                  : "-"}
+                                {(
+                                  data?.clientMonthlyData?.active
+                                    ?.latestGrowth ?? 0
+                                ).toFixed(2)}
+                                %
                               </p>
                               <p className="text-[#8c9097] dark:text-white/50 opacity-[0.7] text-[0.6875rem]">
                                 this month
@@ -339,16 +364,26 @@ const Crm = () => {
                                 Total Cases
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                {formatNumber(data?.caseMonthlyData?.active?.totalCount ?? 0)}
+                                {formatNumber(
+                                  data?.caseMonthlyData?.active?.totalCount ?? 0
+                                )}
                               </h4>
                             </div>
                             <div id="crm-total-revenue">
                               <ReactApexChart
                                 options={Crmdata.Revenue.options}
-                                series={[{
-                                  name: "Value",
-                                  data: data?.caseMonthlyData?.active?.monthlyData?.reverse()?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
-                                },]}
+                                series={[
+                                  {
+                                    name: "Value",
+                                    data: data?.caseMonthlyData?.active?.monthlyData
+                                      ?.reverse()
+                                      ?.map((item: any) => {
+                                        return item?.growthPercentage < 0
+                                          ? 0
+                                          : item?.growthPercentage;
+                                      }),
+                                  },
+                                ]}
                                 type="line"
                                 height={40}
                                 width={100}
@@ -367,11 +402,22 @@ const Crm = () => {
                               </Link>
                             </div>
                             <div className="text-end">
-                              <p className={`mb-0 text-[0.813rem] font-semibold ${data?.caseMonthlyData?.active?.latestGrowth > 0 ? "text-success" : "text-danger"}`}>
+                              <p
+                                className={`mb-0 text-[0.813rem] font-semibold ${
+                                  data?.caseMonthlyData?.active?.latestGrowth >
+                                  0
+                                    ? "text-success"
+                                    : "text-danger"
+                                }`}
+                              >
                                 {/* +25% */}
-
-                                {data?.caseMonthlyData?.active?.latestGrowth > 0 ? "+" : "-"}
-                                {(data?.caseMonthlyData?.active?.latestGrowth ?? 0).toFixed(2)}
+                                {data?.caseMonthlyData?.active?.latestGrowth > 0
+                                  ? "+"
+                                  : "-"}
+                                {(
+                                  data?.caseMonthlyData?.active?.latestGrowth ??
+                                  0
+                                ).toFixed(2)}
                                 %
                               </p>
                               <p className="text-[#8c9097] dark:text-white/50 opacity-[0.7] text-[0.6875rem]">
@@ -400,16 +446,27 @@ const Crm = () => {
                                 Inactive Clients
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                {formatNumber(data?.clientMonthlyData?.inactive?.totalCount ?? 0)}
+                                {formatNumber(
+                                  data?.clientMonthlyData?.inactive
+                                    ?.totalCount ?? 0
+                                )}
                               </h4>
                             </div>
                             <div id="crm-conversion-ratio">
                               <ReactApexChart
                                 options={Crmdata.Ratio.options}
-                                series={[{
-                                  name: "Value",
-                                  data: data?.clientMonthlyData?.inactive?.monthlyData?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
-                                },]}
+                                series={[
+                                  {
+                                    name: "Value",
+                                    data: data?.clientMonthlyData?.inactive?.monthlyData?.map(
+                                      (item: any) => {
+                                        return item?.growthPercentage < 0
+                                          ? 0
+                                          : item?.growthPercentage;
+                                      }
+                                    ),
+                                  },
+                                ]}
                                 type="line"
                                 height={40}
                                 width={100}
@@ -428,9 +485,23 @@ const Crm = () => {
                               </Link>
                             </div>
                             <div className="text-end">
-                              <p className={`mb-0 text-[0.813rem] font-semibold ${data?.caseMonthlyData?.inactive?.latestGrowth > 0 ? "text-success" : "text-danger"}`}>
-                                {data?.clientMonthlyData?.inactive?.latestGrowth > 0 ? "+" : "-"}
-                                {(data?.clientMonthlyData?.inactive?.latestGrowth ?? 0).toFixed(2)}%
+                              <p
+                                className={`mb-0 text-[0.813rem] font-semibold ${
+                                  data?.caseMonthlyData?.inactive
+                                    ?.latestGrowth > 0
+                                    ? "text-success"
+                                    : "text-danger"
+                                }`}
+                              >
+                                {data?.clientMonthlyData?.inactive
+                                  ?.latestGrowth > 0
+                                  ? "+"
+                                  : "-"}
+                                {(
+                                  data?.clientMonthlyData?.inactive
+                                    ?.latestGrowth ?? 0
+                                ).toFixed(2)}
+                                %
                               </p>
                               <p className="text-[#8c9097] dark:text-white/50 opacity-[0.7] text-[0.6875rem]">
                                 this month
@@ -458,16 +529,27 @@ const Crm = () => {
                                 Inactive Cases
                               </p>
                               <h4 className="font-semibold text-[1.5rem] !mb-2 ">
-                                {formatNumber(data?.caseMonthlyData?.inactive?.totalCount ?? 0)}
+                                {formatNumber(
+                                  data?.caseMonthlyData?.inactive?.totalCount ??
+                                    0
+                                )}
                               </h4>
                             </div>
                             <div id="crm-total-deals">
                               <ReactApexChart
                                 options={Crmdata.Deals.options}
-                                series={[{
-                                  name: "Value",
-                                  data: data?.caseMonthlyData?.inactive?.monthlyData?.map((item: any) => { return item?.growthPercentage < 0 ? 0 : item?.growthPercentage }),
-                                },]}
+                                series={[
+                                  {
+                                    name: "Value",
+                                    data: data?.caseMonthlyData?.inactive?.monthlyData?.map(
+                                      (item: any) => {
+                                        return item?.growthPercentage < 0
+                                          ? 0
+                                          : item?.growthPercentage;
+                                      }
+                                    ),
+                                  },
+                                ]}
                                 type="line"
                                 height={40}
                                 width={100}
@@ -486,10 +568,23 @@ const Crm = () => {
                               </Link>
                             </div>
                             <div className="text-end">
-                              <p className={`mb-0 text-[0.813rem] font-semibold ${data?.caseMonthlyData?.inactive?.latestGrowth > 0 ? "text-success" : "text-danger"}`}>
-
-                                {data?.caseMonthlyData?.inactive?.latestGrowth > 0 ? "+" : "-"}
-                                {(data?.caseMonthlyData?.inactive?.latestGrowth ?? 0).toFixed(2)}%
+                              <p
+                                className={`mb-0 text-[0.813rem] font-semibold ${
+                                  data?.caseMonthlyData?.inactive
+                                    ?.latestGrowth > 0
+                                    ? "text-success"
+                                    : "text-danger"
+                                }`}
+                              >
+                                {data?.caseMonthlyData?.inactive?.latestGrowth >
+                                0
+                                  ? "+"
+                                  : "-"}
+                                {(
+                                  data?.caseMonthlyData?.inactive
+                                    ?.latestGrowth ?? 0
+                                ).toFixed(2)}
+                                %
                               </p>
                               <p className="text-[#8c9097] dark:text-white/50  opacity-[0.7] text-[0.6875rem]">
                                 this month
@@ -504,7 +599,9 @@ const Crm = () => {
                 <div className="xxl:col-span-12 xl:col-span-12 col-span-12">
                   <div className="box">
                     <div className="box-header !gap-0 !m-0 justify-between">
-                      <div className="box-title">Clients and Cases per Month</div>
+                      <div className="box-title">
+                        Clients and Cases per Month
+                      </div>
                       <div className="hs-dropdown ti-dropdown">
                         <Link
                           href="#!"
@@ -558,23 +655,28 @@ const Crm = () => {
                               group: "apexcharts-axis-0",
                               name: "Cases",
                               type: "line",
-                              data: data?.monthlyStatistics?.map((item: any, index: number) => {
-                                return {
-                                  x: formatMonth(item?.yearMonth),
-                                  y: item?.cases
+                              data: data?.monthlyStatistics?.map(
+                                (item: any, index: number) => {
+                                  return {
+                                    x: formatMonth(item?.yearMonth),
+                                    y: item?.cases,
+                                  };
                                 }
-                              })
-                            }, {
+                              ),
+                            },
+                            {
                               group: "apexcharts-axis-1",
                               name: "Clients",
                               type: "line",
-                              data: data?.monthlyStatistics?.map((item: any, index: number) => {
-                                return {
-                                  x: formatMonth(item?.yearMonth),
-                                  y: item?.clients
+                              data: data?.monthlyStatistics?.map(
+                                (item: any, index: number) => {
+                                  return {
+                                    x: formatMonth(item?.yearMonth),
+                                    y: item?.clients,
+                                  };
                                 }
-                              })
-                            }
+                              ),
+                            },
                           ]}
                           type="line"
                           width={"100%"}
@@ -869,8 +971,17 @@ const Crm = () => {
                   <div className="leads-source-chart flex items-center justify-center">
                     <ReactApexChart
                       // options={{ ...Crmdata.Sourcedata.options, labels: data?.caseStatusStatistics?.filter((item: any) => item?._id).map((item: any, index: number) => item?._id) }}
-                      options={{ ...Crmdata.Sourcedata.options, labels: data?.caseStatusStatistics?.filter((item: any) => item?._id).map((item: any, index: number) => { return item?._id }) }}
-                      series={data?.caseStatusStatistics?.filter((item: any) => item?._id).map((item: any, index: number) => item?.count)}
+                      options={{
+                        ...Crmdata.Sourcedata.options,
+                        labels: data?.caseStatusStatistics
+                          ?.filter((item: any) => item?._id)
+                          .map((item: any, index: number) => {
+                            return item?._id;
+                          }),
+                      }}
+                      series={data?.caseStatusStatistics
+                        ?.filter((item: any) => item?._id)
+                        .map((item: any, index: number) => item?.count)}
                       type="donut"
                       width={"100%"}
                       height={250}
@@ -878,28 +989,38 @@ const Crm = () => {
                     <div className="lead-source-value ">
                       <span className="block text-[0.875rem] ">Total</span>
                       <span className="block text-[1.5625rem] font-bold">
-                        {formatNumber(data?.caseStatusStatistics?.reduce((acc: number, curr: any) => acc + curr?.count, 0))}
+                        {formatNumber(
+                          data?.caseStatusStatistics?.reduce(
+                            (acc: number, curr: any) => acc + curr?.count,
+                            0
+                          )
+                        )}
                       </span>
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-4 border-t border-dashed dark:border-defaultborder/10">
-                  {data?.caseStatusStatistics?.filter((item: any) => item?._id).map((item: any, index: number) => (
-
-                    <div className="col !p-0">
-                      <div className="!ps-4 p-[0.95rem] text-center border-e border-dashed dark:border-defaultborder/10">
-                        <span className={"text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend inline-block " + ` ${item?._id}`}>
-                          {item?._id}
-                        </span>
-                        <div>
-                          <span className="text-[1rem]  font-semibold">
-                            {formatNumber(item?.count)}
+                <div className="grid grid-cols-2 border-t border-dashed dark:border-defaultborder/10">
+                  {data?.caseStatusStatistics
+                    ?.filter((item: any) => item?._id)
+                    .map((item: any, index: number) => (
+                      <div className="col !p-0">
+                        <div className="!ps-4 p-[0.95rem] text-center border-e border-dashed dark:border-defaultborder/10">
+                          <span
+                            className={
+                              "text-[#8c9097] dark:text-white/50 text-[0.75rem] mb-1 crm-lead-legend inline-block " +
+                              ` ${item?._id}`
+                            }
+                          >
+                            {item?._id}
                           </span>
+                          <div>
+                            <span className="text-[1rem]  font-semibold">
+                              {formatNumber(item?.count)}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-
+                    ))}
                 </div>
               </div>
             </div>
@@ -951,19 +1072,18 @@ const Crm = () => {
                 </div>
                 <div className="box-body">
                   <ul className="list-none crm-top-deals mb-0">
-
                     {data?.topClientsByCase?.map((item: any, index: number) => (
                       <li className="mb-[0.9rem]">
                         <div className="flex items-start flex-wrap">
                           <div className="me-2">
                             <span className=" inline-flex items-center justify-center">
-
                               <span className="avatar avatar-rounded avatar-sm">
                                 {getImageUrl(item?.clientInfo?.logo) ? (
                                   <img
-                                    src={`  ${getImageUrl(item?.clientInfo?.logo) ||
+                                    src={`  ${
+                                      getImageUrl(item?.clientInfo?.logo) ||
                                       "../../assets/images/user-circle.png"
-                                      }`}
+                                    }`}
                                     alt=""
                                     style={{ objectFit: "cover" }}
                                   />
@@ -978,14 +1098,16 @@ const Crm = () => {
                               {item?.clientInfo?.companyName ?? ""}
                             </p>
                             <p className="text-[#8c9097] dark:text-white/50 text-[0.75rem]">
-                              {item?.contactInfo?.firstName} {item?.contactInfo?.lastName}
+                              {item?.contactInfo?.firstName}{" "}
+                              {item?.contactInfo?.lastName}
                             </p>
                           </div>
                           <div className="font-semibold text-[0.9375rem] ">
                             {formatNumber(item?.totalCases ?? 0)}
                           </div>
                         </div>
-                      </li>))}
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -1135,21 +1257,21 @@ const Crm = () => {
                         </div>
 
                         <div className="crm-timeline-content text-defaultsize">
-                          <span>
-                            {item?.title}
-                          </span>
+                          <span>{item?.title}</span>
                           <span className="block text-[0.75rem] text-[#8c9097] dark:text-white/50">
                             {item?.user?.firstName} {item?.user?.lastName}
                           </span>
                         </div>
                         <div className="flex-grow text-end">
                           <span className="block text-[#8c9097] dark:text-white/50 text-[0.6875rem] opacity-[0.7]">
-                            {moment(item?.createdAt).format("DD MMM, YYYY HH:mm")}
+                            {moment(item?.createdAt).format(
+                              "DD MMM, YYYY HH:mm"
+                            )}
                           </span>
                         </div>
                       </div>
-                    </li>))}
-
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
