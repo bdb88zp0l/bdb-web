@@ -132,6 +132,15 @@ const Modalsearch = () => {
                   // myfunction(ele.target.value);
                   setInputValue(ele.target.value);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    if (!InputValue) {
+                      return;
+                    }
+                    window.location.href =
+                      "/file-manager/?mode=search&id=" + InputValue;
+                  }
+                }}
               />
               {/* 
             <a aria-label="anchor" href="#!"  className="!border-e-0 flex items-center input-group-text bg-light !py-[0.375rem] !px-[0.75rem]"
@@ -299,7 +308,8 @@ const Modalsearch = () => {
                   if (!InputValue) {
                     return;
                   }
-                  window.location.href = "/file-manager/?mode=search&id=" + InputValue;
+                  window.location.href =
+                    "/file-manager/?mode=search&id=" + InputValue;
                 }}
                 className="ti-btn-group !px-[0.75rem] !py-[0.45rem]  rounded-s-[0.25rem] !rounded-e-none ti-btn-primary !text-[0.75rem] dark:border-white/10"
                 disabled={!InputValue}

@@ -31,7 +31,7 @@ const EditEventModal = ({ isOpen, onClose, pageData, onUpdate, event }) => {
     setIsSubmitting(true);
 
     userPrivateRequest
-      .patch("/api/hrm/dsr/" + event.id, formData)
+      .patch("/api/hrm/dsr/" + event.id, { ...formData, task: formData.title })
       .then((response) => {
         toast.success(response.data.message);
         onUpdate();
@@ -47,7 +47,7 @@ const EditEventModal = ({ isOpen, onClose, pageData, onUpdate, event }) => {
   };
   const casesOptions = pageData?.cases?.map((caseInfo) => ({
     value: caseInfo._id,
-    label: caseInfo.task,
+    label: caseInfo.title,
   }));
 
   console.log("formData", formData);
@@ -96,10 +96,10 @@ const EditEventModal = ({ isOpen, onClose, pageData, onUpdate, event }) => {
                 <label className="form-label">Task</label>
                 <input
                   type="text"
-                  name="task"
+                  name="title"
                   className="form-control"
                   placeholder="Task"
-                  value={formData.task}
+                  value={formData.title}
                   onChange={handleInputChange}
                   required
                 />

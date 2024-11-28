@@ -16,6 +16,7 @@ import SortBy from "@/shared/common-components/SortBy";
 
 const Contacts = () => {
   const handleDelete = (id: number) => {
+    return;
     userPrivateRequest
       .delete(`/api/roles/${id}`)
       .then((res: any) => {
@@ -39,7 +40,9 @@ const Contacts = () => {
   const fetchRoles = async () => {
     setIsFetching(true);
     const res = await userPrivateRequest
-      .get(`/api/roles`)
+      .get(
+        `/api/roles?page=${page}&limit=${limit}&search=${search}&sortBy=${sortBy}&sortOrder=${sortOrder}`
+      )
       .then((res) => {
         setData(res.data?.data ?? {});
       })

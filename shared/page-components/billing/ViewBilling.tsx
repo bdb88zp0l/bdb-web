@@ -82,9 +82,9 @@ const ViewBilling = ({
                 <i className="ri-close-line"></i>
               </button>
             </div>
-            <div className="ti-modal-body overflow-y-auto border border-defaultborder crm-contact py-3 px-4">
+            <div className="ti-modal-body overflow-y-auto">
               <div className="">
-                <div className="flex justify-between items-center mb-8 border-b pb-4">
+                <div className="flex justify-between items-center mb-8 border-b dark:border-defaultborder/10 pb-4">
                   <h1 className="text-3xl font-bold">
                     {selectedBilling?.title}
                   </h1>
@@ -210,10 +210,10 @@ const ViewBilling = ({
                 </div>
                 <div className="summary-section">
                   <h1 className="text-lg mt-5 mb-4">Items</h1>
-                  <div className="overflow-x-auto mb-6">
-                    <table className="min-w-full table-auto border border-defaultborder crm-contact">
+                  <div className="table-responsive mb-4">
+                    <table className="table whitespace-nowrap min-w-full">
                       <thead>
-                        <tr className="">
+                        <tr className="border border-defaultborder">
                           <th className="p-3 text-left font-bold">#</th>
                           <th className="p-3 text-left font-bold">
                             Particulars
@@ -257,8 +257,8 @@ const ViewBilling = ({
                             </tr>
                           ))
                         ) : (
-                          <tr>
-                            <td col-Span="6" className="p-3 text-center">
+                          <tr className="border-b border border-defaultborder">
+                            <td col-Span="8" className="p-3 text-center">
                               No data available
                             </td>
                           </tr>
@@ -346,7 +346,7 @@ const ViewBilling = ({
                             </td>
                           </tr>
                         ) : payments.length === 0 ? (
-                          <tr>
+                          <tr className="border border-defaultborder">
                             <td colSpan={7} className="text-center py-4">
                               No payments found
                             </td>

@@ -114,14 +114,6 @@ const EditUserModal = ({
 
   return (
     <>
-      <button
-        aria-label="button"
-        type="button"
-        className="ti-btn ti-btn-sm ti-btn-info ti-btn-icon  me-2"
-        onClick={openModal}
-      >
-        <i className="ri-pencil-line"></i>
-      </button>
       <Modal isOpen={showModal} close={closeModal}>
         <div className="hs-overlay-open:mt-7 ti-modal-box mt-0 ease-out h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
           <div className="max-h-full overflow-hidden ti-modal-content text-balance min-w-full">
@@ -347,29 +339,26 @@ const EditUserModal = ({
                                   id="two-step"
                                   name="authenticatorOn"
                                   type="checkbox"
+                                  checked={isAuthenticatorModalOpen}
                                   defaultChecked={true}
-                                  disabled={mode == "show"}
+                                  // disabled={mode == "show"}
                                   onChange={(e) => {
+                                    console.log("onChange event check");
                                     setIsAuthenticatorModalOpen(true);
                                   }}
                                 />
-                                {/* onnnn */}
                               </>
                             ) : (
                               <>
-                                {auth?.user?.googleAuthenticator}
-
                                 <input
                                   id="two-step"
                                   name="authenticatorOff"
                                   type="checkbox"
                                   defaultChecked={false}
                                   // disabled={mode == "show"}
+                                  checked={isAuthenticatorModalOpen}
                                   onChange={(e) => {
-                                    console.log(
-                                      "object is not",
-                                      e.target.checked
-                                    );
+                                    console.log("onChange event check");
                                     setIsAuthenticatorModalOpen(true);
                                   }}
                                 />
@@ -385,7 +374,6 @@ const EditUserModal = ({
                     </div>
                   </div>
                 </div>
-                {/* password */}
               </div>
             </div>
 
@@ -437,14 +425,15 @@ const EditUserModal = ({
           </div>
         </div>
       </Modal>
-      <TwoFASetupModal
-        isOpen={true}
-        onClose={() => {
-          setIsAuthenticatorModalOpen(false);
-        }}
-        user={data}
-        sourcePage="user-management"
-      />
+      {isAuthenticatorModalOpen && (
+        <TwoFASetupModal
+          isAuthenticatorModalOpen={isAuthenticatorModalOpen}
+          setIsAuthenticatorModalOpen={setIsAuthenticatorModalOpen}
+          user={data}
+          sourcePage="user-management"
+        />
+      )}
+
       {resetPasswordShowModal && (
         <ResetPasswordModal
           resetPasswordShowModal={resetPasswordShowModal}

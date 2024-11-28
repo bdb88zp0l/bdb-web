@@ -92,6 +92,7 @@ const CaseTeamOverview = ({
   };
 
   const handleDelete = async (index: number) => {
+    return;
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this member?"
     );
