@@ -31,7 +31,7 @@ const EditEventModal = ({ isOpen, onClose, pageData, onUpdate, event }) => {
     setIsSubmitting(true);
 
     userPrivateRequest
-      .patch("/api/hrm/dsr/" + event.id, formData)
+      .patch("/api/hrm/dsr/" + event.id, { ...formData, task: formData.title })
       .then((response) => {
         toast.success(response.data.message);
         onUpdate();
